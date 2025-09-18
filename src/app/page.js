@@ -343,108 +343,156 @@ function TelegramMiniApp() {
     router.push(`/?tab=${tab}`, { scroll: false });
   }, [router, hapticFeedback]);
 
-  const TopNav = () => {
+  const TopNav = ({ user }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
   
-    // Close menu when clicking outside
+    // Optimized haptic feedback function with proper error handling
+    const triggerHaptic = useCallback((type = 'light') => {
+      try {
+        const telegram = window?.Telegram?.WebApp;
+        if (!telegram?.HapticFeedback) return;
+  
+        switch (type) {
+          case 'light':
+            telegram.HapticFeedback.impactOccurred('light');
+            break;
+          case 'medium':
+            telegram.HapticFeedback.impactOccurred('medium');
+            break;
+          case 'heavy':
+            telegram.HapticFeedback.impactOccurred('heavy');
+            break;
+          case 'selection':
+            telegram.HapticFeedback.selectionChanged();
+            break;
+          default:
+            telegram.HapticFeedback.impactOccurred('light');
+        }
+      } catch (error) {
+        // Silently handle haptic errors - no console.error to avoid spam
+      }
+    }, []);
+  
+    // Optimized click outside handler with single event listener
     useEffect(() => {
+      if (!isMenuOpen) return;
+  
       const handleClickOutside = (event) => {
-        if (menuRef.current && !menuRef.current.contains(event.target) && 
-            buttonRef.current && !buttonRef.current.contains(event.target)) {
+        const menu = menuRef.current;
+        const button = buttonRef.current;
+        
+        if (menu && button && 
+            !menu.contains(event.target) && 
+            !button.contains(event.target)) {
           setIsMenuOpen(false);
+          triggerHaptic('selection');
         }
       };
   
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
+      // Use passive listeners for better performance
+      document.addEventListener('mousedown', handleClickOutside, { passive: true });
+      document.addEventListener('touchstart', handleClickOutside, { passive: true });
+      
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
         document.removeEventListener('touchstart', handleClickOutside);
       };
-    }, []);
+    }, [isMenuOpen, triggerHaptic]);
   
-    // Haptic feedback function
-    const triggerHaptic = (type = 'light') => {
-      if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
-        if (type === 'light') {
-          window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-        } else if (type === 'medium') {
-          window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-        } else if (type === 'selection') {
-          window.Telegram.WebApp.HapticFeedback.selectionChanged();
-        }
-      }
-    };
-  
-    // Handle menu toggle
-    const toggleMenu = () => {
+    // Optimized menu toggle with immediate state update
+    const toggleMenu = useCallback(() => {
       triggerHaptic('light');
-      setIsMenuOpen(!isMenuOpen);
-    };
+      setIsMenuOpen(prev => !prev);
+    }, [triggerHaptic]);
   
-    // Handle share functionality
-    const handleShare = () => {
+    // Enhanced share functionality with better error handling
+    const handleShare = useCallback(() => {
       triggerHaptic('medium');
       setIsMenuOpen(false);
       
-      if (typeof window !== 'undefined') {
+      try {
         const shareUrl = window.location.href;
         const shareText = '🚀 Join me on LabelX - Earn $LBLX tokens by completing AI labeling missions! 🎯';
-        
-        // Use Telegram's native share functionality
         const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
         
-        // Try to use Telegram WebApp utils first, fallback to window.open
-        if (window.Telegram?.WebApp?.openTelegramLink) {
-          window.Telegram.WebApp.openTelegramLink(telegramShareUrl);
+        const telegram = window?.Telegram?.WebApp;
+        
+        if (telegram?.openTelegramLink) {
+          telegram.openTelegramLink(telegramShareUrl);
+        } else if (telegram?.openLink) {
+          telegram.openLink(telegramShareUrl);
         } else {
-          window.open(telegramShareUrl, '_blank');
+          window.open(telegramShareUrl, '_blank', 'noopener,noreferrer');
+        }
+      } catch (error) {
+        // Fallback to basic share
+        try {
+          window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`, '_blank');
+        } catch {
+          // Silent fail - don't show alerts
         }
       }
-    };
+    }, [triggerHaptic]);
   
-    // Handle copy link functionality
-    const handleCopyLink = async () => {
+    // Optimized copy link with modern async clipboard API
+    const handleCopyLink = useCallback(async () => {
       triggerHaptic('selection');
       setIsMenuOpen(false);
       
-      if (typeof window !== 'undefined') {
-        try {
-          await navigator.clipboard.writeText(window.location.href);
+      try {
+        const url = window.location.href;
+        
+        // Try modern clipboard API first
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(url);
+          triggerHaptic('medium');
           
-          // Show success feedback
-          if (window.Telegram?.WebApp?.showPopup) {
-            window.Telegram.WebApp.showPopup({
+          // Show success feedback via Telegram if available
+          const telegram = window?.Telegram?.WebApp;
+          if (telegram?.showPopup) {
+            telegram.showPopup({
               title: '✅ Link Copied!',
               message: 'Share this link with friends to invite them to LabelX',
               buttons: [{ type: 'ok' }]
             });
-          } else {
-            // alert('✅ Link copied to clipboard!');
           }
-          
-          triggerHaptic('medium');
-        } catch (error) {
-          console.error('Failed to copy link:', error);
-          // Fallback for older browsers
-          const textArea = document.createElement('textarea');
-          textArea.value = window.location.href;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          // alert('✅ Link copied to clipboard!');
+          return;
         }
+        
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        if (document.execCommand('copy')) {
+          triggerHaptic('medium');
+        }
+        
+        document.body.removeChild(textArea);
+      } catch (error) {
+        // Silent fail - no alerts or console errors
       }
-    };
+    }, [triggerHaptic]);
   
     return (
       <div className="relative">
         <div className="w-full flex justify-between items-center pb-3 px-1">
           <div className='flex items-center gap-3'>
-            <Image src="/agent/agentlogo.png" alt="Logo" width={40} height={40} priority />
+            <Image 
+              src="/agent/agentlogo.png" 
+              alt="Logo" 
+              width={40} 
+              height={40} 
+              priority
+              className="rounded-lg"
+            />
             <div className="text-left">
               <p className="text-gray-300 text-sm">Welcome</p>
               <p className="text-gray-200 text-lg -mt-1 font-semibold">
@@ -458,11 +506,14 @@ function TelegramMiniApp() {
             <button
               ref={buttonRef}
               onClick={toggleMenu}
-              className='glass-light p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95'
+              className='glass-light p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'
+              type="button"
+              aria-label="Menu"
+              aria-expanded={isMenuOpen}
             >
               <motion.div
                 animate={{ rotate: isMenuOpen ? 90 : 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <CiMenuKebab size={25} />
               </motion.div>
@@ -473,9 +524,9 @@ function TelegramMiniApp() {
               {isMenuOpen && (
                 <motion.div
                   ref={menuRef}
-                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  initial={{ opacity: 0, scale: 0.9, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
                   transition={{ duration: 0.15, ease: "easeOut" }}
                   className="absolute right-0 top-full mt-2 z-50"
                 >
@@ -483,9 +534,10 @@ function TelegramMiniApp() {
                     {/* Share Option */}
                     <button
                       onClick={handleShare}
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 text-left group"
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                      type="button"
                     >
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-200">
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 group-active:from-blue-500/40 group-active:to-purple-500/40 transition-all duration-200">
                         <IoShareSocial size={16} className="text-blue-400" />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Share App</span>
@@ -497,9 +549,10 @@ function TelegramMiniApp() {
                     {/* Copy Link Option */}
                     <button
                       onClick={handleCopyLink}
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 text-left group"
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                      type="button"
                     >
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all duration-200">
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 group-hover:from-green-500/30 group-hover:to-emerald-500/30 group-active:from-green-500/40 group-active:to-emerald-500/40 transition-all duration-200">
                         <IoLink size={16} className="text-green-400" />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Copy Link</span>
@@ -513,7 +566,6 @@ function TelegramMiniApp() {
       </div>
     );
   };
-
   const renderHomeContent = () => (
     <div className="space-y-6">
       <EarningTimer />
