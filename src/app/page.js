@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense, useCallback } from 'react';
+import { useEffect, useState, Suspense, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,8 @@ import InviteCenter from '@/components/InviteCenter';
 import DataCenterHome from '@/components/DataCenterHome';
 import { SquareCheckBig, UserPlus, History, Check, CheckCircle } from 'lucide-react';
 import { CiMenuKebab } from "react-icons/ci";
+import { motion, AnimatePresence } from 'framer-motion';
+import { IoShareSocial, IoLink } from 'react-icons/io5';
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -341,25 +343,176 @@ function TelegramMiniApp() {
     router.push(`/?tab=${tab}`, { scroll: false });
   }, [router, hapticFeedback]);
 
-  const TopNav = () => (
-    <div>
-      <div className="w-full flex justify-between items-center pb-3 px-1">
-        <div className='flex items-center gap-3'>
-          <Image src="/agent/agentlogo.png" alt="Logo" width={40} height={40} priority />
-          <div className="text-left">
-            <p className="text-gray-300 text-sm">Welcome</p>
-            <p className="text-gray-200 text-lg -mt-1 font-semibold">
-              {user?.first_name || 'Loading...'}
-            </p>
+  const TopNav = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+    const buttonRef = useRef(null);
+  
+    // Close menu when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target) && 
+            buttonRef.current && !buttonRef.current.contains(event.target)) {
+          setIsMenuOpen(false);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('touchstart', handleClickOutside);
+      };
+    }, []);
+  
+    // Haptic feedback function
+    const triggerHaptic = (type = 'light') => {
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
+        if (type === 'light') {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        } else if (type === 'medium') {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        } else if (type === 'selection') {
+          window.Telegram.WebApp.HapticFeedback.selectionChanged();
+        }
+      }
+    };
+  
+    // Handle menu toggle
+    const toggleMenu = () => {
+      triggerHaptic('light');
+      setIsMenuOpen(!isMenuOpen);
+    };
+  
+    // Handle share functionality
+    const handleShare = () => {
+      triggerHaptic('medium');
+      setIsMenuOpen(false);
+      
+      if (typeof window !== 'undefined') {
+        const shareUrl = window.location.href;
+        const shareText = '🚀 Join me on LabelX - Earn $LBLX tokens by completing AI labeling missions! 🎯';
+        
+        // Use Telegram's native share functionality
+        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+        
+        // Try to use Telegram WebApp utils first, fallback to window.open
+        if (window.Telegram?.WebApp?.openTelegramLink) {
+          window.Telegram.WebApp.openTelegramLink(telegramShareUrl);
+        } else {
+          window.open(telegramShareUrl, '_blank');
+        }
+      }
+    };
+  
+    // Handle copy link functionality
+    const handleCopyLink = async () => {
+      triggerHaptic('selection');
+      setIsMenuOpen(false);
+      
+      if (typeof window !== 'undefined') {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          
+          // Show success feedback
+          if (window.Telegram?.WebApp?.showPopup) {
+            window.Telegram.WebApp.showPopup({
+              title: '✅ Link Copied!',
+              message: 'Share this link with friends to invite them to LabelX',
+              buttons: [{ type: 'ok' }]
+            });
+          } else {
+            alert('✅ Link copied to clipboard!');
+          }
+          
+          triggerHaptic('medium');
+        } catch (error) {
+          console.error('Failed to copy link:', error);
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = window.location.href;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          alert('✅ Link copied to clipboard!');
+        }
+      }
+    };
+  
+    return (
+      <div className="relative">
+        <div className="w-full flex justify-between items-center pb-3 px-1">
+          <div className='flex items-center gap-3'>
+            <Image src="/agent/agentlogo.png" alt="Logo" width={40} height={40} priority />
+            <div className="text-left">
+              <p className="text-gray-300 text-sm">Welcome</p>
+              <p className="text-gray-200 text-lg -mt-1 font-semibold">
+                {user?.first_name || 'Loading...'}
+              </p>
+            </div>
+          </div>
+          
+          {/* Menu Button */}
+          <div className="relative">
+            <button
+              ref={buttonRef}
+              onClick={toggleMenu}
+              className='glass-light p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95'
+            >
+              <motion.div
+                animate={{ rotate: isMenuOpen ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <CiMenuKebab size={25} />
+              </motion.div>
+            </button>
+            
+            {/* Popup Menu */}
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  ref={menuRef}
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute right-0 top-full mt-2 z-50"
+                >
+                  <div className="glass-light rounded-2xl p-1 min-w-[160px] shadow-xl border border-white/10">
+                    {/* Share Option */}
+                    <button
+                      onClick={handleShare}
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 text-left group"
+                    >
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-200">
+                        <IoShareSocial size={16} className="text-blue-400" />
+                      </div>
+                      <span className="text-gray-200 text-sm font-medium">Share App</span>
+                    </button>
+                    
+                    {/* Divider */}
+                    <div className="h-px bg-white/5 mx-2 my-1"></div>
+                    
+                    {/* Copy Link Option */}
+                    <button
+                      onClick={handleCopyLink}
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 text-left group"
+                    >
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all duration-200">
+                        <IoLink size={16} className="text-green-400" />
+                      </div>
+                      <span className="text-gray-200 text-sm font-medium">Copy Link</span>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-        <div className='glass-light p-2 rounded-full backdrop-blur-xs'>
-          {/* when user will click show two option one share the mini app and other is copy link */}
-          <CiMenuKebab size={25}/>
-        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderHomeContent = () => (
     <div className="space-y-6">
