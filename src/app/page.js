@@ -15,6 +15,7 @@ import TaskCenter from '@/components/TaskCenter';
 import InviteCenter from '@/components/InviteCenter';
 import DataCenterHome from '@/components/DataCenterHome';
 import { SquareCheckBig, UserPlus, History, Check, CheckCircle } from 'lucide-react';
+import { CiMenuKebab } from "react-icons/ci";
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -343,12 +344,17 @@ function TelegramMiniApp() {
   const TopNav = () => (
     <div>
       <div className="w-full flex justify-between items-center pb-3 px-1">
-        <Image src="/logo.png" alt="Logo" width={250} height={70} priority />
-        <div className="text-right">
-          <p className="text-gray-800 text-sm">Welcome</p>
-          <p className="text-gray-900 text-lg font-semibold">
-            {user?.first_name || 'Loading...'}
-          </p>
+        <div className='flex items-center gap-3'>
+          <Image src="/agent/agentlogo.png" alt="Logo" width={50} height={50} priority />
+          <div className="text-left">
+            <p className="text-gray-300 text-sm">Welcome</p>
+            <p className="text-gray-200 text-lg font-semibold">
+              {user?.first_name || 'Loading...'}
+            </p>
+          </div>
+        </div>
+        <div className='glass-light p-2 rounded-full backdrop-blur-xs'>
+          <CiMenuKebab size={25}/>
         </div>
       </div>
     </div>
