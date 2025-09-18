@@ -354,6 +354,7 @@ function TelegramMiniApp() {
           </div>
         </div>
         <div className='glass-light p-2 rounded-full backdrop-blur-xs'>
+          {/* when user will click show two option one share the mini app and other is copy link */}
           <CiMenuKebab size={25}/>
         </div>
       </div>
