@@ -496,7 +496,7 @@ function TelegramMiniApp() {
             <div className="text-left">
               <p className="text-gray-300 text-sm">Welcome</p>
               <p className="text-gray-200 text-lg -mt-1 font-semibold">
-                {user?.first_name || 'Loading...'}
+                {user?.first_name || 'Dev'}
               </p>
             </div>
           </div>
@@ -537,7 +537,7 @@ function TelegramMiniApp() {
                       className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
                       type="button"
                     >
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 group-active:from-blue-500/40 group-active:to-purple-500/40 transition-all duration-200">
+                      <div className="p-1.5 rounded-lg glass-dark transition-all duration-200">
                         <IoShareSocial size={16} className="text-blue-400" />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Share App</span>
@@ -552,7 +552,7 @@ function TelegramMiniApp() {
                       className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
                       type="button"
                     >
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 group-hover:from-green-500/30 group-hover:to-emerald-500/30 group-active:from-green-500/40 group-active:to-emerald-500/40 transition-all duration-200">
+                      <div className="p-1.5 rounded-lg glass-light transition-all duration-200">
                         <IoLink size={16} className="text-green-400" />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Copy Link</span>
