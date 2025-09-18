@@ -348,7 +348,7 @@ function TelegramMiniApp() {
           <Image src="/agent/agentlogo.png" alt="Logo" width={50} height={50} priority />
           <div className="text-left">
             <p className="text-gray-300 text-sm">Welcome</p>
-            <p className="text-gray-200 text-lg font-semibold">
+            <p className="text-gray-200 text-lg -mt-1 font-semibold">
               {user?.first_name || 'Loading...'}
             </p>
           </div>
