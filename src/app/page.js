@@ -422,7 +422,7 @@ function TelegramMiniApp() {
               buttons: [{ type: 'ok' }]
             });
           } else {
-            alert('✅ Link copied to clipboard!');
+            // alert('✅ Link copied to clipboard!');
           }
           
           triggerHaptic('medium');
@@ -435,7 +435,7 @@ function TelegramMiniApp() {
           textArea.select();
           document.execCommand('copy');
           document.body.removeChild(textArea);
-          alert('✅ Link copied to clipboard!');
+          // alert('✅ Link copied to clipboard!');
         }
       }
     };
@@ -479,7 +479,7 @@ function TelegramMiniApp() {
                   transition={{ duration: 0.15, ease: "easeOut" }}
                   className="absolute right-0 top-full mt-2 z-50"
                 >
-                  <div className="glass-light rounded-2xl p-1 min-w-[160px] shadow-xl border border-white/10">
+                  <div className="glass-blue backdrop-blur-sm rounded-2xl p-1 min-w-[160px] shadow-xl border border-white/10">
                     {/* Share Option */}
                     <button
                       onClick={handleShare}
