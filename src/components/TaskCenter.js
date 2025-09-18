@@ -16,7 +16,7 @@ const TaskCenter = () => {
   const handlePurchasePass = (count) => {
     const success = purchasePass(count);
     if (!success) {
-      setError('Insufficient DNUA Points');
+      setError('Insufficient LBLX Points');
       setTimeout(() => setError(null), 3000);
     }
   };
@@ -63,7 +63,7 @@ const TaskCenter = () => {
                 <SynaptAIIcon />
                 <div>
                   <h4 className="text-black font-semibold">Daily Reward</h4>
-                  <p className="text-gray-700 text-sm">100 DNUA POINT</p>
+                  <p className="text-gray-700 text-sm">100 LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -93,7 +93,7 @@ const TaskCenter = () => {
                 <SynaptAIIcon />
                 <div>
                   <h4 className="text-black font-semibold">RT Our Post</h4>
-                  <p className="text-gray-700 text-sm">1K DNUA POINT</p>
+                  <p className="text-gray-700 text-sm">1K LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -134,7 +134,7 @@ const TaskCenter = () => {
                 <SynaptAIIcon />
                 <div>
                   <h4 className="text-black font-semibold">Follow X</h4>
-                  <p className="text-gray-700 text-sm">1K DNUA POINT</p>
+                  <p className="text-gray-700 text-sm">1K LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -169,7 +169,7 @@ const TaskCenter = () => {
                 <SynaptAIIcon />
                 <div>
                   <h4 className="text-black font-semibold">Invite 5 users</h4>
-                  <p className="text-gray-700 text-sm">5K DNUA POINT</p>
+                  <p className="text-gray-700 text-sm">5K LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -195,7 +195,7 @@ const TaskCenter = () => {
       </div>
       {/* Description */}
       <p className="text-black mb-6 text-center leading-relaxed">
-          <span className="font-semibold text-gray-800">Use DNUA Points to purchase a pass and activate your AI Agent.</span>  Once activated, you can submit your predictions and start earning rewards based on your performance.
+          <span className="font-semibold text-gray-800">Use LBLX Points to purchase a pass and activate your AI Agent.</span>  Once activated, you can submit your predictions and start earning rewards based on your performance.
         </p>
 
         {error && (
@@ -210,13 +210,13 @@ const TaskCenter = () => {
             onClick={() => handlePurchasePass(1)}
             className="flex-1 glass-light glass-blue py-4 rounded-2xl text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
-            1 PASS / 500 DNUA
+            1 PASS / 500 LBLX
           </button>
           <button
             onClick={() => handlePurchasePass(5)}
             className="flex-1 glass-light glass-blue py-4 rounded-2xl text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
-            5 PASS / 2K DNUA
+            5 PASS / 2K LBLX
           </button>
         </div>
       <div className='h-20'/>

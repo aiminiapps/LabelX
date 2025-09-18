@@ -105,7 +105,7 @@ const EarningTimer = () => {
       <div className='flex items-center gap-16'>
         {/* Earn text */}
       <div className="text-black text-xl font-medium tracking-wider">
-        Earn 3,000 DNAU
+        Earn 3,000 LBLX
       </div>
 
       {/* Timer display */}
@@ -134,10 +134,10 @@ const UserBalance = () => {
   return (
     <div className="flex gap-3 mb-1">
       <div className="flex-1 glass glass-blue rounded-xl p-2 text-center">
-        <div className="text-stone-800 font-medium text-[15px]">DNAU <span className='text-3xl'>{spaiPoints.toLocaleString()}</span></div>
+        <div className="text-gray-200 font-medium text-[15px]">LBLX <span className='text-3xl'>{spaiPoints.toLocaleString()}</span></div>
       </div>
       <div className="flex-1 glass glass-pruple rounded-xl p-4 text-center">
-        <div className="text-stone-800 font-medium text-[15px]">AI LICENCE <span className='text-3xl'>{agentTickets.toLocaleString()}</span></div>
+        <div className="text-gray-200 font-medium text-[15px]">AI LICENCE <span className='text-3xl'>{agentTickets.toLocaleString()}</span></div>
       </div>
     </div>
   );
@@ -169,8 +169,8 @@ const SocialTask = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-black font-semibold">Join DNAU official X</h3>
-            <p className="text-gray-700 text-sm">Follow on X for 1,000 DNAU Points</p>
+            <h3 className="text-black font-semibold">Join LBLX official X</h3>
+            <p className="text-gray-700 text-sm">Follow on X for 1,000 LBLX Points</p>
           </div>
         </div>
         <button
@@ -213,9 +213,9 @@ const NavigationButtons = ({ setActiveTab, earningTimer, startEarningTimer }) =>
       </button>
       <button onClick={() => handleNavClick('SPAI')}>
         <div className="glass rounded-xl py-3 flex items-center justify-center border border-green-400/20 border-l-2 border-l-green-500/30 border-r-2 border-r-green-500/30 transition-colors">
-          <Image src="/agent/agentlogo.png" alt="DNAU" width={45} height={45} />
+          <Image src="/agent/agentlogo.png" alt="LBLX" width={45} height={45} />
         </div>
-        <p className="text-gray-700">DNAU AI</p>
+        <p className="text-gray-700">LBLX AI</p>
       </button>
       <button onClick={() => handleNavClick('invite')}>
       <div className="glass rounded-xl py-3 flex items-center justify-center border border-green-400/20 border-l-2 border-l-green-500/30 border-r-2 border-r-green-500/30 transition-colors">
@@ -365,7 +365,7 @@ function TelegramMiniApp() {
         startEarningTimer={startEarningTimer}
       />
       <div className="flex justify-between items-center">
-        <h2 className="text-black text-xl font-semibold">DNAU Trading Suggestion</h2>
+        <h2 className="text-black text-xl font-semibold">LBLX Trading Suggestion</h2>
         <button
           onClick={() => handleTabNavigation('dataCenter')}
           className="text-gray-700 text-sm hover:text-white transition-colors"

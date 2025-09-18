@@ -3,7 +3,7 @@ import { Copy, Share2, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 
 function InviteCenter() {
-  const [inviteCode] = useState('DNAU2025');
+  const [inviteCode] = useState('LBLX2025');
   const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
@@ -18,8 +18,8 @@ function InviteCenter() {
   }, []);
 
   const generateInviteLink = () => {
-    const baseUrl = 'https://t.me/dnautrade_bot';
-    return `https://t.me/dnautrade_bot`;
+    const baseUrl = 'https://t.me/LBLXtrade_bot';
+    return `https://t.me/LBLXtrade_bot`;
   };
 
   const handleCopyCode = async () => {
@@ -39,10 +39,10 @@ function InviteCenter() {
 
   const handleInviteTraders = () => {
     const inviteLink = generateInviteLink();
-    const shareText = `🚀 Join me on DNAU Trading Platform! 
+    const shareText = `🚀 Join me on LBLX Trading Platform! 
 
 🤖 Get AI-powered trading insights
-📈 Earn DNAU Points through predictions
+📈 Earn LBLX Points through predictions
 🎯 Access exclusive AI missions
 
 Use my invite code: ${inviteCode}
@@ -56,7 +56,7 @@ Join now: ${inviteLink}`;
       // Fallback for web
       if (navigator.share) {
         navigator.share({
-          title: 'Join DNAU Trading Platform',
+          title: 'Join LBLX Trading Platform',
           text: shareText,
           url: inviteLink
         });
@@ -91,11 +91,11 @@ Join now: ${inviteLink}`;
           <h1 className='text-stone-800 text-xl font-semibold'>How It Works - Invite to Earn</h1>
           <div>
             <h2 className='text-stone-800 text-xl font-medium'>Share Your Invitation Link</h2>
-            <p className='text-stone-700 py-1'>Invite others to DNAU by sharing your personal referral link. For each successful join, you unlock a strategic opportunity.</p>
-            <h2 className='text-stone-800 text-xl font-medium mt-4'>Your Friends Join DNAU</h2>
-            <p className='text-stone-700 py-1'>They start submitting predictions, engaging with AI agents, and earning DNAU Points.</p>
+            <p className='text-stone-700 py-1'>Invite others to LBLX by sharing your personal referral link. For each successful join, you unlock a strategic opportunity.</p>
+            <h2 className='text-stone-800 text-xl font-medium mt-4'>Your Friends Join LBLX</h2>
+            <p className='text-stone-700 py-1'>They start submitting predictions, engaging with AI agents, and earning LBLX Points.</p>
             <h2 className='text-stone-800 text-xl font-medium mt-4'>1 Friend = 1 Agent LICENSE</h2>
-            <p className='text-stone-700 py-1'>Each referral gives you an Agent License, which allows you to submit premium predictions, earn bonus rewards, or access exclusive AI missions.<br/>(Each pass is worth up to 3,000 DNAU Points based on your performance.)</p>
+            <p className='text-stone-700 py-1'>Each referral gives you an Agent License, which allows you to submit premium predictions, earn bonus rewards, or access exclusive AI missions.<br/>(Each pass is worth up to 3,000 LBLX Points based on your performance.)</p>
           </div>
         </div>
 
@@ -144,7 +144,7 @@ Join now: ${inviteLink}`;
         {/* Footer */}
         <div className="mt-8 text-center">
           <p className="text-xs text-gray-700">
-            Share DNAU with friends and earn together! 🚀
+            Share LBLX with friends and earn together! 🚀
           </p>
         </div>
       </div>
