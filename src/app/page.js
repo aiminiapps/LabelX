@@ -345,7 +345,7 @@ function TelegramMiniApp() {
     <div>
       <div className="w-full flex justify-between items-center pb-3 px-1">
         <div className='flex items-center gap-3'>
-          <Image src="/agent/agentlogo.png" alt="Logo" width={50} height={50} priority />
+          <Image src="/agent/agentlogo.png" alt="Logo" width={40} height={40} priority />
           <div className="text-left">
             <p className="text-gray-300 text-sm">Welcome</p>
             <p className="text-gray-200 text-lg -mt-1 font-semibold">
