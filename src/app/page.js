@@ -436,11 +436,11 @@ function TelegramMiniApp() {
 
   return (
     <Suspense fallback={<CustomLoader />}>
-      <div className="min-h-screen max-w-md w-full tektur mx-auto text-white flex flex-col items-center p-4 relative overflow-hidden">
+      <div className="min-h-screen max-w-md w-full tektur mx-auto bg-[#0D0D0D] text-white flex flex-col items-center p-4 relative overflow-hidden">
           <DebugPanel user={user} error={telegramError} webApp={webApp} />
           
           {/* Background decorations */}
-          <div className="fixed top-0 inset-0 -z-10">
+          {/* <div className="fixed top-0 inset-0 -z-10">
             <Image
               src="/bg.svg"
               alt="Background"
@@ -448,7 +448,7 @@ function TelegramMiniApp() {
               objectFit="cover"
               priority
             />
-          </div>
+          </div> */}
           
           <div className="w-full">
             <TopNav />
