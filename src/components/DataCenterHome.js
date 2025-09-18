@@ -1,333 +1,326 @@
 'use client';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useAnimation } from 'framer-motion';
+import { BiData, BiCheckCircle, BiBrain } from 'react-icons/bi';
+import { IoSparkles } from 'react-icons/io5';
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { TrendingUp, TrendingDown, Brain, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
-import Image from 'next/image';
+const LiveDataFlow = () => {
+  const [activeNodes, setActiveNodes] = useState([]);
+  const [liveStats, setLiveStats] = useState({
+    totalProcessed: 12847,
+    activeLabelers: 28,
+    accuracy: 94.2,
+    modelsTraining: 3
+  });
 
-export default function DataCenterHome() {
-  const [coins, setCoins] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [aiAnalysis, setAiAnalysis] = useState({});
-  const [analysisLoading, setAnalysisLoading] = useState({});
+  const pathRef = useRef(null);
+  const controls = useAnimation();
+  const pathLength = useMotionValue(0);
 
+  // Simulate live data updates
   useEffect(() => {
-    let isMounted = true;
-    async function fetchCoins() {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/coins');
-        const data = await response.json();
+    const interval = setInterval(() => {
+      setLiveStats(prev => ({
+        totalProcessed: prev.totalProcessed + Math.floor(Math.random() * 5) + 1,
+        activeLabelers: 25 + Math.floor(Math.random() * 8),
+        accuracy: 94 + Math.random() * 2,
+        modelsTraining: Math.floor(Math.random() * 5) + 1
+      }));
+    }, 2000);
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to fetch coin data');
-        }
-
-        if (isMounted) {
-          setCoins(data);
-          setError(null);
-          // Trigger AI analysis for each coin
-          data.forEach(coin => {
-            getAIAnalysis(coin);
-          });
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err.message);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchCoins();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => clearInterval(interval);
   }, []);
 
-  const getAIAnalysis = async (coin) => {
-    const coinKey = coin.symbol.toUpperCase();
-    
-    setAnalysisLoading(prev => ({ ...prev, [coinKey]: true }));
-    
-    try {
-      const systemPrompt = `You are a crypto trading analyst. Analyze ${coin.name} (${coin.symbol}) based on the following data:
-      - Current Price: $${coin.priceUsd}
-      - 24h Change: ${coin.changePercent24Hr}%
-      - Market Cap Rank: ${coin.rank}
-      
-      Provide a brief analysis in this EXACT format:
-      RECOMMENDATION: [BUY/HOLD/SELL]
-      DESCRIPTION: [One sentence explaining why - max 15 words]
-      
-      Keep it concise and actionable.`;
-
-      const response = await fetch("/api/agent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages: [
-            { role: "system", content: systemPrompt },
-            { 
-              role: "user", 
-              content: `Analyze ${coin.name} with current price $${coin.priceUsd} and 24h change of ${coin.changePercent24Hr}%` 
-            },
-          ],
-        }),
-      });
-
-      let data;
-      try {
-        const contentType = response.headers.get("Content-Type");
-        if (contentType && contentType.includes("application/json")) {
-          data = await response.json();
-        } else {
-          throw new Error("Invalid JSON response");
+  // Animate data flow continuously
+  useEffect(() => {
+    const animateFlow = async () => {
+      while (true) {
+        // Trigger haptic feedback
+        if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.selectionChanged();
         }
-      } catch (error) {
-        console.error("Response parsing error:", error);
-        throw new Error("Unexpected response format");
-      }
 
-      if (data.reply) {
-        // Parse the AI response
-        const reply = data.reply;
-        const recommendationMatch = reply.match(/RECOMMENDATION:\s*(BUY|HOLD|SELL)/i);
-        const descriptionMatch = reply.match(/DESCRIPTION:\s*(.+)/i);
+        await controls.start({
+          pathLength: [0, 1],
+          transition: { duration: 3, ease: "easeInOut" }
+        });
         
-        const recommendation = recommendationMatch ? recommendationMatch[1].toUpperCase() : 'HOLD';
-        const description = descriptionMatch ? descriptionMatch[1].trim() : 'Analysis pending...';
-        
-        setAiAnalysis(prev => ({
-          ...prev,
-          [coinKey]: {
-            recommendation,
-            description,
-            timestamp: Date.now()
-          }
-        }));
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
-    } catch (error) {
-      console.error("AI Analysis error:", error);
-      setAiAnalysis(prev => ({
-        ...prev,
-        [coinKey]: {
-          recommendation: 'HOLD',
-          description: 'Analysis unavailable',
-          timestamp: Date.now()
-        }
-      }));
-    } finally {
-      setAnalysisLoading(prev => ({ ...prev, [coinKey]: false }));
-    }
-  };
-
-  const getCoinIcon = (symbol) => {
-    const icons = {
-      'BTC': '₿',
-      'ETH': 'Ξ',
-      'ADA': '₳',
-      'DOT': '●',
-      'LINK': '⬡',
-      'LTC': 'Ł',
-      'XRP': '◆',
-      'BNB': '◊'
     };
-    return icons[symbol?.toUpperCase()] || '◉';
-  };
 
-  const getCoinGradient = (symbol) => {
-    const gradients = {
-      'BTC': 'bg-yellow-500',
-      'ETH': 'bg-white',
-      'ADA': 'bg-yellow-500',
-      'DOT': 'bg-yellow-500',
-      'LINK': 'bg-yellow-500',
-      'SOL': 'bg-[#000508]',
-      'XRP': 'bg-yellow-500',
-      'BNB': 'bg-yellow-500'
-    };
-    return gradients[symbol?.toUpperCase()] || 'bg-yellow-500';
-  };
-
-  const getRecommendationIcon = (recommendation) => {
-    switch (recommendation) {
-      case 'BUY':
-        return <CheckCircle className="w-4 h-4 text-green-400" />;
-      case 'SELL':
-        return <XCircle className="w-4 h-4 text-red-400" />;
-      default:
-        return <AlertCircle className="w-4 h-4 text-blue-500" />;
-    }
-  };
-
-  const getRecommendationColor = (recommendation) => {
-    switch (recommendation) {
-      case 'BUY':
-        return 'text-green-400 bg-green-400/10 border-green-400/30';
-      case 'SELL':
-        return 'text-red-400 bg-red-400/10 border-red-400/30';
-      default:
-        return 'text-blue-500 bg-blue-400/10 border-blue-400/30';
-    }
-  };
-
-  const formatPrice = (price) => {
-    if (price >= 1) {
-      return price.toFixed(4);
-    } else {
-      return price.toFixed(6);
-    }
-  };
-
-  const formatChange = (change) => {
-    const sign = change >= 0 ? '+' : '';
-    return `${sign}${change.toFixed(2)}`;
-  };
-
-  const formatPercentage = (percent) => {
-    const sign = percent >= 0 ? '+' : '';
-    return `${sign}${percent.toFixed(2)}%`;
-  };
+    animateFlow();
+  }, [controls]);
 
   return (
-    <div className=" text-white">
-      {loading && (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-        </div>
-      )}
+    <div className="glass-dark rounded-3xl p-6 mb-6 overflow-hidden relative">
+      {/* Background glow effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-green-500/5 opacity-50" />
       
-      {error && (
-        <div className="text-center hidden py-8">
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mx-4">
-            <p className="text-red-400">Error: {error}</p>
-          </div>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="p-2 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20"
+        >
+          <IoSparkles className="text-blue-400" size={20} />
+        </motion.div>
+        <div>
+          <h3 className="text-xl font-semibold text-white">Live Data Pipeline</h3>
+          <p className="text-gray-400 text-sm">Real-time AI training flow</p>
         </div>
-      )}
-      
-      {!loading && !error && coins.length === 0 && (
-        <div className="text-center py-12">
-          <div className="bg-gray-800/30 border border-gray-600/30 rounded-xl p-6 mx-4">
-            <p className="text-gray-400">No data available.</p>
-          </div>
-        </div>
-      )}
+      </div>
 
-      <div className="space-y-2 max-w-md mx-auto mb-24">
-        {coins.map((coin, index) => {
-          const coinKey = coin.symbol.toUpperCase();
-          const analysis = aiAnalysis[coinKey];
-          const isAnalysisLoading = analysisLoading[coinKey];
+      {/* SVG Data Flow Animation */}
+      <div className="relative h-32 mb-6">
+        <svg
+          width="100%"
+          height="128"
+          viewBox="0 0 400 128"
+          className="absolute inset-0"
+        >
+          {/* Background path */}
+          <path
+            d="M20 64 Q100 20, 180 64 T340 64"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth="3"
+            fill="none"
+            strokeDasharray="5,5"
+          />
           
-          return (
-            <motion.div
-              key={coin.symbol}
-              className="relative group "
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+          {/* Animated flow path */}
+          <motion.path
+            ref={pathRef}
+            d="M20 64 Q100 20, 180 64 T340 64"
+            stroke="url(#flowGradient)"
+            strokeWidth="4"
+            fill="none"
+            strokeLinecap="round"
+            animate={controls}
+            style={{ pathLength }}
+          />
+
+          {/* Processing Nodes */}
+          {/* Input Node */}
+          <motion.circle
+            cx="40"
+            cy="64"
+            r="12"
+            fill="rgba(59, 130, 246, 0.3)"
+            stroke="rgba(59, 130, 246, 0.6)"
+            strokeWidth="2"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          
+          {/* Processing Node */}
+          <motion.circle
+            cx="200"
+            cy="64"
+            r="12"
+            fill="rgba(168, 85, 247, 0.3)"
+            stroke="rgba(168, 85, 247, 0.6)"
+            strokeWidth="2"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          />
+          
+          {/* Output Node */}
+          <motion.circle
+            cx="360"
+            cy="64"
+            r="12"
+            fill="rgba(34, 197, 94, 0.3)"
+            stroke="rgba(34, 197, 94, 0.6)"
+            strokeWidth="2"
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          />
+
+          {/* Data Packets */}
+          <motion.circle
+            cx="0"
+            cy="0"
+            r="4"
+            fill="#FFD60A"
+            animate={{
+              offsetDistance: ["0%", "100%"]
+            }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 0 
+            }}
+            style={{ offsetPath: "path('M20 64 Q100 20, 180 64 T340 64')" }}
+          />
+          
+          <motion.circle
+            cx="0"
+            cy="0"
+            r="3"
+            fill="#FF9500"
+            animate={{
+              offsetDistance: ["0%", "100%"]
+            }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1 
+            }}
+            style={{ offsetPath: "path('M20 64 Q100 20, 180 64 T340 64')" }}
+          />
+
+          {/* Gradient Definitions */}
+          <defs>
+            <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#A855F7" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#22C55E" stopOpacity="0.8" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        {/* Node Labels */}
+        <div className="absolute left-2 top-20">
+          <div className="glass-light px-2 py-1 rounded-lg text-xs text-blue-400 flex items-center gap-1">
+            <BiData size={12} />
+            Input
+          </div>
+        </div>
+        
+        <div className="absolute left-1/2 top-20 transform -translate-x-1/2">
+          <div className="glass-light px-2 py-1 rounded-lg text-xs text-purple-400 flex items-center gap-1">
+            <BiCheckCircle size={12} />
+            Label
+          </div>
+        </div>
+        
+        <div className="absolute right-2 top-20">
+          <div className="glass-light px-2 py-1 rounded-lg text-xs text-green-400 flex items-center gap-1">
+            <BiBrain size={12} />
+            Model
+          </div>
+        </div>
+      </div>
+
+      {/* Live Stats Grid */}
+      <div className="grid grid-cols-2 gap-4">
+        <motion.div 
+          className="glass-light p-4 rounded-2xl"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-sm text-gray-400">Processed</span>
+          </div>
+          <motion.div
+            key={liveStats.totalProcessed}
+            initial={{ scale: 1.1, color: "#FFD60A" }}
+            animate={{ scale: 1, color: "#FFFFFF" }}
+            transition={{ duration: 0.3 }}
+            className="text-2xl font-bold"
+          >
+            {liveStats.totalProcessed.toLocaleString()}
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className="glass-light p-4 rounded-2xl"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+            <span className="text-sm text-gray-400">Active Users</span>
+          </div>
+          <motion.div
+            key={liveStats.activeLabelers}
+            initial={{ scale: 1.1, color: "#3B82F6" }}
+            animate={{ scale: 1, color: "#FFFFFF" }}
+            transition={{ duration: 0.3 }}
+            className="text-2xl font-bold"
+          >
+            {liveStats.activeLabelers}
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className="glass-light p-4 rounded-2xl"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+            <span className="text-sm text-gray-400">Accuracy</span>
+          </div>
+          <motion.div
+            key={Math.floor(liveStats.accuracy * 10)}
+            initial={{ scale: 1.1, color: "#A855F7" }}
+            animate={{ scale: 1, color: "#FFFFFF" }}
+            transition={{ duration: 0.3 }}
+            className="text-2xl font-bold"
+          >
+            {liveStats.accuracy.toFixed(1)}%
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className="glass-light p-4 rounded-2xl"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+            <span className="text-sm text-gray-400">Training</span>
+          </div>
+          <motion.div
+            key={liveStats.modelsTraining}
+            initial={{ scale: 1.1, color: "#FF9500" }}
+            animate={{ scale: 1, color: "#FFFFFF" }}
+            transition={{ duration: 0.3 }}
+            className="text-2xl font-bold flex items-center gap-1"
+          >
+            {liveStats.modelsTraining}
+            <motion.span
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1, repeat: Infinity }}
+              className="text-sm text-orange-400"
             >
-              {/* Glow Effect */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${
-                coin.changePercent24Hr >= 0 
-                  ? 'from-green-500/20 to-emerald-500/20' 
-                  : 'from-red-500/20 to-pink-500/20'
-              } rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-              
-              <div className="relative glass">
-                <div className="relative">
-                  {/* Main coin info row */}
-                  <div className="flex items-center justify-between mb-3">
-                    {/* Left Side - Coin Info */}
-                    <div className="flex items-center space-x-4">
-                      {/* Coin Icon */}
-                      <div className={`w-12 h-12 ${getCoinGradient(coin.symbol)} ring-1 ring-black rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                        {coin.image ? (
-                          <img src={coin.image} alt={coin.name} className=" rounded-full" />
-                        ) : (
-                          getCoinIcon(coin.symbol)
-                        )}
-                      </div>
-                      
-                      {/* Coin Details */}
-                      <div>
-                        <h2 className="text-lg font-semibold text-black group-hover:text-cyan-300 transition-colors duration-300">
-                          {coin.symbol?.toUpperCase()}
-                        </h2>
-                        <p className="text-gray-700 text-sm">
-                          {coin.name} / USDT
-                        </p>
-                      </div>
-                    </div>
+              models
+            </motion.span>
+          </motion.div>
+        </motion.div>
+      </div>
 
-                    {/* Right Side - Price Info */}
-                    <div className="text-right">
-                      <div className="text-xl font-medium text-stone-800 mb-1">
-                        {formatPrice(coin.priceUsd)}
-                      </div>
-                      <div className={`flex items-center justify-end space-x-1 ${
-                        coin.changePercent24Hr >= 0 ? 'text-green-700' : 'text-red-500'
-                      }`}>
-                        {coin.changePercent24Hr >= 0 ? (
-                          <TrendingUp className="w-4 h-4" />
-                        ) : (
-                          <TrendingDown className="w-4 h-4" />
-                        )}
-                        <span className="text-sm font-medium">
-                          {formatPercentage(coin.changePercent24Hr)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* AI Analysis Section */}
-                  <div className="border-t border-gray-200/20 pt-3">
-                    <div className="flex items-center space-x-2 mb-2">
-                    <div className="rounded-full size-8">
-                      <Image src="/agent/agentlogo.png" alt="SPAI" width={45} height={45} />
-                    </div>
-                      <span className="text-lg font-medium text-gray-800">AI Analysis</span>
-                    </div>
-                    
-                    {isAnalysisLoading ? (
-                      <div className="flex items-center space-x-2">
-                        <div className="animate-spin rounded-full h-3 w-3 border border-blue-400 border-t-transparent"></div>
-                        <span className="text-xs text-gray-500">Analyzing...</span>
-                      </div>
-                    ) : analysis ? (
-                      <div className="space-y-2">
-                        {/* Recommendation Badge */}
-                        <div className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${getRecommendationColor(analysis.recommendation)}`}>
-                          {getRecommendationIcon(analysis.recommendation)}
-                          <span>{analysis.recommendation}</span>
-                        </div>
-                        
-                        {/* Description */}
-                        <p className="text-xs text-gray-600 leading-relaxed">
-                          {analysis.description}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="text-xs text-gray-500">
-                        Analysis pending...
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
+      {/* Particle overlay for premium effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white/30 rounded-full"
+            animate={{
+              x: [0, Math.random() * 400],
+              y: [0, Math.random() * 200],
+              opacity: [0, 1, 0]
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2
+            }}
+            style={{
+              left: Math.random() * 100 + '%',
+              top: Math.random() * 100 + '%'
+            }}
+          />
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default LiveDataFlow;
