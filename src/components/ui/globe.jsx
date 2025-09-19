@@ -188,15 +188,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div>
-              <h3 className="text-xl font-bold text-white">AI Labeling Network</h3>
-              <p className="text-gray-400 text-sm flex items-center gap-2">
-                <motion.div 
-                  className="w-2 h-2 bg-green-400 rounded-full"
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-                Real-time global activity
-              </p>
+              <h3 className="text-lg font-semibold text-white">AI Labeling Network</h3>
             </div>
           </div>
           
@@ -210,7 +202,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
         </div>
 
         {/* Enhanced stats grid */}
-        <div className="grid grid-cols-5 gap-2 mb-5">
+        <div className="grid grid-cols-2 gap-2 mb-5">
           <motion.div 
             className="glass-light p-3 rounded-xl text-center group cursor-pointer"
             whileHover={{ scale: 1.05, backgroundColor: "rgba(34, 197, 94, 0.1)" }}
@@ -317,7 +309,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
             <p className="text-xs text-gray-400">Accuracy</p>
           </motion.div>
 
-          <motion.div 
+          {/* <motion.div 
             className="glass-light p-3 rounded-xl text-center group cursor-pointer"
             whileHover={{ scale: 1.05, backgroundColor: "rgba(239, 68, 68, 0.1)" }}
             whileTap={{ scale: 0.98 }}
@@ -341,7 +333,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
               {Math.floor(globalStats.dataFlowRate / 50)}
             </motion.div>
             <p className="text-xs text-gray-400">Nodes</p>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
 
