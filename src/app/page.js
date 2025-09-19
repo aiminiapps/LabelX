@@ -568,6 +568,7 @@ function TelegramMiniApp() {
   };
   const renderHomeContent = () => (
     <div className="space-y-6">
+      <DataCenterHome />
       <EarningTimer />
       <UserBalance />
       <SocialTask />
@@ -585,7 +586,6 @@ function TelegramMiniApp() {
           More
         </button>
       </div>
-      <DataCenterHome />
       <div className="h-10" />
     </div>
   );

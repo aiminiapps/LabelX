@@ -59,13 +59,6 @@ const LiveDataFlow = () => {
       
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="p-2 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20"
-        >
-          <IoSparkles className="text-blue-400" size={20} />
-        </motion.div>
         <div>
           <h3 className="text-xl font-semibold text-white">Live Data Pipeline</h3>
           <p className="text-gray-400 text-sm">Real-time AI training flow</p>
