@@ -37,7 +37,7 @@ const ENHANCED_GLOBE_CONFIG = {
   dark: 0.4, // Balanced dark mode - not too black [web:122][web:136]
   diffuse: 2.2, // Enhanced diffuse lighting [web:122][web:136]
   mapSamples: 24000, // Higher quality world dots [web:120][web:122]
-  mapBrightness: 3.5, // Bright world map visibility [web:120][web:122]
+  mapBrightness:60.9, // Bright world map visibility [web:120][web:122]
   mapBaseBrightness: 0.05, // Subtle ocean visibility [web:120]
   baseColor: [0.15, 0.15, 0.25], // Subtle blue-gray base [web:122][web:136]
   markerColor: [1, 0.84, 0.21], // LabelX yellow default
