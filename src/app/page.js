@@ -570,7 +570,7 @@ function TelegramMiniApp() {
   const renderHomeContent = () => (
     <div className="space-y-6">
       <LabelXNetworkGlobe/>
-      {/* <DataCenterHome /> */}
+      <DataCenterHome />
       <EarningTimer />
       <UserBalance />
       <SocialTask />
