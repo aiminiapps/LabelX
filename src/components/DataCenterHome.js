@@ -288,30 +288,6 @@ const LiveDataFlow = () => {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Particle overlay for premium effect */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full"
-            animate={{
-              x: [0, Math.random() * 400],
-              y: [0, Math.random() * 200],
-              opacity: [0, 1, 0]
-            }}
-            transition={{
-              duration: 4 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-            style={{
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%'
-            }}
-          />
-        ))}
-      </div>
     </div>
   );
 };
