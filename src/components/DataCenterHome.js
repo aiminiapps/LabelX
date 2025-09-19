@@ -522,7 +522,7 @@ const SmartDataPresentation = () => {
   if (!currentItem) return null;
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 space-y-6">
+    <div className="w-full max-w-md mx-auto space-y-6">
       {/* Session Progress Header */}
       <div className="glass-light rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">
