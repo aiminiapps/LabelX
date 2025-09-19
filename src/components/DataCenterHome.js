@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { BiData, BiCheckCircle, BiBrain } from 'react-icons/bi';
 import { IoSparkles } from 'react-icons/io5';
-import { Globe } from './ui/globe';
+import LabelXNetworkGlobe, { Globe } from './ui/globe';
 
 const LiveDataFlow = () => {
   const [activeNodes, setActiveNodes] = useState([]);
@@ -66,7 +66,7 @@ const LiveDataFlow = () => {
         </div>
       </div>
       <div className='h-52 mt-14'>
-      <Globe/>
+      <LabelXNetworkGlobe/>
       </div>
       {/* Live Stats Grid */}
       <div className="grid grid-cols-2 gap-4">

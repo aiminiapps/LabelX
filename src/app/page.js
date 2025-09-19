@@ -18,6 +18,7 @@ import { SquareCheckBig, UserPlus, History, Check, CheckCircle } from 'lucide-re
 import { CiMenuKebab } from "react-icons/ci";
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoShareSocial, IoLink } from 'react-icons/io5';
+import LabelXNetworkGlobe from '@/components/ui/globe';
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -568,7 +569,8 @@ function TelegramMiniApp() {
   };
   const renderHomeContent = () => (
     <div className="space-y-6">
-      <DataCenterHome />
+      <LabelXNetworkGlobe/>
+      {/* <DataCenterHome /> */}
       <EarningTimer />
       <UserBalance />
       <SocialTask />
