@@ -19,6 +19,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoShareSocial, IoLink } from 'react-icons/io5';
 import LabelXNetworkGlobe from '@/components/ui/globe';
+import InteractivePeerReview from '@/components/InteractivePeerReview';
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -173,8 +174,8 @@ const SocialTask = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-black font-semibold">Join LBLX official X</h3>
-            <p className="text-gray-700 text-sm">Follow on X for 1,000 LBLX Points</p>
+            <h3 className="text-white font-semibold">Join LBLX official X</h3>
+            <p className="text-gray-300 text-xs">Follow on X for 1,000 LBLX Points</p>
           </div>
         </div>
         <button
@@ -571,9 +572,10 @@ function TelegramMiniApp() {
     <div className="space-y-6">
       <LabelXNetworkGlobe/>
       <DataCenterHome />
+      <SocialTask />
+      <InteractivePeerReview/>
       <EarningTimer />
       <UserBalance />
-      <SocialTask />
       <NavigationButtons
         setActiveTab={handleTabNavigation}
         earningTimer={earningTimer}
