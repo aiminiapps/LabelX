@@ -185,8 +185,8 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
     <div className="glass rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl">
       {/* Dynamic header with real-time stats */}
       <div className="relative z-10 mb-5">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-2.5 mb-4">
+          <div className="flex items-center">
             <div>
               <h3 className="text-lg font-semibold text-white">AI Labeling Network</h3>
             </div>
@@ -364,7 +364,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
         </AnimatePresence>
 
         {/* Active node highlight */}
-        <AnimatePresence>
+        {/* <AnimatePresence>
           {activeNode && (
             <motion.div
               className="absolute inset-0 rounded-full border-2 border-yellow-400/50 bg-yellow-400/5"
@@ -374,7 +374,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
               transition={{ duration: 0.3 }}
             />
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
 
         {/* Premium Globe Canvas */}
         <canvas
@@ -393,33 +393,6 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
             e.touches[0] && updateMovement(e.touches[0].clientX)
           }
         />
-
-        {/* Enhanced floating data particles */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(12)].map((_, i) => (
-            <motion.div
-              key={`particle-${i}`}
-              className="absolute w-1 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"
-              animate={{
-                x: [0, Math.random() * 320 - 160],
-                y: [0, Math.random() * 320 - 160],
-                opacity: [0, 1, 0],
-                scale: [0, 1.2, 0]
-              }}
-              transition={{
-                duration: 4 + Math.random() * 3,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-                ease: "easeOut"
-              }}
-              style={{
-                left: '50%',
-                top: '50%'
-              }}
-            />
-          ))}
-        </div>
-
         {/* Connection lines visualization */}
         <div className="absolute inset-0 hidden pointer-events-none">
           <AnimatePresence>
@@ -446,11 +419,6 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
       <div className="mt-5 flex items-center justify-between text-sm">
         <div className="flex items-center gap-4 text-gray-400">
           <div className="flex items-center gap-2">
-            <motion.div 
-              className="w-2 h-2 bg-green-400 rounded-full"
-              animate={{ opacity: [1, 0.4, 1] }}
-              transition={{ duration: 1.8, repeat: Infinity }}
-            />
             <span>Network Online</span>
           </div>
           <div className="w-px h-4 bg-gray-600" />
@@ -464,7 +432,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
           animate={{ backgroundColor: activeNode ? "rgba(255, 214, 10, 0.1)" : "rgba(255, 255, 255, 0.05)" }}
           transition={{ duration: 0.3 }}
         >
-          {activeNode ? `${activeNode.city} Active` : 'Monitoring...'}
+          {activeNode ? `${activeNode.city}` : 'Monitoring...'}
         </motion.div>
       </div>
 
