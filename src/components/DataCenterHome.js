@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { motion, useMotionValue, useAnimation } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { BiData, BiCheckCircle, BiBrain } from 'react-icons/bi';
 import { IoSparkles } from 'react-icons/io5';
 
@@ -15,7 +15,6 @@ const LiveDataFlow = () => {
 
   const pathRef = useRef(null);
   const controls = useAnimation();
-  const pathLength = useMotionValue(0);
 
   // Simulate live data updates
   useEffect(() => {
@@ -31,25 +30,26 @@ const LiveDataFlow = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Animate data flow continuously
+  // Enhanced workflow animation
   useEffect(() => {
-    const animateFlow = async () => {
+    const animateWorkflow = async () => {
       while (true) {
         // Trigger haptic feedback
         if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
           window.Telegram.WebApp.HapticFeedback.selectionChanged();
         }
 
+        // Animate connection lines with stagger
         await controls.start({
           pathLength: [0, 1],
-          transition: { duration: 3, ease: "easeInOut" }
+          transition: { duration: 2.5, ease: "easeOut", staggerChildren: 0.2 }
         });
         
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
       }
     };
 
-    animateFlow();
+    animateWorkflow();
   }, [controls]);
 
   return (
@@ -65,137 +65,297 @@ const LiveDataFlow = () => {
         </div>
       </div>
 
-      {/* SVG Data Flow Animation */}
-      <div className="relative h-32 mb-6">
+      {/* Enhanced SVG Workflow - Mobile Optimized */}
+      <div className="relative h-48 md:h-40 mb-6">
         <svg
           width="100%"
-          height="128"
-          viewBox="0 0 400 128"
+          height="180"
+          viewBox="0 0 300 180"
           className="absolute inset-0"
+          preserveAspectRatio="xMidYMid meet"
         >
-          {/* Background path */}
-          <path
-            d="M20 64 Q100 20, 180 64 T340 64"
-            stroke="rgba(255,255,255,0.1)"
-            strokeWidth="3"
-            fill="none"
-            strokeDasharray="5,5"
-          />
-          
-          {/* Animated flow path */}
+          {/* Connection Lines with Enhanced Styling */}
           <motion.path
-            ref={pathRef}
-            d="M20 64 Q100 20, 180 64 T340 64"
-            stroke="url(#flowGradient)"
-            strokeWidth="4"
+            d="M40 40 L110 40"
+            stroke="#3B82F6"
+            strokeWidth="2"
             fill="none"
-            strokeLinecap="round"
-            animate={controls}
-            style={{ pathLength }}
+            strokeDasharray="0"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1, delay: 0.5, repeat: Infinity, repeatDelay: 3 }}
+          />
+          
+          <motion.path
+            d="M110 40 L110 70"
+            stroke="#10B981"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="0"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1, delay: 1, repeat: Infinity, repeatDelay: 3 }}
           />
 
-          {/* Processing Nodes */}
+          <motion.path
+            d="M110 70 L180 70"
+            stroke="#A855F7"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="0"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1, delay: 1.5, repeat: Infinity, repeatDelay: 3 }}
+          />
+
+          <motion.path
+            d="M180 70 L180 100"
+            stroke="#F59E0B"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="0"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1, delay: 2, repeat: Infinity, repeatDelay: 3 }}
+          />
+
+          <motion.path
+            d="M180 100 L250 100"
+            stroke="#EC4899"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="0"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1, delay: 2.5, repeat: Infinity, repeatDelay: 3 }}
+          />
+
+          {/* Workflow Nodes with n8n Style */}
+          
           {/* Input Node */}
-          <motion.circle
-            cx="40"
-            cy="64"
-            r="12"
-            fill="rgba(59, 130, 246, 0.3)"
-            stroke="rgba(59, 130, 246, 0.6)"
-            strokeWidth="2"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          
+          <motion.g
+            animate={{ 
+              y: [0, -2, 0],
+              filter: ["drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3))", "drop-shadow(0 4px 6px rgba(59, 130, 246, 0.4))", "drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3))"]
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <rect
+              x="20"
+              y="30"
+              width="40"
+              height="40"
+              rx="8"
+              fill="rgba(59, 130, 246, 0.15)"
+              stroke="#3B82F6"
+              strokeWidth="2"
+            />
+            <BiData x="32" y="42" size={16} color="#3B82F6" />
+            <circle cx="15" cy="25" r="3" fill="#3B82F6" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" />
+            </circle>
+          </motion.g>
+
           {/* Processing Node */}
-          <motion.circle
-            cx="200"
-            cy="64"
-            r="12"
-            fill="rgba(168, 85, 247, 0.3)"
-            stroke="rgba(168, 85, 247, 0.6)"
-            strokeWidth="2"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
-          
+          <motion.g
+            animate={{ 
+              y: [0, -3, 0],
+              filter: ["drop-shadow(0 2px 4px rgba(168, 85, 247, 0.3))", "drop-shadow(0 4px 6px rgba(168, 85, 247, 0.4))", "drop-shadow(0 2px 4px rgba(168, 85, 247, 0.3))"]
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+          >
+            <rect
+              x="160"
+              y="50"
+              width="40"
+              height="40"
+              rx="8"
+              fill="rgba(168, 85, 247, 0.15)"
+              stroke="#A855F7"
+              strokeWidth="2"
+            />
+            <BiBrain x="172" y="62" size={16} color="#A855F7" />
+            <circle cx="155" cy="45" r="3" fill="#A855F7" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite" />
+            </circle>
+          </motion.g>
+
+          {/* Quality Check Node */}
+          <motion.g
+            animate={{ 
+              y: [0, -2, 0],
+              filter: ["drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3))", "drop-shadow(0 4px 6px rgba(16, 185, 129, 0.4))", "drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3))"]
+            }}
+            transition={{ duration: 2.8, repeat: Infinity, delay: 1 }}
+          >
+            <rect
+              x="90"
+              y="60"
+              width="40"
+              height="40"
+              rx="8"
+              fill="rgba(16, 185, 129, 0.15)"
+              stroke="#10B981"
+              strokeWidth="2"
+            />
+            <BiCheckCircle x="102" y="72" size={16} color="#10B981" />
+            <circle cx="85" cy="55" r="3" fill="#10B981" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.2s" repeatCount="indefinite" />
+            </circle>
+          </motion.g>
+
           {/* Output Node */}
+          <motion.g
+            animate={{ 
+              y: [0, -2.5, 0],
+              filter: ["drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3))", "drop-shadow(0 4px 6px rgba(245, 158, 11, 0.4))", "drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3))"]
+            }}
+            transition={{ duration: 3.2, repeat: Infinity, delay: 1.5 }}
+          >
+            <rect
+              x="230"
+              y="90"
+              width="40"
+              height="40"
+              rx="8"
+              fill="rgba(245, 158, 11, 0.15)"
+              stroke="#F59E0B"
+              strokeWidth="2"
+            />
+            <IoSparkles x="242" y="102" size={16} color="#F59E0B" />
+            <circle cx="225" cy="85" r="3" fill="#F59E0B" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.8s" repeatCount="indefinite" />
+            </circle>
+          </motion.g>
+
+          {/* Data Flow Particles */}
           <motion.circle
-            cx="360"
-            cy="64"
-            r="12"
-            fill="rgba(34, 197, 94, 0.3)"
-            stroke="rgba(34, 197, 94, 0.6)"
-            strokeWidth="2"
-            animate={{ scale: [1, 1.15, 1] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
+            r="2.5"
+            fill="#3B82F6"
+            animate={{
+              offsetDistance: ["0%", "100%"],
+              opacity: [0, 1, 1, 0]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatDelay: 1
+            }}
+            style={{ offsetPath: "path('M40 40 L110 40')" }}
           />
 
-          {/* Data Packets */}
           <motion.circle
-            cx="0"
-            cy="0"
-            r="4"
-            fill="#FFD60A"
+            r="2"
+            fill="#10B981"
             animate={{
-              offsetDistance: ["0%", "100%"]
+              offsetDistance: ["0%", "100%"],
+              opacity: [0, 1, 1, 0]
             }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 0 
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              repeatDelay: 1,
+              delay: 0.3
             }}
-            style={{ offsetPath: "path('M20 64 Q100 20, 180 64 T340 64')" }}
-          />
-          
-          <motion.circle
-            cx="0"
-            cy="0"
-            r="3"
-            fill="#FF9500"
-            animate={{
-              offsetDistance: ["0%", "100%"]
-            }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 1 
-            }}
-            style={{ offsetPath: "path('M20 64 Q100 20, 180 64 T340 64')" }}
+            style={{ offsetPath: "path('M110 40 L110 70')" }}
           />
 
-          {/* Gradient Definitions */}
-          <defs>
-            <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8" />
-              <stop offset="50%" stopColor="#A855F7" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#22C55E" stopOpacity="0.8" />
-            </linearGradient>
-          </defs>
+          <motion.circle
+            r="2"
+            fill="#A855F7"
+            animate={{
+              offsetDistance: ["0%", "100%"],
+              opacity: [0, 1, 1, 0]
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatDelay: 1,
+              delay: 0.6
+            }}
+            style={{ offsetPath: "path('M110 70 L180 70')" }}
+          />
+
+          <motion.circle
+            r="2.5"
+            fill="#F59E0B"
+            animate={{
+              offsetDistance: ["0%", "100%"],
+              opacity: [0, 1, 1, 0]
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              repeatDelay: 1,
+              delay: 0.9
+            }}
+            style={{ offsetPath: "path('M180 70 L180 100')" }}
+          />
+
+          <motion.circle
+            r="2.5"
+            fill="#EC4899"
+            animate={{
+              offsetDistance: ["0%", "100%"],
+              opacity: [0, 1, 1, 0]
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              repeatDelay: 1,
+              delay: 1.2
+            }}
+            style={{ offsetPath: "path('M180 100 L250 100')" }}
+          />
         </svg>
 
-        {/* Node Labels */}
-        <div className="absolute left-2 top-20">
-          <div className="glass-light px-2 py-1 rounded-lg text-xs text-blue-400 flex items-center gap-1">
-            <BiData size={12} />
-            Input
-          </div>
+        {/* Mobile-Optimized Labels with Better Positioning */}
+        <div className="absolute left-2 top-2">
+          <motion.div 
+            className="glass-light px-2 py-1 rounded-lg text-xs text-blue-400 flex items-center gap-1 shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            animate={{ y: [0, -1, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <BiData size={10} />
+            <span className="font-medium">Input</span>
+          </motion.div>
         </div>
         
-        <div className="absolute left-1/2 top-20 transform -translate-x-1/2">
-          <div className="glass-light px-2 py-1 rounded-lg text-xs text-purple-400 flex items-center gap-1">
-            <BiCheckCircle size={12} />
-            Label
-          </div>
+        <div className="absolute left-1/2 -translate-x-1/2 top-12">
+          <motion.div 
+            className="glass-light px-2 py-1 rounded-lg text-xs text-green-400 flex items-center gap-1 shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            animate={{ y: [0, -1, 0] }}
+            transition={{ duration: 2.8, repeat: Infinity, delay: 1 }}
+          >
+            <BiCheckCircle size={10} />
+            <span className="font-medium">Validate</span>
+          </motion.div>
         </div>
         
-        <div className="absolute right-2 top-20">
-          <div className="glass-light px-2 py-1 rounded-lg text-xs text-green-400 flex items-center gap-1">
-            <BiBrain size={12} />
-            Model
-          </div>
+        <div className="absolute left-1/3 top-24">
+          <motion.div 
+            className="glass-light px-2 py-1 rounded-lg text-xs text-purple-400 flex items-center gap-1 shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            animate={{ y: [0, -1.5, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+          >
+            <BiBrain size={10} />
+            <span className="font-medium">Process</span>
+          </motion.div>
+        </div>
+        
+        <div className="absolute right-2 bottom-2">
+          <motion.div 
+            className="glass-light px-2 py-1 rounded-lg text-xs text-orange-400 flex items-center gap-1 shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            animate={{ y: [0, -1.2, 0] }}
+            transition={{ duration: 3.2, repeat: Infinity, delay: 1.5 }}
+          >
+            <IoSparkles size={10} />
+            <span className="font-medium">Deploy</span>
+          </motion.div>
         </div>
       </div>
 
