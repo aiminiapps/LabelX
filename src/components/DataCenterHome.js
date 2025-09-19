@@ -410,7 +410,7 @@ const SmartDataPresentation = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md mx-auto p-4 space-y-6"
+        className="w-full max-w-md mx-auto space-y-6"
       >
         {/* Results Header */}
         <div className="glass rounded-3xl p-6 text-center relative overflow-hidden">
@@ -433,7 +433,7 @@ const SmartDataPresentation = () => {
         {/* Detailed Stats */}
         <div className="space-y-4">
           {/* Performance Overview */}
-          <div className="glass-light rounded-2xl p-5">
+          <div className="glass rounded-2xl p-5">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <IoStatsChart className="text-blue-400" />
               Performance Summary
@@ -462,7 +462,7 @@ const SmartDataPresentation = () => {
           </div>
 
           {/* Category Breakdown */}
-          <div className="glass-light rounded-2xl p-5">
+          <div className="glass rounded-2xl p-5">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <BiBarChart className="text-green-400" />
               Category Breakdown
@@ -524,7 +524,7 @@ const SmartDataPresentation = () => {
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       {/* Session Progress Header */}
-      <div className="glass-light rounded-2xl p-4">
+      <div className="glass rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <TbTarget className="text-yellow-400" size={20} />
