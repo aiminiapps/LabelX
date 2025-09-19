@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "cobe": "^0.6.5",
     "crypto": "^1.0.1",
     "framer-motion": "^12.15.0",
     "lucide-react": "^0.511.0",
+    "motion": "^12.23.15",
     "next": "15.3.3",
     "openai": "^5.0.2",
     "react": "^19.0.0",
