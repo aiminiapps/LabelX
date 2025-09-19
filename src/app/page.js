@@ -576,20 +576,11 @@ function TelegramMiniApp() {
       <InteractivePeerReview/>
       {/* <EarningTimer /> */}
       <UserBalance />
-      <NavigationButtons
+      {/* <NavigationButtons
         setActiveTab={handleTabNavigation}
         earningTimer={earningTimer}
         startEarningTimer={startEarningTimer}
-      />
-      <div className="flex justify-between items-center">
-        <h2 className="text-black text-xl font-semibold">LBLX Trading Suggestion</h2>
-        <button
-          onClick={() => handleTabNavigation('dataCenter')}
-          className="text-gray-700 text-sm hover:text-white transition-colors"
-        >
-          More
-        </button>
-      </div>
+      /> */}
       <div className="h-10" />
     </div>
   );
