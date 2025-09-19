@@ -5,6 +5,7 @@ import { IoCheckmarkCircle, IoCloseCircle, IoFlag, IoEye, IoTime, IoTrendingUp }
 import { BiShield, BiCrown, BiTrophy, BiBrain, BiData } from 'react-icons/bi';
 import { TbSparkles, TbScale, TbUsers } from 'react-icons/tb';
 import { MdOutlineWaves } from "react-icons/md";
+import Image from 'next/image';
 
 const InteractivePeerReview = () => {
   // Core state management
@@ -249,19 +250,10 @@ const InteractivePeerReview = () => {
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <motion.div
-                animate={bubbleControls}
-                className={`p-2 rounded-full bg-gradient-to-br ${weightIndicator.color.replace('text-', 'from-').replace('-400', '-500/20')} to-gray-500/20`}
-              >
-                {weightIndicator.icon}
-              </motion.div>
               <div>
                 <h3 className="text-white font-semibold flex items-center gap-2">
                   Peer Review
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  >
+                  <motion.div>
                     <TbUsers className="text-blue-400" size={16} />
                   </motion.div>
                 </h3>
@@ -324,42 +316,14 @@ const InteractivePeerReview = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Floating consensus bubbles */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-3 h-3 rounded-full bg-gradient-to-r from-blue-400/30 to-purple-400/30"
-              animate={{
-                x: [0, Math.random() * 300],
-                y: [0, Math.random() * 200],
-                scale: [0, 1, 0],
-                opacity: [0, 1, 0]
-              }}
-              transition={{
-                duration: 4 + Math.random() * 2,
-                repeat: Infinity,
-                delay: i * 0.5,
-                ease: "easeInOut"
-              }}
-              style={{
-                left: Math.random() * 100 + '%',
-                top: Math.random() * 100 + '%'
-              }}
-            />
-          ))}
-        </div>
-
         {/* Review Header with Consensus Status */}
         <div className="relative z-10 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <BiBrain className="text-purple-400" size={20} />
+              {/* <BiBrain className="text-purple-400" size={20} /> */}
               <span className="text-white font-medium">{currentReview.category}</span>
               {currentReview.disputed && (
                 <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
                   className="px-2 py-1 bg-red-500/20 border border-red-500/40 rounded-lg text-xs text-red-400"
                 >
                   Disputed
@@ -465,10 +429,7 @@ const InteractivePeerReview = () => {
                   whileHover={{ scale: 1.02, backgroundColor: "rgba(34, 197, 94, 0.1)" }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  >
+                  <motion.div>
                     <IoCheckmarkCircle className="text-green-400" size={24} />
                   </motion.div>
                   <div className="text-left flex-1">
@@ -485,13 +446,7 @@ const InteractivePeerReview = () => {
                   whileHover={{ scale: 1.02, backgroundColor: "rgba(59, 130, 246, 0.1)" }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, 10, -10, 0],
-                      scale: [1, 1.1, 1] 
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
+                  <motion.div>
                     <BiBrain className="text-blue-400" size={24} />
                   </motion.div>
                   <div className="text-left flex-1">
@@ -508,12 +463,7 @@ const InteractivePeerReview = () => {
                   whileHover={{ scale: 1.02, backgroundColor: "rgba(239, 68, 68, 0.1)" }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, 5, -5, 0] 
-                    }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
+                  <motion.div>
                     <IoFlag className="text-red-400" size={24} />
                   </motion.div>
                   <div className="text-left flex-1">
@@ -541,7 +491,7 @@ const InteractivePeerReview = () => {
                   }}
                   className="p-4 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20"
                 >
-                  <TbSparkles className="text-yellow-400" size={32} />
+                  <Image />
                 </motion.div>
                 
                 <div className="text-center">

@@ -574,7 +574,7 @@ function TelegramMiniApp() {
       <DataCenterHome />
       <SocialTask />
       <InteractivePeerReview/>
-      <EarningTimer />
+      {/* <EarningTimer /> */}
       <UserBalance />
       <NavigationButtons
         setActiveTab={handleTabNavigation}
