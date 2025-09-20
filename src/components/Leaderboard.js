@@ -255,17 +255,17 @@ const PremiumLeaderboard = () => {
       </div>
 
       {/* Enhanced Top 3 Podium */}
-      <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
+      <div className="glass bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
         {/* Dynamic background effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-purple-500/5 to-blue-500/5" />
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-gradient-to-b from-yellow-400/10 to-transparent rounded-full blur-3xl" />
 
         <div className="relative z-10">
           <h3 className="text-center text-xl font-bold text-white mb-8 flex items-center justify-center gap-3">
-            <div className="relative">
+            {/* <div className="relative">
               <Crown className="text-yellow-400" size={24} />
               <div className="absolute -inset-1 bg-yellow-400/30 rounded-full blur animate-pulse" />
-            </div>
+            </div> */}
             Elite Champions
           </h3>
 
@@ -285,7 +285,7 @@ const PremiumLeaderboard = () => {
                   {/* Crown animation for #1 */}
                   {user.rank === 1 && (
                     <div className="mb-3 relative">
-                      <Crown className="text-yellow-400 animate-bounce" size={32} />
+                      <Crown className="text-yellow-400" size={32} />
                       <div className="absolute -inset-2 bg-yellow-400/20 rounded-full blur-xl animate-pulse" />
                     </div>
                   )}
@@ -301,11 +301,11 @@ const PremiumLeaderboard = () => {
                           e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}&backgroundColor=transparent`;
                         }}
                       />
-                      {user.isOnline && (
+                      {/* {user.isOnline && (
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-gray-900 animate-pulse">
                           <div className="w-full h-full bg-green-400 rounded-full animate-ping" />
                         </div>
-                      )}
+                      )} */}
                     </div>
                     
                     {/* Enhanced Rank Badge */}
@@ -352,7 +352,7 @@ const PremiumLeaderboard = () => {
           </div>
 
           {/* Enhanced Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 bg-gray-900/50 rounded-2xl p-4">
+          <div className="glass-light grid grid-cols-3 gap-4 bg-gray-900/50 rounded-2xl p-4">
             {topThree.map((user, index) => (
               <div key={user.id} className="text-center">
                 <div className="text-white font-bold text-lg">{user.accuracy}%</div>
