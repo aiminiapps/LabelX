@@ -147,7 +147,7 @@ const PremiumLeaderboard = () => {
   // Enhanced loading state with skeleton
   if (animationStage === 'loading') {
     return (
-      <div className="w-full max-w-md mx-auto p-4 space-y-6 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen">
+      <div className="w-full mx-auto space-y-6 min-h-screen">
         {/* Header Skeleton */}
         <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 animate-pulse">
           <div className="flex items-center justify-between mb-4">
@@ -206,7 +206,7 @@ const PremiumLeaderboard = () => {
   return (
     <div 
       ref={leaderboardRef} 
-      className="w-full max-w-md mx-auto p-4 space-y-6 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen overflow-x-hidden"
+      className="w-full mx-auto space-y-6 min-h-screen overflow-x-hidden"
     >
       {/* Enhanced Header */}
       <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
