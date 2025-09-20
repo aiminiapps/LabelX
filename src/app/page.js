@@ -21,6 +21,9 @@ import { IoShareSocial, IoLink } from 'react-icons/io5';
 import LabelXNetworkGlobe from '@/components/ui/globe';
 import InteractivePeerReview from '@/components/InteractivePeerReview';
 import PremiumLeaderboard from '@/components/Leaderboard';
+import Link from 'next/link';
+import { LiaUserFriendsSolid } from "react-icons/lia";
+
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -534,7 +537,21 @@ function TelegramMiniApp() {
                   className="absolute right-0 top-full mt-2 z-50"
                 >
                   <div className="glass-blue backdrop-blur-sm rounded-2xl p-1 min-w-[160px] shadow-xl border border-white/10">
-                    {/* Share Option */}
+                    
+                    {/* Share Option  /?tab=invite*/}
+                    <Link
+                      href="/?tab=invite"
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                    >
+                      <div className="p-1.5 rounded-lg glass-dark transition-all duration-200">
+                        <LiaUserFriendsSolid size={16} className="text-red-400" />
+                      </div>
+                      <span className="text-gray-200 text-sm font-medium">Invite Friends</span>
+                    </Link>
+                    
+                    {/* Divider */}
+                    <div className="h-px bg-white/5 mx-2 my-1"/>
+                    {/* Share Option  /?tab=invite*/}
                     <button
                       onClick={handleShare}
                       className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
@@ -547,7 +564,7 @@ function TelegramMiniApp() {
                     </button>
                     
                     {/* Divider */}
-                    <div className="h-px bg-white/5 mx-2 my-1"></div>
+                    <div className="h-px bg-white/5 mx-2 my-1"/>
                     
                     {/* Copy Link Option */}
                     <button
