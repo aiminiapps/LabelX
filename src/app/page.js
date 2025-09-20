@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { IoShareSocial, IoLink } from 'react-icons/io5';
 import LabelXNetworkGlobe from '@/components/ui/globe';
 import InteractivePeerReview from '@/components/InteractivePeerReview';
+import PremiumLeaderboard from '@/components/Leaderboard';
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -590,7 +591,8 @@ function TelegramMiniApp() {
       case 'home':
         return renderHomeContent();
       case 'dataCenter':
-        return <CoinAgent />;
+        // return <CoinAgent />;
+        return <PremiumLeaderboard/>;
       case 'SPAI':
         return <Agent />;
       case 'task':

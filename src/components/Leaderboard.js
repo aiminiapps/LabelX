@@ -1,10 +1,12 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
-import { IoCrown, IoTrophy, IoMedal, IoFlash, IoFire, IoSparkles, IoTrendingUp, IoChevronUp, IoChevronDown } from 'react-icons/io5';
-import { BiShield, BiDiamond, BiStar, BiBrain, BiTarget, BiTime } from 'react-icons/bi';
-import { TbMedal, TbCrown, TbFlame, TbBolt, TbStars, TbTrending3 } from 'react-icons/tb';
-import { FaRegGem, FaMedal } from 'react-icons/fa';
+import { motion, useAnimation, useInView } from 'framer-motion';
+import { IoTrophy, IoTrendingUp, IoChevronUp, IoChevronDown } from 'react-icons/io5';
+import { BiShield, BiDiamond, BiStar } from 'react-icons/bi';
+import { TbMedal, TbCrown } from 'react-icons/tb';
+import { LuCrown } from "react-icons/lu";
+import { MdOutlineLocalFireDepartment } from "react-icons/md";
+
 
 const PremiumLeaderboard = () => {
   // Component state
@@ -48,7 +50,7 @@ const PremiumLeaderboard = () => {
   const getTierInfo = (rank, points) => {
     if (rank <= 3) return { 
       tier: 'Legendary', 
-      icon: <IoCrown className="text-yellow-400" size={20} />, 
+      icon: <LuCrown className="text-yellow-400" size={20} />, 
       color: 'from-yellow-400 to-orange-500',
       bgColor: 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20',
       borderColor: 'border-yellow-400/50'
@@ -306,7 +308,7 @@ const PremiumLeaderboard = () => {
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     className="mb-2"
                   >
-                    <IoCrown className="text-yellow-400" size={32} />
+                    <LuCrown className="text-yellow-400" size={32} />
                   </motion.div>
                 )}
 
@@ -445,7 +447,7 @@ const PremiumLeaderboard = () => {
                   <span>{user.accuracy}% acc</span>
                   {user.currentStreak > 5 && (
                     <div className="flex items-center gap-1 text-orange-400">
-                      <IoFire size={12} />
+                      <MdOutlineLocalFireDepartment size={12} />
                       <span>{user.currentStreak}</span>
                     </div>
                   )}
