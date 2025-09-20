@@ -209,19 +209,13 @@ const PremiumLeaderboard = () => {
       className="w-full mx-auto space-y-6 min-h-screen overflow-x-hidden"
     >
       {/* Enhanced Header */}
-      <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full blur-3xl animate-pulse delay-1000" />
-        </div>
-
+      <div className="glass rounded-3xl p-6 relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Trophy className="text-yellow-400 animate-bounce" size={28} />
-                <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur animate-pulse" />
+                <Trophy className="text-yellow-400" size={28} />
+                <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Leaderboard</h2>
