@@ -1,73 +1,93 @@
 import { useState, useEffect, useRef } from 'react';
-import { Trophy, TrendingUp, ChevronUp, ChevronDown, Shield, Star, Crown, Medal, Flame } from 'lucide-react';
+import { Trophy, TrendingUp, ChevronUp, ChevronDown, Shield, Star, Crown, Medal, Flame, Users, Zap, Target, Award } from 'lucide-react';
 
 const PremiumLeaderboard = () => {
   // Component state
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState('weekly');
   const [animationStage, setAnimationStage] = useState('loading');
-  const [userRank] = useState(8);
+  const [totalUsers] = useState(Math.floor(Math.random() * (125000 - 120000) + 120000));
+  const [userRank] = useState(Math.floor(Math.random() * (115000 - 110000) + 110000));
   
   // Refs for scroll animations
   const leaderboardRef = useRef(null);
 
-  // Realistic Telegram usernames generator
-  const generateRealisticUsername = () => {
-    const prefixes = ['alex', 'maria', 'john', 'anna', 'david', 'sarah', 'mike', 'lisa', 'chen', 'kate', 
-                     'ryan', 'maya', 'tom', 'sara', 'max', 'luna', 'jake', 'zoe', 'nick', 'emma',
-                     'leo', 'iris', 'sam', 'nova', 'ray', 'ivy', 'kai', 'ava', 'eli', 'mia'];
-    const suffixes = ['_dev', '_ai', '_labs', '_tech', '_pro', '_x', '_21', '_99', '_zero', '_one',
-                     '_sage', '_mind', '_flow', '_wave', '_sky', '_neo', '_arc', '_hub', '_bin', '_kit'];
-    const numbers = ['7', '9', '12', '23', '42', '88', '101', '777', '2024', '369'];
+  // More realistic and organic usernames
+  const generateOrganicUsername = () => {
+    const firstNames = [
+      'alexandra', 'benjamin', 'charlotte', 'dominic', 'elizabeth', 'francisco', 'gabriella', 'harrison',
+      'isabella', 'jonathan', 'katherine', 'leonardo', 'margaret', 'nathaniel', 'olivia', 'patricia',
+      'quinton', 'rebecca', 'sebastian', 'theodore', 'valentina', 'william', 'ximena', 'zachary',
+      'adriana', 'brandon', 'camila', 'diego', 'elena', 'fernando', 'gloria', 'hector',
+      'irene', 'julian', 'karla', 'lorenzo', 'miranda', 'nicolas', 'octavio', 'paloma'
+    ];
     
-    const base = prefixes[Math.floor(Math.random() * prefixes.length)];
+    const lastNames = [
+      'anderson', 'brown', 'garcia', 'johnson', 'miller', 'davis', 'rodriguez', 'wilson',
+      'martinez', 'taylor', 'thomas', 'hernandez', 'moore', 'martin', 'jackson', 'thompson',
+      'white', 'lopez', 'lee', 'gonzalez', 'harris', 'clark', 'lewis', 'robinson',
+      'walker', 'perez', 'hall', 'young', 'allen', 'sanchez', 'wright', 'king'
+    ];
+    
+    const techSuffixes = [
+      '_dev', '_ai', '_tech', '_labs', '_code', '_data', '_ml', '_crypto', '_web3', '_nft',
+      '_digital', '_cloud', '_byte', '_pixel', '_neural', '_quantum', '_cyber', '_matrix'
+    ];
+    
+    const yearSuffixes = ['21', '22', '23', '24', '2k', '2024', '99', '01', '07', '13'];
     
     const rand = Math.random();
-    if (rand < 0.4) {
-      return base + suffixes[Math.floor(Math.random() * suffixes.length)];
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    
+    if (rand < 0.3) {
+      // First name + last name
+      const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+      return firstName + '.' + lastName;
+    } else if (rand < 0.5) {
+      // First name + tech suffix
+      return firstName + techSuffixes[Math.floor(Math.random() * techSuffixes.length)];
     } else if (rand < 0.7) {
-      return base + numbers[Math.floor(Math.random() * numbers.length)];
+      // First name + year
+      return firstName + yearSuffixes[Math.floor(Math.random() * yearSuffixes.length)];
     } else {
-      return base + Math.floor(Math.random() * 99);
+      // First name + random numbers
+      return firstName + Math.floor(Math.random() * 999);
     }
   };
 
-  // Generate tier system with realistic progression
+  // Enhanced tier system with more visual appeal
   const getTierInfo = (rank) => {
     if (rank <= 3) return { 
       tier: 'Legendary', 
       icon: Crown, 
-      color: 'text-yellow-400',
-      bgColor: 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20',
-      borderColor: 'border-yellow-400/50'
+      color: 'text-yellow-300',
+      bgColor: 'bg-gradient-to-r from-yellow-400/30 to-orange-400/30',
+      borderColor: 'border-yellow-400/60',
+      glowColor: 'shadow-yellow-400/50'
     };
     if (rank <= 10) return { 
       tier: 'Master', 
       icon: Medal, 
-      color: 'text-purple-400',
-      bgColor: 'bg-gradient-to-r from-purple-500/20 to-pink-500/20',
-      borderColor: 'border-purple-400/50'
+      color: 'text-purple-300',
+      bgColor: 'bg-gradient-to-r from-purple-400/30 to-pink-400/30',
+      borderColor: 'border-purple-400/60',
+      glowColor: 'shadow-purple-400/50'
     };
     if (rank <= 25) return { 
       tier: 'Expert', 
       icon: Trophy, 
-      color: 'text-blue-400',
-      bgColor: 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20',
-      borderColor: 'border-blue-400/50'
-    };
-    if (rank <= 50) return { 
-      tier: 'Advanced', 
-      icon: Shield, 
-      color: 'text-green-400',
-      bgColor: 'bg-gradient-to-r from-green-500/20 to-emerald-500/20',
-      borderColor: 'border-green-400/50'
+      color: 'text-blue-300',
+      bgColor: 'bg-gradient-to-r from-blue-400/30 to-cyan-400/30',
+      borderColor: 'border-blue-400/60',
+      glowColor: 'shadow-blue-400/50'
     };
     return { 
-      tier: 'Rising', 
+      tier: 'Pro', 
       icon: Star, 
-      color: 'text-gray-400',
-      bgColor: 'bg-gradient-to-r from-gray-500/20 to-slate-500/20',
-      borderColor: 'border-gray-400/50'
+      color: 'text-emerald-300',
+      bgColor: 'bg-gradient-to-r from-emerald-400/30 to-green-400/30',
+      borderColor: 'border-emerald-400/60',
+      glowColor: 'shadow-emerald-400/50'
     };
   };
 
@@ -75,25 +95,26 @@ const PremiumLeaderboard = () => {
   const generateLeaderboardData = () => {
     const data = [];
     for (let i = 1; i <= 15; i++) {
-      const basePoints = Math.max(15000 - (i * 800) + Math.random() * 400, 1000);
-      const accuracy = Math.max(85 + Math.random() * 12, 75);
-      const labels = Math.floor(basePoints / 10) + Math.floor(Math.random() * 500);
-      const streak = Math.floor(Math.random() * 25) + 1;
+      const basePoints = Math.max(25000 - (i * 1200) + Math.random() * 600, 2000);
+      const accuracy = Math.max(88 + Math.random() * 10, 80);
+      const labels = Math.floor(basePoints / 8) + Math.floor(Math.random() * 800);
+      const streak = Math.floor(Math.random() * 45) + 1;
       const tierInfo = getTierInfo(i);
       
       data.push({
         id: i,
         rank: i,
-        username: generateRealisticUsername(),
+        username: generateOrganicUsername(),
         points: Math.floor(basePoints),
         accuracy: parseFloat(accuracy.toFixed(1)),
         labelsCompleted: labels,
         currentStreak: streak,
         tier: tierInfo,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${i}&backgroundColor=transparent`,
-        isOnline: Math.random() > 0.3,
-        weeklyGrowth: Math.floor(Math.random() * 40) - 10,
-        totalReviews: Math.floor(Math.random() * 200) + 50
+        avatar: `https://api.dicebear.com/7.x/notionists/svg?seed=${i}&backgroundColor=c0392b,27ae60,2980b9,8e44ad,f39c12`,
+        isOnline: Math.random() > 0.25,
+        weeklyGrowth: Math.floor(Math.random() * 60) - 15,
+        totalReviews: Math.floor(Math.random() * 500) + 100,
+        level: Math.floor(i / 3) + Math.floor(Math.random() * 5) + 15
       });
     }
     return data;
@@ -105,16 +126,15 @@ const PremiumLeaderboard = () => {
     const timer = setTimeout(() => {
       setLeaderboardData(generateLeaderboardData());
       setAnimationStage('loaded');
-    }, 1000);
+    }, 1200);
     
     return () => clearTimeout(timer);
   }, [selectedPeriod]);
 
-  // Haptic feedback simulation
+  // Enhanced haptic feedback
   const triggerHaptic = () => {
-    // Simplified haptic feedback - can be enhanced for Telegram WebApp
     if (typeof window !== 'undefined' && window.navigator?.vibrate) {
-      window.navigator.vibrate(50);
+      window.navigator.vibrate([30, 20, 30]);
     }
   };
 
@@ -124,38 +144,55 @@ const PremiumLeaderboard = () => {
     setAnimationStage('loading');
   };
 
-  // Get podium styling
-  const getPodiumHeight = (rank) => {
-    switch(rank) {
-      case 1: return 'h-24';
-      case 2: return 'h-20';
-      case 3: return 'h-16';
-      default: return 'h-16';
-    }
-  };
-
-  const getPodiumOrder = (rank) => {
-    switch(rank) {
-      case 1: return 'order-2';
-      case 2: return 'order-1';
-      case 3: return 'order-3';
-      default: return 'order-4';
-    }
-  };
-
-  // Loading state
+  // Enhanced loading state with skeleton
   if (animationStage === 'loading') {
     return (
-      <div className="w-full max-w-md mx-auto p-4 space-y-6 bg-gray-900 min-h-screen">
-        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-6 space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center gap-4 animate-pulse">
-              <div className="w-12 h-12 bg-gray-700 rounded-full" />
-              <div className="flex-1 space-y-2">
-                <div className="h-4 bg-gray-700 rounded w-3/4" />
-                <div className="h-3 bg-gray-700 rounded w-1/2" />
+      <div className="w-full max-w-md mx-auto p-4 space-y-6 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen">
+        {/* Header Skeleton */}
+        <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 animate-pulse">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gray-700 rounded-full animate-spin" />
+              <div className="w-32 h-6 bg-gray-700 rounded-lg" />
+            </div>
+            <div className="w-16 h-4 bg-gray-700 rounded" />
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {[1,2,3].map(i => (
+              <div key={i} className="h-10 bg-gray-700 rounded-xl" />
+            ))}
+          </div>
+        </div>
+
+        {/* Podium Skeleton */}
+        <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 animate-pulse">
+          <div className="flex items-end justify-center gap-4 mb-6">
+            {[1,2,3].map(i => (
+              <div key={i} className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-gray-700 rounded-full mb-2" />
+                <div className="w-20 h-4 bg-gray-700 rounded mb-2" />
+                <div className="w-16 h-16 bg-gray-700 rounded-t-lg" />
               </div>
-              <div className="w-16 h-8 bg-gray-700 rounded" />
+            ))}
+          </div>
+        </div>
+
+        {/* List Skeleton */}
+        <div className="space-y-3">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 animate-pulse">
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 bg-gray-700 rounded-lg" />
+                <div className="w-12 h-12 bg-gray-700 rounded-full" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-gray-700 rounded w-3/4" />
+                  <div className="h-3 bg-gray-700 rounded w-1/2" />
+                </div>
+                <div className="text-right space-y-1">
+                  <div className="w-16 h-4 bg-gray-700 rounded" />
+                  <div className="w-10 h-3 bg-gray-700 rounded ml-auto" />
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -165,179 +202,237 @@ const PremiumLeaderboard = () => {
 
   const topThree = leaderboardData.slice(0, 3);
   const remaining = leaderboardData.slice(3);
-  const currentUser = leaderboardData.find(user => user.rank === userRank);
 
   return (
-    <div ref={leaderboardRef} className="w-full max-w-md mx-auto p-4 space-y-6 bg-gray-900 min-h-screen">
-      {/* Header with Period Selector */}
-      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="animate-spin-slow">
-              <Trophy className="text-yellow-400" size={24} />
-            </div>
-            <h2 className="text-xl font-bold text-white">Leaderboard</h2>
-          </div>
-          
-          <div className="flex items-center gap-1 text-sm">
-            <TrendingUp className="text-green-400" size={16} />
-            <span className="text-green-400">Live</span>
-          </div>
+    <div 
+      ref={leaderboardRef} 
+      className="w-full max-w-md mx-auto p-4 space-y-6 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen overflow-x-hidden"
+    >
+      {/* Enhanced Header */}
+      <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
+        {/* Animated background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
-        {/* Period Selector */}
-        <div className="grid grid-cols-3 gap-2">
-          {['daily', 'weekly', 'monthly'].map((period) => (
-            <button
-              key={period}
-              onClick={() => handlePeriodChange(period)}
-              className={`p-2 rounded-lg text-sm font-medium transition-all transform hover:scale-95 ${
-                selectedPeriod === period
-                  ? 'bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-400/50 text-white'
-                  : 'bg-gray-800/50 border border-gray-700/50 text-gray-400 hover:text-white'
-              }`}
-            >
-              {period.charAt(0).toUpperCase() + period.slice(1)}
-            </button>
-          ))}
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Trophy className="text-yellow-400 animate-bounce" size={28} />
+                <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur animate-pulse" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Leaderboard</h2>
+                <p className="text-sm text-gray-400 flex items-center gap-1">
+                  <Users size={14} />
+                  {totalUsers.toLocaleString()} players
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 bg-green-400/20 px-3 py-2 rounded-xl border border-green-400/30">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-green-400 text-sm font-medium">Live</span>
+            </div>
+          </div>
+
+          {/* Enhanced Period Selector */}
+          <div className="grid grid-cols-3 gap-3">
+            {['daily', 'weekly', 'monthly'].map((period) => (
+              <button
+                key={period}
+                onClick={() => handlePeriodChange(period)}
+                className={`relative p-3 rounded-2xl text-sm font-semibold transition-all duration-300 transform active:scale-95 ${
+                  selectedPeriod === period
+                    ? 'bg-gradient-to-r from-orange-500/30 to-red-500/30 border-2 border-orange-400/60 text-white shadow-lg shadow-orange-400/25'
+                    : 'bg-gray-800/60 border-2 border-gray-700/50 text-gray-400 hover:text-white hover:bg-gray-700/60 hover:border-gray-600/50'
+                }`}
+              >
+                <span className="relative z-10">{period.charAt(0).toUpperCase() + period.slice(1)}</span>
+                {selectedPeriod === period && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-2xl animate-pulse" />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Interactive Top 3 Podium */}
-      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
-        {/* Background gradient effect */}
+      {/* Enhanced Top 3 Podium */}
+      <div className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 relative overflow-hidden">
+        {/* Dynamic background effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-purple-500/5 to-blue-500/5" />
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-gradient-to-b from-yellow-400/10 to-transparent rounded-full blur-3xl" />
 
         <div className="relative z-10">
-          <h3 className="text-center text-lg font-semibold text-white mb-6 flex items-center justify-center gap-2">
-            <Crown className="text-yellow-400" />
-            Top Performers
+          <h3 className="text-center text-xl font-bold text-white mb-8 flex items-center justify-center gap-3">
+            <div className="relative">
+              <Crown className="text-yellow-400" size={24} />
+              <div className="absolute -inset-1 bg-yellow-400/30 rounded-full blur animate-pulse" />
+            </div>
+            Elite Champions
           </h3>
 
-          {/* Podium Display */}
-          <div className="flex items-end justify-center gap-4 mb-6">
-            {topThree.map((user) => {
+          {/* Enhanced Podium Display */}
+          <div className="flex items-end justify-center gap-3 mb-8">
+            {topThree.map((user, index) => {
               const IconComponent = user.tier.icon;
+              const podiumHeights = ['h-28', 'h-24', 'h-20'];
+              const podiumOrder = ['order-2', 'order-1', 'order-3'];
+              
               return (
                 <div
                   key={user.id}
-                  className={`flex flex-col items-center ${getPodiumOrder(user.rank)} transform transition-transform hover:scale-105`}
+                  className={`flex flex-col items-center ${podiumOrder[index]} transform transition-all duration-500 hover:scale-105 cursor-pointer`}
                   onClick={() => triggerHaptic()}
                 >
-                  {/* Crown for #1 */}
+                  {/* Crown animation for #1 */}
                   {user.rank === 1 && (
-                    <div className="mb-2 animate-bounce">
-                      <Crown className="text-yellow-400" size={32} />
+                    <div className="mb-3 relative">
+                      <Crown className="text-yellow-400 animate-bounce" size={32} />
+                      <div className="absolute -inset-2 bg-yellow-400/20 rounded-full blur-xl animate-pulse" />
                     </div>
                   )}
 
-                  {/* User Avatar */}
-                  <div className={`relative mb-2 ${user.rank === 1 ? 'w-20 h-20' : 'w-16 h-16'}`}>
-                    <div className={`w-full h-full rounded-full ${user.tier.bgColor} p-1 ${
-                      user.rank === 1 ? 'shadow-lg shadow-yellow-400/50' : ''
-                    }`}>
+                  {/* Enhanced User Avatar */}
+                  <div className={`relative mb-3 ${user.rank === 1 ? 'w-20 h-20' : 'w-16 h-16'}`}>
+                    <div className={`w-full h-full rounded-full ${user.tier.bgColor} p-1 border-2 ${user.tier.borderColor} ${user.tier.glowColor} shadow-xl`}>
                       <img 
                         src={user.avatar} 
                         alt={user.username}
-                        className="w-full h-full rounded-full bg-gray-800"
+                        className="w-full h-full rounded-full object-cover"
+                        onError={(e) => {
+                          e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}&backgroundColor=transparent`;
+                        }}
                       />
                       {user.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-gray-900" />
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-gray-900 animate-pulse">
+                          <div className="w-full h-full bg-green-400 rounded-full animate-ping" />
+                        </div>
                       )}
                     </div>
                     
-                    {/* Rank Badge */}
-                    <div className={`absolute -top-2 -left-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                      user.rank === 1 ? 'bg-yellow-400 text-black' :
-                      user.rank === 2 ? 'bg-gray-300 text-black' :
-                      'bg-orange-400 text-white'
+                    {/* Enhanced Rank Badge */}
+                    <div className={`absolute -top-2 -left-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-lg ${
+                      user.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-500 text-black shadow-yellow-400/50' :
+                      user.rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-black shadow-gray-400/50' :
+                      'bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-orange-400/50'
                     }`}>
                       {user.rank}
                     </div>
+
+                    {/* Level indicator */}
+                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gray-800 px-2 py-0.5 rounded-full text-xs text-white border border-gray-600">
+                      Lv.{user.level}
+                    </div>
                   </div>
 
-                  {/* Username */}
-                  <p className={`font-semibold text-center mb-1 ${
-                    user.rank === 1 ? 'text-yellow-400 text-lg' : 'text-white'
+                  {/* Enhanced Username */}
+                  <p className={`font-bold text-center mb-2 max-w-20 truncate ${
+                    user.rank === 1 ? 'text-yellow-300 text-lg' : 'text-white text-sm'
                   }`}>
                     {user.username}
                   </p>
 
-                  {/* Points */}
-                  <p className="text-sm text-gray-300 mb-2">
-                    {user.points.toLocaleString()} pts
-                  </p>
+                  {/* Enhanced Points Display */}
+                  <div className="text-center mb-3">
+                    <p className={`font-bold ${user.rank === 1 ? 'text-lg text-yellow-300' : 'text-white'}`}>
+                      {user.points.toLocaleString()}
+                    </p>
+                    <p className="text-xs text-gray-400">points</p>
+                  </div>
 
-                  {/* Podium Base */}
-                  <div className={`w-20 ${getPodiumHeight(user.rank)} ${user.tier.bgColor} rounded-t-lg flex items-center justify-center transition-all duration-500`}>
-                    <IconComponent className={user.tier.color} size={20} />
+                  {/* Enhanced Podium Base */}
+                  <div className={`w-20 ${podiumHeights[index]} ${user.tier.bgColor} rounded-t-2xl flex flex-col items-center justify-center transition-all duration-500 border-t-2 ${user.tier.borderColor} relative overflow-hidden`}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    <IconComponent className={`${user.tier.color} z-10`} size={20} />
+                    <span className={`text-xs font-bold ${user.tier.color} mt-1 z-10`}>
+                      {user.tier.tier}
+                    </span>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Quick Stats for Top 3 */}
-          <div className="grid grid-cols-3 gap-2 text-xs">
-            {topThree.map((user) => (
+          {/* Enhanced Quick Stats */}
+          <div className="grid grid-cols-3 gap-4 bg-gray-900/50 rounded-2xl p-4">
+            {topThree.map((user, index) => (
               <div key={user.id} className="text-center">
-                <div className="text-white font-semibold">{user.accuracy}%</div>
-                <div className="text-gray-400">Accuracy</div>
+                <div className="text-white font-bold text-lg">{user.accuracy}%</div>
+                <div className="text-gray-400 text-xs">Accuracy</div>
+                <div className="text-gray-300 text-xs mt-1">{user.labelsCompleted} labels</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Remaining Rankings List */}
+      {/* Enhanced Rankings List */}
       <div className="space-y-3">
         {remaining.map((user) => {
           const IconComponent = user.tier.icon;
           return (
             <div
               key={user.id}
-              className={`bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-4 relative overflow-hidden transition-all hover:bg-gray-700/50 hover:scale-102 ${
-                user.rank === userRank ? 'ring-2 ring-yellow-400/50' : ''
-              }`}
+              className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 relative overflow-hidden transition-all duration-300 hover:bg-gray-700/50 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               onClick={() => triggerHaptic()}
             >
-              {/* User indicator */}
-              {user.rank === userRank && (
-                <div className="absolute top-2 right-2 px-2 py-1 bg-yellow-400/20 rounded-lg text-xs text-yellow-400 font-medium animate-pulse">
-                  You
-                </div>
-              )}
+              {/* Subtle background gradient */}
+              <div className={`absolute inset-0 ${user.tier.bgColor} opacity-20`} />
 
-              <div className="flex items-center gap-4">
-                {/* Rank */}
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
-                  <span className="font-bold text-white">{user.rank}</span>
+              <div className="relative z-10 flex items-center gap-4">
+                {/* Enhanced Rank Display */}
+                <div className={`flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center border ${user.tier.borderColor} ${user.tier.glowColor} shadow-lg`}>
+                  <span className="font-bold text-white text-lg">{user.rank}</span>
                 </div>
 
-                {/* Avatar */}
+                {/* Enhanced Avatar */}
                 <div className="relative">
-                  <div className={`w-12 h-12 rounded-full ${user.tier.bgColor} p-0.5`}>
+                  <div className={`w-14 h-14 rounded-full ${user.tier.bgColor} p-1 border-2 ${user.tier.borderColor}`}>
                     <img 
                       src={user.avatar} 
                       alt={user.username}
-                      className="w-full h-full rounded-full bg-gray-800"
+                      className="w-full h-full rounded-full object-cover"
+                      onError={(e) => {
+                        e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}&backgroundColor=transparent`;
+                      }}
                     />
                     {user.isOnline && (
-                      <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border border-gray-900" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-400 rounded-full border-2 border-gray-900">
+                        <div className="w-full h-full bg-green-400 rounded-full animate-ping" />
+                      </div>
                     )}
+                  </div>
+                  
+                  {/* Level badge */}
+                  <div className="absolute -top-1 -right-1 bg-gray-800 text-white text-xs px-1.5 py-0.5 rounded-full border border-gray-600 font-medium">
+                    {user.level}
                   </div>
                 </div>
 
-                {/* User Info */}
+                {/* Enhanced User Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-white truncate">{user.username}</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-semibold text-white truncate text-base">{user.username}</p>
                     <IconComponent className={user.tier.color} size={16} />
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${user.tier.bgColor} ${user.tier.color}`}>
+                      {user.tier.tier}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-gray-400">
-                    <span>{user.labelsCompleted} labels</span>
-                    <span>{user.accuracy}% acc</span>
-                    {user.currentStreak > 5 && (
+                  
+                  <div className="flex items-center gap-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <Target size={12} />
+                      <span>{user.labelsCompleted}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Zap size={12} />
+                      <span>{user.accuracy}%</span>
+                    </div>
+                    {user.currentStreak > 7 && (
                       <div className="flex items-center gap-1 text-orange-400">
                         <Flame size={12} />
                         <span>{user.currentStreak}</span>
@@ -346,16 +441,17 @@ const PremiumLeaderboard = () => {
                   </div>
                 </div>
 
-                {/* Points & Growth */}
+                {/* Enhanced Points & Growth */}
                 <div className="text-right">
-                  <div className="font-bold text-white">
+                  <div className="font-bold text-white text-lg">
                     {user.points.toLocaleString()}
                   </div>
-                  <div className={`text-xs flex items-center gap-1 ${
-                    user.weeklyGrowth > 0 ? 'text-green-400' : 'text-red-400'
+                  <div className="text-xs text-gray-400 mb-1">points</div>
+                  <div className={`text-xs flex items-center gap-1 justify-end font-medium ${
+                    user.weeklyGrowth > 0 ? 'text-green-400' : user.weeklyGrowth < 0 ? 'text-red-400' : 'text-gray-400'
                   }`}>
-                    {user.weeklyGrowth > 0 ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                    <span>{Math.abs(user.weeklyGrowth)}</span>
+                    {user.weeklyGrowth > 0 ? <ChevronUp size={12} /> : user.weeklyGrowth < 0 ? <ChevronDown size={12} /> : null}
+                    <span>{user.weeklyGrowth > 0 ? '+' : ''}{user.weeklyGrowth}</span>
                   </div>
                 </div>
               </div>
@@ -364,23 +460,56 @@ const PremiumLeaderboard = () => {
         })}
       </div>
 
-      {/* Current User Position (if not in top 15) */}
-      {userRank > 15 && currentUser && (
-        <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-400/50 rounded-2xl p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-2xl font-bold text-yellow-400">#{userRank}</div>
+      {/* Enhanced User Position Card */}
+      <div className="bg-gradient-to-r from-orange-500/30 to-red-500/30 border-2 border-orange-400/60 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl">
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 via-red-400/10 to-pink-400/10" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full blur-3xl" />
+        
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="text-4xl font-black text-yellow-300 flex items-center">
+                  #{userRank.toLocaleString()}
+                </div>
+                <div className="absolute -inset-1 bg-yellow-400/20 rounded blur animate-pulse" />
+              </div>
               <div>
-                <p className="font-semibold text-white">Your Position</p>
-                <p className="text-sm text-gray-300">{currentUser.points.toLocaleString()} points</p>
+                <p className="text-xl font-bold text-white flex items-center gap-2">
+                  <Award className="text-yellow-400" size={20} />
+                  Your Rank
+                </p>
+                <p className="text-sm text-gray-300">
+                  Top {((userRank / totalUsers) * 100).toFixed(1)}% globally
+                </p>
               </div>
             </div>
-            <button className="bg-gray-800/50 border border-gray-700/50 px-4 py-2 rounded-lg text-sm text-white hover:bg-gray-700/50 transition-colors">
-              View More
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-800/50 rounded-2xl p-4 text-center">
+              <div className="text-2xl font-bold text-white mb-1">
+                {(totalUsers - userRank).toLocaleString()}
+              </div>
+              <div className="text-sm text-gray-400">Players behind you</div>
+            </div>
+            
+            <button 
+              onClick={() => triggerHaptic()}
+              className="bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-bold py-4 px-6 rounded-2xl hover:from-yellow-300 hover:to-orange-300 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <TrendingUp size={18} />
+                Climb Up!
+              </div>
             </button>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Bottom padding for mobile */}
+      <div className="pb-8" />
     </div>
   );
 };
