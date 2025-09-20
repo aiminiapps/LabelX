@@ -371,7 +371,7 @@ const PremiumLeaderboard = () => {
           return (
             <div
               key={user.id}
-              className="bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 relative overflow-hidden transition-all duration-300 hover:bg-gray-700/50 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="bg-gray-800/40 glass-warm backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 relative overflow-hidden transition-all duration-300 hover:bg-gray-700/50 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               onClick={() => triggerHaptic()}
             >
               {/* Subtle background gradient */}
@@ -379,9 +379,9 @@ const PremiumLeaderboard = () => {
 
               <div className="relative z-10 flex items-center gap-4">
                 {/* Enhanced Rank Display */}
-                <div className={`flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center border ${user.tier.borderColor} ${user.tier.glowColor} shadow-lg`}>
+                {/* <div className={`flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center border ${user.tier.borderColor} ${user.tier.glowColor} shadow-lg`}>
                   <span className="font-bold text-white text-lg">{user.rank}</span>
-                </div>
+                </div> */}
 
                 {/* Enhanced Avatar */}
                 <div className="relative">
