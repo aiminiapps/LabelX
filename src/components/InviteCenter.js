@@ -174,7 +174,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className=" inset-0 backdrop-blur-sm z-50 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -183,7 +183,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
         className="glass rounded-3xl w-full max-w-md relative overflow-hidden"
       >
         {/* Animated background gradients */}
-        <div className="absolute inset-0">
+        {/* <div className="absolute inset-0">
           <motion.div
             animate={{
               background: [
@@ -196,7 +196,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
             transition={{ duration: 8, repeat: Infinity }}
             className="absolute inset-0"
           />
-        </div>
+        </div> */}
 
         <div className="relative z-10 p-6">
           {/* Header */}
