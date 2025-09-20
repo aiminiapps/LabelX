@@ -206,7 +206,7 @@ const PremiumLeaderboard = () => {
   return (
     <div 
       ref={leaderboardRef} 
-      className="w-full mx-auto space-y-6 min-h-screen overflow-x-hidden"
+      className="w-full mx-auto space-y-6 min-h-screen overflow-x-hidden pb-12"
     >
       {/* Enhanced Header */}
       <div className="glass rounded-3xl p-6 relative overflow-hidden">
