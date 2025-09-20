@@ -455,49 +455,38 @@ const PremiumLeaderboard = () => {
       </div>
 
       {/* Enhanced User Position Card */}
-      <div className="bg-gradient-to-r from-orange-500/30 to-red-500/30 border-2 border-orange-400/60 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl">
+      <div className="bg-gradient-to-r glass glass-dark from-orange-500/30 to-red-500/30 border-2 border-orange-400/60 rounded-3xl p-4 relative overflow-hidden backdrop-blur-xl">
         {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 via-red-400/10 to-pink-400/10" />
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full blur-3xl" />
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 via-red-400/10 to-pink-400/10" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full blur-3xl" /> */}
         
         <div className="relative z-10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-20">
               <div className="relative">
-                <div className="text-4xl font-black text-yellow-300 flex items-center">
+                <div className="text-3xl font-black text-yellow-300 flex items-center">
                   #{userRank.toLocaleString()}
                 </div>
-                <div className="absolute -inset-1 bg-yellow-400/20 rounded blur animate-pulse" />
               </div>
               <div>
-                <p className="text-xl font-bold text-white flex items-center gap-2">
+                <p className="text-lg font-bold text-white flex items-center gap-2">
                   <Award className="text-yellow-400" size={20} />
                   Your Rank
                 </p>
-                <p className="text-sm text-gray-300">
+                <p className="text-xs text-gray-300">
                   Top {((userRank / totalUsers) * 100).toFixed(1)}% globally
                 </p>
               </div>
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-800/50 rounded-2xl p-4 text-center">
-              <div className="text-2xl font-bold text-white mb-1">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="bg-gray-800/50 glass-button rounded-2xl p-4 text-center">
+              <div className="text-xl font-bold text-white mb-1">
                 {(totalUsers - userRank).toLocaleString()}
               </div>
               <div className="text-sm text-gray-400">Players behind you</div>
             </div>
-            
-            <button 
-              onClick={() => triggerHaptic()}
-              className="bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-bold py-4 px-6 rounded-2xl hover:from-yellow-300 hover:to-orange-300 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
-            >
-              <div className="flex items-center justify-center gap-2">
-                <TrendingUp size={18} />
-                Climb Up!
-              </div>
-            </button>
           </div>
         </div>
       </div>
