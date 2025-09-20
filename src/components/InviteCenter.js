@@ -174,7 +174,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
   };
 
   return (
-    <div className=" inset-0 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div className=" flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -198,28 +198,10 @@ Use my invite link and we both get bonus tokens! 🎁`;
           />
         </div> */}
 
-        <div className="relative z-10 p-6">
+        <div className="relative z-10">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">Invite Friends</h2>
-            <div className="flex items-center gap-2">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={onClose}
-                className="p-2 rounded-full glass-light hover:bg-white/10 transition-colors"
-              >
-                <IoClose className="text-gray-400" size={20} />
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-full glass-light hover:bg-white/10 transition-colors"
-              >
-                <IoHelpCircleOutline className="text-gray-400" size={20} />
-              </motion.button>
-            </div>
           </div>
 
           {/* 3D Illustration Area */}
