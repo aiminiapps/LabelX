@@ -174,7 +174,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
   };
 
   return (
-    <div className=" flex items-center justify-center">
+    <div className=" flex items-center justify-center pb-20">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -182,21 +182,6 @@ Use my invite link and we both get bonus tokens! 🎁`;
         transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
         className="glass rounded-3xl w-full max-w-md relative overflow-hidden"
       >
-        {/* Animated background gradients */}
-        {/* <div className="absolute inset-0">
-          <motion.div
-            animate={{
-              background: [
-                'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)',
-                'radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.15) 0%, transparent 50%)',
-                'radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%)',
-                'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)'
-              ]
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute inset-0"
-          />
-        </div> */}
 
         <div className="relative z-10">
           {/* Header */}
