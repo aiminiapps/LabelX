@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { IoClose, IoHelpCircleOutline, IoShareSocial, IoLink, IoCopy, IoPeople, IoGift, IoSparkles, IoCheckmark } from 'react-icons/io5';
 import { BiUserPlus, BiSend, BiCoin } from 'react-icons/bi';
 import { TbUsers, TbGift, TbStars } from 'react-icons/tb';
+import Image from 'next/image';
 
 const InviteFriendsPage = ({ onClose }) => {
   // Component state
@@ -190,7 +191,8 @@ Use my invite link and we both get bonus tokens! 🎁`;
           </div>
 
           {/* 3D Illustration Area */}
-          <div className="relative mb-8 h-48 flex items-center justify-center">
+          <Image src='/invite.png' alt='Invite Image' width={400} height={400} quality={100} className='mx-auto scale-110'/>
+          <div className="relative hidden mb-8 h-48 flex items-center justify-center">
             {/* Main 3D Elements */}
             <motion.div
               animate={floatingControls}
