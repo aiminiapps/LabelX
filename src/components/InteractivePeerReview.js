@@ -203,7 +203,7 @@ const InteractivePeerReview = () => {
   };
 
   const getWeightIndicator = (weight) => {
-    if (weight >= 2.0) return { icon: <BiCrown />, color: 'text-yellow-400', label: 'Expert' };
+    if (weight >= 2.0) return { icon: <BiCrown />, color: 'text-[#FF7A1A]', label: 'Expert' };
     if (weight >= 1.5) return { icon: <BiTrophy />, color: 'text-blue-400', label: 'Advanced' };
     return { icon: <BiShield />, color: 'text-green-400', label: 'Regular' };
   };
@@ -361,7 +361,7 @@ const InteractivePeerReview = () => {
             
             <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
               <motion.div
-                className={`absolute inset-y-0 left-0 bg-gradient-to-r ${getConsensusColor(currentReview.consensus.weightedScore)} rounded-full`}
+                className={`absolute inset-y-0 left-0 bg-[#FF7A1A] rounded-full`}
                 initial={{ width: 0 }}
                 animate={{ width: `${currentReview.consensus.weightedScore * 100}%` }}
                 transition={{ duration: 1, ease: "easeOut" }}
@@ -531,7 +531,7 @@ const InteractivePeerReview = () => {
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2">
                 <motion.div
-                  className="bg-green-400 h-2 rounded-full relative overflow-hidden"
+                  className="bg-[#FF7A1A] h-2 rounded-full relative overflow-hidden"
                   initial={{ width: 0 }}
                   animate={{ width: `${(currentReview.consensus.confirmed / currentReview.consensus.total) * 100}%` }}
                   transition={{ duration: 0.8 }}
