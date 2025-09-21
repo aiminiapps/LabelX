@@ -83,14 +83,18 @@ const CustomLoader = () => {
     <div className='min-h-screen max-w-md w-full relative flex items-center justify-center mx-auto overflow-hidden'>
       {/* Background decorations */}
       <div className="fixed top-0 inset-0 -z-10">
-            <Image
-              src="/loaderbg.svg"
-              alt="Background"
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
-          </div>
+      <div className="min-h-screen w-full relative bg-black">
+    {/* Copper Forge Background with Top Glow */}
+    <div
+      className="absolute inset-0 z-0"
+      style={{
+        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(249, 115, 22, 0.25), transparent 70%), #000000",
+      }}
+    />
+  
+    {/* Your Content/Components */}
+  </div>
+      </div>
       {/* Logo with advanced canvas shine effect */}
       <div className="relative">
         <motion.div
