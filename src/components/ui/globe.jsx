@@ -289,13 +289,13 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
           >
             <div className="flex items-center justify-center gap-1 mb-1">
               <motion.div 
-                className="w-1.5 h-1.5 bg-yellow-400 rounded-full"
+                className="w-1.5 h-1.5 bg-[#FF7A1A] rounded-full"
                 animate={{ 
                   boxShadow: ["0 0 0 0 rgba(255, 214, 10, 0.4)", "0 0 0 4px rgba(255, 214, 10, 0)"],
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <IoSparkles size={14} className="text-yellow-400 group-hover:scale-110 transition-transform" />
+              <IoSparkles size={14} className="text-[#FF7A1A] group-hover:scale-110 transition-transform" />
             </div>
             <motion.div
               key={Math.floor(globalStats.accuracy * 10)}
@@ -349,7 +349,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={`pulse-${i}`}
-              className="absolute inset-0 rounded-full border border-yellow-400/20"
+              className="absolute inset-0 rounded-full border border-[#FF7A1A]/20"
               initial={{ scale: 0.9, opacity: 0.6 }}
               animate={{ scale: 1.3 + i * 0.2, opacity: 0 }}
               exit={{ opacity: 0 }}
@@ -428,7 +428,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
         </div>
         
         <motion.div 
-          className="glass-light px-3 py-1.5 rounded-lg text-xs text-yellow-400 font-medium"
+          className="glass-light px-3 py-1.5 rounded-lg text-xs text-[#FF7A1A] font-medium"
           animate={{ backgroundColor: activeNode ? "rgba(255, 214, 10, 0.1)" : "rgba(255, 255, 255, 0.05)" }}
           transition={{ duration: 0.3 }}
         >
