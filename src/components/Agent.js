@@ -881,7 +881,7 @@ const OptimizedLabelXApp = () => {
   );
 
   const renderRewards = () => (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 py-4 pb-16">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">💰 Rewards</h2>
         <p className="text-gray-400">Your earnings from helping train AI</p>
@@ -902,13 +902,13 @@ const OptimizedLabelXApp = () => {
 
         <motion.button
           onClick={() => triggerHaptic('success')}
-          className="w-full p-4 rounded-2xl font-bold text-white text-lg"
+          className="w-full p-4 glass-button rounded-2xl font-bold text-white text-lg"
           style={{ backgroundColor: theme.primary }}
           disabled={userStats.claimableTokens === 0}
           whileHover={userStats.claimableTokens > 0 ? { scale: 1.02 } : {}}
           whileTap={userStats.claimableTokens > 0 ? { scale: 0.98 } : {}}
         >
-          {userStats.claimableTokens > 0 ? 'Claim Tokens' : 'Complete missions to earn tokens'}
+          {userStats.claimableTokens > 0 ? 'Claim Tokens (Coming Soon)' : 'Complete missions to earn tokens'}
         </motion.button>
       </motion.div>
 
