@@ -473,7 +473,7 @@ const OptimizedLabelXApp = () => {
 
   // Render Functions
   const renderHome = () => (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 py-4 pb-16">
       {/* Welcome Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
