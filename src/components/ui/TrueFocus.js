@@ -88,7 +88,7 @@ const TrueFocus = ({
       })}
 
       <motion.div
-        className="absolute top-0 left-0 pointer-events-none box-border border-0"
+        className="absolute top-2.5 left-1 pointer-events-none box-border border-0"
         animate={{
           x: focusRect.x,
           y: focusRect.y,
@@ -112,7 +112,7 @@ const TrueFocus = ({
           }}
         ></span>
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] right-[-10px] border-l-0 border-b-0"
+          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] right-[-38px] border-l-0 border-b-0"
           style={{
             borderColor: 'var(--border-color)',
             filter: 'drop-shadow(0 0 4px var(--border-color))'
@@ -126,7 +126,7 @@ const TrueFocus = ({
           }}
         ></span>
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] right-[-10px] border-l-0 border-t-0"
+          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] right-[-38px] border-l-0 border-t-0"
           style={{
             borderColor: 'var(--border-color)',
             filter: 'drop-shadow(0 0 4px var(--border-color))'
