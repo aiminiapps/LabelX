@@ -1,544 +1,542 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { IoClose, IoSparkles, IoTrendingUp, IoFlash, IoAnalytics, IoCheckmarkCircle, IoWarningOutline, IoRefresh } from 'react-icons/io5';
-import { BiShield, BiBot, BiChart, BiStar, BiTime, BiCoin } from 'react-icons/bi';
-import { TbRobot, TbChartLine, TbBulb, TbEye, TbMagic } from 'react-icons/tb';
-import { LuBrainCircuit } from "react-icons/lu";
-import { GiConvergenceTarget } from "react-icons/gi";
+import { IoCloudUpload, IoDocument, IoCheckmarkCircle, IoBrain, IoSparkles, IoClose, IoPlay, IoRefresh, IoArrowForward } from 'react-icons/io5';
+import { BiUpload, BiFile, BiData, BiBot, BiMicrophone, BiSend } from 'react-icons/bi';
+import { TbFileSpreadsheet, TbFileText, TbRobot, TbBrain, TbWand } from 'react-icons/tb';
+import { HiOutlineDocument, HiOutlineDocumentText } from 'react-icons/hi2';
 
-const AIAccuracyAgent = ({ onClose }) => {
-  // Core state management
-  const [selectedAgent, setSelectedAgent] = useState(null);
-  const [conversation, setConversation] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [userMessage, setUserMessage] = useState('');
-  const [accuracyPrediction, setAccuracyPrediction] = useState(null);
-  const [realTimeInsights, setRealTimeInsights] = useState({
-    currentAccuracy: 94.2,
-    predictedAccuracy: 96.1,
-    confidenceScore: 0.87,
-    recommendation: 'Focus on medical imaging tasks for optimal performance'
+const AIAgentCreator = () => {
+  // Core state
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [agentConfig, setAgentConfig] = useState({
+    name: '',
+    description: '',
+    dataType: 'mixed',
+    accuracy: 0,
+    isTraining: false,
+    isReady: false
   });
-  const [researchCredits, setResearchCredits] = useState(5);
+  const [dragActive, setDragActive] = useState(false);
+  const [conversation, setConversation] = useState([]);
+  const [userInput, setUserInput] = useState('');
+  const [credits, setCredits] = useState(10);
+  const [showAgent, setShowAgent] = useState(false);
 
   // Animation controls
+  const uploadControls = useAnimation();
   const agentControls = useAnimation();
-  const chatControls = useAnimation();
-  const insightControls = useAnimation();
+  const trainingControls = useAnimation();
 
   // Refs
-  const chatEndRef = useRef(null);
-  const inputRef = useRef(null);
-
-  // Available AI agents [web:283][web:299]
-  const availableAgents = [
-    {
-      id: 'accuracy_predictor',
-      name: 'Accuracy Predictor',
-      icon: <GiConvergenceTarget className="text-blue-400" size={24} />,
-      description: 'Predicts your labeling accuracy for upcoming tasks',
-      specialty: 'Real-time performance forecasting',
-      color: 'from-blue-400 to-cyan-500',
-      bgColor: 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20',
-      borderColor: 'border-blue-400/50',
-      features: ['Confidence scoring', 'Task difficulty assessment', 'Performance optimization']
-    },
-    {
-      id: 'quality_coach',
-      name: 'Quality Coach',
-      icon: <BiShield className="text-green-400" size={24} />,
-      description: 'Provides personalized tips to improve accuracy',
-      specialty: 'Adaptive learning recommendations',
-      color: 'from-green-400 to-emerald-500',
-      bgColor: 'bg-gradient-to-br from-green-500/20 to-emerald-500/20',
-      borderColor: 'border-green-400/50',
-      features: ['Pattern recognition', 'Weakness identification', 'Skill development']
-    },
-    {
-      id: 'insight_analyst',
-      name: 'Insight Analyst',
-      icon: <IoAnalytics className="text-purple-400" size={24} />,
-      description: 'Analyzes your performance patterns and trends',
-      specialty: 'Deep performance analytics',
-      color: 'from-purple-400 to-pink-500',
-      bgColor: 'bg-gradient-to-br from-purple-500/20 to-pink-500/20',
-      borderColor: 'border-purple-400/50',
-      features: ['Trend analysis', 'Comparative benchmarking', 'Predictive insights']
-    },
-    {
-      id: 'smart_assistant',
-      name: 'Smart Assistant',
-      icon: <LuBrainCircuit className="text-yellow-400" size={24} />,
-      description: 'General AI assistant for labeling optimization',
-      specialty: 'Multi-purpose optimization guidance',
-      color: 'from-yellow-400 to-orange-500',
-      bgColor: 'bg-gradient-to-br from-yellow-500/20 to-orange-500/20',
-      borderColor: 'border-yellow-400/50',
-      features: ['Context-aware suggestions', 'Real-time guidance', 'Performance optimization']
-    }
-  ];
-
-  // System prompts for each agent [web:283][web:299]
-  const systemPrompts = {
-    accuracy_predictor: {
-      greeting: "🎯 Hello! I'm your Accuracy Predictor. I analyze your labeling patterns and predict your performance on upcoming tasks. Let me help you optimize your accuracy and earn more $LBLX tokens!",
-      system: "You are an AI accuracy prediction agent for LabelX. Analyze user performance patterns and provide specific, actionable predictions about their labeling accuracy. Focus on confidence scores, task difficulty assessment, and optimization strategies."
-    },
-    quality_coach: {
-      greeting: "🛡️ Hi there! I'm your personal Quality Coach. I've analyzed your recent labeling performance and I'm here to help you improve your accuracy through personalized training and insights. Ready to level up?",
-      system: "You are a quality coaching agent for data labeling. Provide personalized advice to improve accuracy, identify common mistakes, and suggest targeted practice areas. Be encouraging and specific in your recommendations."
-    },
-    insight_analyst: {
-      greeting: "📊 Welcome! I'm your Insight Analyst. I dive deep into your performance data to uncover hidden patterns, compare you with top performers, and provide strategic insights for maximum token earnings.",
-      system: "You are an analytics agent specializing in performance insights for data labeling. Analyze trends, provide comparative analysis, and deliver actionable insights about user performance patterns and optimization opportunities."
-    },
-    smart_assistant: {
-      greeting: "🧠 Hello! I'm your Smart Assistant, your all-in-one AI companion for LabelX optimization. I can help with accuracy improvement, task selection, reward optimization, and any questions about the platform.",
-      system: "You are a comprehensive AI assistant for the LabelX platform. Help users with accuracy improvement, task optimization, reward strategies, and general platform guidance. Provide practical, actionable advice."
-    }
-  };
-
-  // Initialize real-time insights
-  useEffect(() => {
-    startRealTimeUpdates();
-    loadUserStats();
-  }, []);
-
-  // Start real-time insight updates
-  const startRealTimeUpdates = () => {
-    const interval = setInterval(() => {
-      setRealTimeInsights(prev => ({
-        ...prev,
-        currentAccuracy: prev.currentAccuracy + (Math.random() - 0.5) * 0.2,
-        predictedAccuracy: prev.predictedAccuracy + (Math.random() - 0.5) * 0.3,
-        confidenceScore: Math.max(0.7, Math.min(0.99, prev.confidenceScore + (Math.random() - 0.5) * 0.05))
-      }));
-    }, 3000);
-
-    return () => clearInterval(interval);
-  };
-
-  // Load user statistics
-  const loadUserStats = () => {
-    if (typeof window !== 'undefined') {
-      const stats = localStorage.getItem('labelx-user-stats');
-      if (stats) {
-        const parsed = JSON.parse(stats);
-        setRealTimeInsights(prev => ({
-          ...prev,
-          currentAccuracy: parsed.accuracy || 94.2
-        }));
-      }
-    }
-  };
+  const fileInputRef = useRef(null);
+  const dropRef = useRef(null);
+  const chatScrollRef = useRef(null);
 
   // Haptic feedback
-  const triggerHaptic = (type = 'impact', style = 'light') => {
+  const triggerHaptic = (type = 'light') => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
-      if (type === 'notification') {
-        window.Telegram.WebApp.HapticFeedback.notificationOccurred(style);
+      if (type === 'success') {
+        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+      } else if (type === 'error') {
+        window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
       } else {
-        window.Telegram.WebApp.HapticFeedback.impactOccurred(style);
+        window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
       }
     }
   };
 
-  // Handle agent selection
-  const handleAgentSelect = (agent) => {
-    if (researchCredits <= 0) {
-      triggerHaptic('notification', 'error');
+  // File handling functions [web:302][web:305]
+  const handleDrag = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  }, []);
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFiles(Array.from(e.dataTransfer.files));
+    }
+  }, []);
+
+  const handleFiles = (files) => {
+    const validFiles = files.filter(file => {
+      const validTypes = ['.csv', '.txt', '.json'];
+      const isValid = validTypes.some(type => file.name.toLowerCase().endsWith(type));
+      const isSize = file.size <= 10 * 1024 * 1024; // 10MB limit
+      return isValid && isSize;
+    });
+
+    if (validFiles.length === 0) {
+      triggerHaptic('error');
       return;
     }
 
-    setSelectedAgent(agent);
-    setResearchCredits(prev => Math.max(0, prev - 1));
-    triggerHaptic('impact', 'medium');
+    triggerHaptic('success');
     
-    const prompt = systemPrompts[agent.id];
-    setConversation([{
-      role: 'assistant',
-      content: prompt.greeting,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      id: `welcome_${Date.now()}`
-    }]);
+    validFiles.forEach(file => {
+      const fileObj = {
+        id: Date.now() + Math.random(),
+        name: file.name,
+        size: file.size,
+        type: file.name.toLowerCase().endsWith('.csv') ? 'csv' : 
+              file.name.toLowerCase().endsWith('.json') ? 'json' : 'txt',
+        uploadProgress: 0,
+        status: 'uploading',
+        file: file
+      };
 
-    // Animate agent selection
-    agentControls.start({
-      scale: [1, 1.05, 1],
-      transition: { duration: 0.4 }
+      setUploadedFiles(prev => [...prev, fileObj]);
+      simulateUpload(fileObj);
     });
   };
 
-  // Send message to AI agent
-  const sendMessage = async () => {
-    if (!userMessage.trim() || isLoading || !selectedAgent) return;
+  // Simulate file upload with progress [web:300][web:303]
+  const simulateUpload = (fileObj) => {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 25;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === fileObj.id 
+            ? { ...f, uploadProgress: 100, status: 'completed' }
+            : f
+        ));
 
-    const newUserMessage = {
+        // Auto-train agent after successful upload
+        setTimeout(() => {
+          trainAgent(fileObj);
+        }, 1000);
+      } else {
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === fileObj.id 
+            ? { ...f, uploadProgress: progress }
+            : f
+        ));
+      }
+    }, 200);
+  };
+
+  // Simulate agent training [web:306][web:312]
+  const trainAgent = async (fileData) => {
+    triggerHaptic('medium');
+    
+    setAgentConfig(prev => ({
+      ...prev,
+      name: `${fileData.name.split('.')[0]} AI Assistant`,
+      description: `Intelligent agent trained on ${fileData.name}`,
+      dataType: fileData.type,
+      isTraining: true,
+      accuracy: 0
+    }));
+
+    // Simulate training progress
+    let accuracy = 0;
+    const trainingInterval = setInterval(() => {
+      accuracy += Math.random() * 15;
+      if (accuracy >= 95) {
+        accuracy = Math.min(98.5, 85 + Math.random() * 13.5);
+        clearInterval(trainingInterval);
+        
+        setAgentConfig(prev => ({
+          ...prev,
+          accuracy: accuracy,
+          isTraining: false,
+          isReady: true
+        }));
+
+        // Success celebration
+        agentControls.start({
+          scale: [1, 1.1, 1],
+          rotate: [0, 5, -5, 0],
+          transition: { duration: 0.8 }
+        });
+
+        triggerHaptic('success');
+        
+        // Initialize conversation
+        setConversation([{
+          role: 'assistant',
+          content: `Hello! I'm your personalized AI agent trained on "${fileData.name}". I can help you analyze, query, and gain insights from your data. What would you like to know?`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          id: `welcome_${Date.now()}`
+        }]);
+        
+      } else {
+        setAgentConfig(prev => ({ ...prev, accuracy }));
+      }
+    }, 300);
+  };
+
+  // Handle agent conversation [web:301][web:307]
+  const handleAgentChat = async () => {
+    if (!userInput.trim() || credits <= 0) return;
+    
+    triggerHaptic('light');
+    setCredits(prev => Math.max(0, prev - 1));
+    
+    const userMessage = {
       role: 'user',
-      content: userMessage,
+      content: userInput,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      id: `user_${Date.now()}`
+      id: Date.now()
     };
+    
+    setConversation(prev => [...prev, userMessage]);
+    setUserInput('');
 
-    setConversation(prev => [...prev, newUserMessage]);
-    setUserMessage('');
-    setIsLoading(true);
-    triggerHaptic('impact', 'light');
-
+    // Simulate API call to /api/agent
     try {
-      // Call the API route
       const response = await fetch('/api/agent', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [...conversation, newUserMessage],
-          agentType: selectedAgent.id,
-          systemPrompt: systemPrompts[selectedAgent.id].system,
-          userContext: {
-            currentAccuracy: realTimeInsights.currentAccuracy,
-            labelsCompleted: 1247,
-            streak: 8,
-            weakAreas: ['medical imaging', 'financial analysis']
-          }
-        }),
+          message: userInput,
+          context: uploadedFiles.map(f => ({ name: f.name, type: f.type })),
+          agentConfig: agentConfig
+        })
       });
-
-      if (!response.ok) throw new Error('Failed to get response');
 
       const data = await response.json();
       
       const assistantMessage = {
         role: 'assistant',
-        content: data.response,
+        content: data.response || 'Based on your uploaded data, I can see interesting patterns. Let me analyze this further...',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        id: `assistant_${Date.now()}`,
-        insights: data.insights || null
+        id: Date.now() + 1
       };
-
+      
       setConversation(prev => [...prev, assistantMessage]);
       
-      // Update insights if provided
-      if (data.accuracyPrediction) {
-        setAccuracyPrediction(data.accuracyPrediction);
-        insightControls.start({
-          scale: [1, 1.1, 1],
-          transition: { duration: 0.5 }
-        });
-      }
-
-      triggerHaptic('notification', 'success');
     } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage = {
+      console.error('Agent API error:', error);
+      
+      // Fallback response
+      const fallbackResponse = {
         role: 'assistant',
-        content: "I apologize, but I'm experiencing some technical difficulties. Please try again in a moment.",
+        content: 'I notice some interesting patterns in your data. Could you be more specific about what insights you\'re looking for?',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        id: `error_${Date.now()}`
+        id: Date.now() + 1
       };
-      setConversation(prev => [...prev, errorMessage]);
-      triggerHaptic('notification', 'error');
-    } finally {
-      setIsLoading(false);
+      
+      setConversation(prev => [...prev, fallbackResponse]);
     }
   };
 
-  // Auto-scroll to bottom of chat
+  // Get file icon
+  const getFileIcon = (type) => {
+    switch (type) {
+      case 'csv': return <TbFileSpreadsheet className="text-green-400" size={24} />;
+      case 'json': return <BiData className="text-blue-400" size={24} />;
+      case 'txt': return <TbFileText className="text-purple-400" size={24} />;
+      default: return <HiOutlineDocument className="text-gray-400" size={24} />;
+    }
+  };
+
+  // Scroll chat to bottom
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
   }, [conversation]);
 
-  // Handle Enter key press
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 50 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 50 }}
-        transition={{ duration: 0.4, type: "spring", bounce: 0.2 }}
-        className="glass rounded-3xl w-full max-w-md h-[90vh] flex flex-col relative overflow-hidden"
-      >
-        {/* Animated background effects */}
-        <div className="absolute inset-0">
-          <motion.div
-            animate={{
-              background: [
-                'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)',
-                'radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%)',
-                'radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)',
-                'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)'
-              ]
-            }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="absolute inset-0"
-          />
-        </div>
-
-        <div className="relative z-10 flex flex-col h-full">
+    <div className="w-full max-w-md mx-auto p-4 space-y-6">
+      {!showAgent ? (
+        <>
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              className="inline-block p-3 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 mb-4"
+            >
+              <TbRobot className="text-blue-400" size={32} />
+            </motion.div>
+            <h2 className="text-2xl font-bold text-white mb-2">Create AI Agent</h2>
+            <p className="text-gray-400 text-sm">Upload your data and train a personalized AI assistant</p>
+          </motion.div>
+
+          {/* File Upload Area */}
+          <motion.div
+            ref={dropRef}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            className={`glass rounded-3xl p-8 relative overflow-hidden transition-all duration-300 ${
+              dragActive ? 'ring-2 ring-blue-400/50 bg-blue-500/10' : ''
+            }`}
+            animate={uploadControls}
+          >
+            {/* Animated background */}
+            <div className="absolute inset-0">
+              <motion.div
+                animate={{
+                  background: dragActive 
+                    ? 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 70%)'
+                    : 'radial-gradient(circle at 30% 30%, rgba(147, 51, 234, 0.1) 0%, transparent 70%)'
+                }}
+                transition={{ duration: 0.3 }}
+                className="absolute inset-0"
+              />
+            </div>
+
+            <div className="relative z-10 text-center">
+              <motion.div
+                animate={dragActive ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
+                className="mb-4"
+              >
+                <IoCloudUpload className="mx-auto text-blue-400" size={48} />
+              </motion.div>
+
+              <h3 className="text-lg font-semibold text-white mb-2">
+                {dragActive ? 'Drop your files here' : 'Upload Training Data'}
+              </h3>
+              <p className="text-sm text-gray-400 mb-6">
+                Supports CSV, TXT, and JSON files up to 10MB
+              </p>
+
+              <motion.button
+                onClick={() => fileInputRef.current?.click()}
+                className="glass-button px-6 py-3 rounded-xl font-medium flex items-center gap-2 mx-auto"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <BiUpload size={20} />
+                Choose Files
+              </motion.button>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept=".csv,.txt,.json"
+                onChange={(e) => handleFiles(Array.from(e.target.files || []))}
+                className="hidden"
+              />
+            </div>
+          </motion.div>
+
+          {/* Uploaded Files */}
+          <AnimatePresence>
+            {uploadedFiles.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="space-y-3"
+              >
+                {uploadedFiles.map((file) => (
+                  <motion.div
+                    key={file.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="glass-light rounded-2xl p-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      {getFileIcon(file.type)}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-white truncate">{file.name}</p>
+                        <p className="text-xs text-gray-400">
+                          {(file.size / 1024).toFixed(1)} KB • {file.type.toUpperCase()}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {file.status === 'completed' ? (
+                          <IoCheckmarkCircle className="text-green-400" size={20} />
+                        ) : (
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full"
+                          />
+                        )}
+                      </div>
+                    </div>
+                    
+                    {file.status !== 'completed' && (
+                      <div className="mt-3">
+                        <div className="w-full bg-gray-700 rounded-full h-1">
+                          <motion.div
+                            className="bg-blue-400 h-1 rounded-full"
+                            animate={{ width: `${file.uploadProgress}%` }}
+                            transition={{ duration: 0.3 }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Agent Training Status */}
+          <AnimatePresence>
+            {agentConfig.isTraining || agentConfig.isReady ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="glass rounded-3xl p-6"
+              >
+                <div className="text-center">
+                  <motion.div
+                    animate={agentConfig.isTraining ? {
+                      rotate: 360,
+                      scale: [1, 1.1, 1]
+                    } : { rotate: 0, scale: 1 }}
+                    transition={{ 
+                      rotate: { duration: 2, repeat: agentConfig.isTraining ? Infinity : 0, ease: "linear" },
+                      scale: { duration: 1, repeat: agentConfig.isTraining ? Infinity : 0 }
+                    }}
+                    className="mb-4"
+                  >
+                    <TbBrain className="mx-auto text-purple-400" size={48} />
+                  </motion.div>
+
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {agentConfig.isTraining ? 'Training Your AI Agent...' : '🎉 Agent Ready!'}
+                  </h3>
+                  
+                  <p className="text-sm text-gray-400 mb-4">{agentConfig.description}</p>
+
+                  {/* Training Progress */}
+                  <div className="mb-6">
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-gray-400">Accuracy</span>
+                      <span className="text-white font-medium">{agentConfig.accuracy.toFixed(1)}%</span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <motion.div
+                        className="bg-gradient-to-r from-purple-400 to-blue-400 h-2 rounded-full"
+                        animate={{ width: `${agentConfig.accuracy}%` }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </div>
+                  </div>
+
+                  {agentConfig.isReady && (
+                    <motion.button
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      onClick={() => setShowAgent(true)}
+                      className="glass-warm px-6 py-3 rounded-xl font-medium flex items-center gap-2 mx-auto"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <IoPlay size={20} />
+                      Start Conversation
+                    </motion.button>
+                  )}
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </>
+      ) : (
+        /* AI Agent Chat Interface */
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="space-y-4"
+        >
+          {/* Agent Header */}
+          <div className="glass-light rounded-2xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="p-2 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="p-2 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20"
               >
-                <LuBrainCircuit className="text-blue-400" size={24} />
+                <TbBrain className="text-purple-400" size={24} />
               </motion.div>
               <div>
-                <h2 className="text-xl font-bold text-white">AI Accuracy Agent</h2>
-                <p className="text-xs text-gray-400">
-                  {researchCredits} credits • {selectedAgent ? selectedAgent.name : 'Select an agent'}
-                </p>
+                <h3 className="font-bold text-white">{agentConfig.name}</h3>
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span>{agentConfig.accuracy.toFixed(1)}% Accuracy</span>
+                  <span>•</span>
+                  <span>{credits} credits</span>
+                </div>
               </div>
             </div>
-            
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              onClick={() => setShowAgent(false)}
+              className="p-2 rounded-full glass-light hover:bg-white/10"
               whileTap={{ scale: 0.9 }}
-              onClick={onClose}
-              className="p-2 rounded-full glass-light hover:bg-white/10 transition-colors"
             >
-              <IoClose className="text-gray-400" size={20} />
+              <IoClose size={20} className="text-gray-400" />
             </motion.button>
           </div>
 
-          {!selectedAgent ? (
-            /* Agent Selection Screen */
-            <div className="flex-1 p-6 space-y-6 overflow-y-auto">
-              {/* Real-time Insights Header */}
-              <motion.div 
-                className="glass-light rounded-2xl p-4"
-                animate={insightControls}
-              >
-                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                  <IoTrendingUp className="text-green-400" />
-                  Live Performance Insights
-                </h3>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <motion.div
-                      key={Math.floor(realTimeInsights.currentAccuracy * 10)}
-                      initial={{ scale: 1.2, color: "#22C55E" }}
-                      animate={{ scale: 1, color: "#FFFFFF" }}
-                      className="text-2xl font-bold mb-1"
-                    >
-                      {realTimeInsights.currentAccuracy.toFixed(1)}%
-                    </motion.div>
-                    <p className="text-xs text-gray-400">Current Accuracy</p>
-                  </div>
-                  
-                  <div className="text-center">
-                    <motion.div
-                      key={Math.floor(realTimeInsights.predictedAccuracy * 10)}
-                      initial={{ scale: 1.2, color: "#3B82F6" }}
-                      animate={{ scale: 1, color: "#FFFFFF" }}
-                      className="text-2xl font-bold mb-1"
-                    >
-                      {realTimeInsights.predictedAccuracy.toFixed(1)}%
-                    </motion.div>
-                    <p className="text-xs text-gray-400">Predicted Next</p>
-                  </div>
-                </div>
-                
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-400">Confidence Score</span>
-                    <span className="text-sm text-white font-medium">
-                      {Math.round(realTimeInsights.confidenceScore * 100)}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2">
-                    <motion.div
-                      className="bg-gradient-to-r from-blue-400 to-purple-400 h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${realTimeInsights.confidenceScore * 100}%` }}
-                      transition={{ duration: 0.8 }}
-                    />
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Agent Selection Grid */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <TbRobot className="text-purple-400" />
-                  Choose Your AI Assistant
-                </h3>
-                
-                {availableAgents.map((agent, index) => (
-                  <motion.div
-                    key={agent.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.4 }}
-                    onClick={() => handleAgentSelect(agent)}
-                    className={`glass-light rounded-2xl p-4 cursor-pointer transition-all duration-200 ${
-                      researchCredits <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/5'
-                    }`}
-                    whileHover={researchCredits > 0 ? { scale: 1.02 } : {}}
-                    whileTap={researchCredits > 0 ? { scale: 0.98 } : {}}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-xl ${agent.bgColor} border ${agent.borderColor}`}>
-                        {agent.icon}
-                      </div>
-                      
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-white mb-1">{agent.name}</h4>
-                        <p className="text-sm text-gray-400 mb-2">{agent.description}</p>
-                        <p className="text-xs text-gray-500 mb-3">{agent.specialty}</p>
-                        
-                        <div className="flex flex-wrap gap-1">
-                          {agent.features.map((feature, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-white/5 rounded-lg text-xs text-gray-300">
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <BiCoin className="text-yellow-400" size={16} />
-                        <span className="text-sm text-white">1</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Credit Warning */}
-              {researchCredits <= 0 && (
+          {/* Chat Messages */}
+          <div
+            ref={chatScrollRef}
+            className="glass rounded-2xl p-4 h-80 overflow-y-auto space-y-4"
+          >
+            <AnimatePresence>
+              {conversation.map((message) => (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="glass-warm rounded-2xl p-4 text-center"
+                  key={message.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <IoWarningOutline className="text-orange-400 mx-auto mb-2" size={24} />
-                  <p className="text-sm text-white mb-2">No research credits remaining</p>
-                  <p className="text-xs text-gray-300">Complete more missions to earn credits</p>
+                  <div className={`max-w-[80%] p-3 rounded-2xl ${
+                    message.role === 'user'
+                      ? 'bg-blue-500 text-white'
+                      : 'glass-light text-gray-200'
+                  }`}>
+                    <p className="text-sm leading-relaxed">{message.content}</p>
+                    <p className="text-xs opacity-70 mt-1">{message.timestamp}</p>
+                  </div>
                 </motion.div>
-              )}
-            </div>
-          ) : (
-            /* Chat Interface */
-            <div className="flex-1 flex flex-col">
-              {/* Agent Info Bar */}
-              <div className={`p-4 ${selectedAgent.bgColor} border-b border-white/10`}>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-white/10">
-                    {selectedAgent.icon}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-white">{selectedAgent.name}</h3>
-                    <p className="text-xs text-gray-300">{selectedAgent.specialty}</p>
-                  </div>
-                  <div className="ml-auto">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setSelectedAgent(null)}
-                      className="p-2 rounded-lg glass-light"
-                    >
-                      <IoRefresh className="text-gray-400" size={16} />
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
+              ))}
+            </AnimatePresence>
+          </div>
 
-              {/* Chat Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                <AnimatePresence>
-                  {conversation.map((message) => (
-                    <motion.div
-                      key={message.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div className={`max-w-[80%] rounded-2xl p-3 ${
-                        message.role === 'user' 
-                          ? 'bg-blue-500 text-white' 
-                          : 'glass-light text-white'
-                      }`}>
-                        <p className="text-sm leading-relaxed">{message.content}</p>
-                        <p className="text-xs opacity-70 mt-2">{message.timestamp}</p>
-                        
-                        {message.insights && (
-                          <div className="mt-3 p-2 bg-white/10 rounded-lg">
-                            <p className="text-xs font-medium mb-1">💡 Insight</p>
-                            <p className="text-xs">{message.insights}</p>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-                
-                {isLoading && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex justify-start"
-                  >
-                    <div className="glass-light rounded-2xl p-3">
-                      <div className="flex items-center gap-2">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        >
-                          <IoSparkles className="text-blue-400" size={16} />
-                        </motion.div>
-                        <span className="text-sm text-gray-300">Analyzing...</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-                
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* Message Input */}
-              <div className="p-4 border-t border-white/10">
-                <div className="flex items-center gap-3">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={userMessage}
-                    onChange={(e) => setUserMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Ask about your accuracy, get tips, or request analysis..."
-                    className="flex-1 glass-light rounded-2xl px-4 py-3 text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-                    disabled={isLoading}
-                  />
-                  
-                  <motion.button
-                    onClick={sendMessage}
-                    disabled={!userMessage.trim() || isLoading}
-                    className="p-3 rounded-2xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <IoFlash className="text-white" size={20} />
-                  </motion.button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </motion.div>
+          {/* Chat Input */}
+          <div className="glass-light rounded-2xl p-3 flex items-center gap-3">
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAgentChat()}
+              placeholder="Ask me about your data..."
+              className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none"
+              disabled={credits <= 0}
+            />
+            <motion.button
+              onClick={handleAgentChat}
+              disabled={!userInput.trim() || credits <= 0}
+              className="p-2 rounded-full bg-blue-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              whileHover={!(!userInput.trim() || credits <= 0) ? { scale: 1.1 } : {}}
+              whileTap={!(!userInput.trim() || credits <= 0) ? { scale: 0.9 } : {}}
+            >
+              <BiSend size={20} />
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };
 
-export default AIAccuracyAgent;
+export default AIAgentCreator;
