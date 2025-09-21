@@ -541,7 +541,7 @@ function TelegramMiniApp() {
                     {/* Share Option  /?tab=invite*/}
                     <Link
                       href="/?tab=invite"
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                      className="w-full flex bg-green-500/10 items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
                     >
                       <div className="p-1.5 rounded-lg glass-dark transition-all duration-200">
                         <LiaUserFriendsSolid size={16} className="text-red-400" />

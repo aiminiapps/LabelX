@@ -440,7 +440,7 @@ const OptimizedLabelXApp = () => {
 
   // Top Navigation Component
   const TopNavigation = () => (
-    <div className="sticky -top-4 z-50 border-b border-gray-800/50">
+    <div className="sticky -top-4 z-30 border-b border-gray-800/50">
       <div className="flex items-center justify-center p-4">
         <div className="flex items-center gap-1 bg-gray-800/50 rounded-xl p-1">
           {[
