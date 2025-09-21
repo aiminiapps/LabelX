@@ -42,7 +42,7 @@ const LabelXLoader = () => {
           <TrueFocus 
             sentence="LabelX"
             manualMode={false}
-            blurAmount={4}
+            blurAmount={7}
             borderColor="#FF7A1A"
             animationDuration={1}
             pauseBetweenAnimations={0}
