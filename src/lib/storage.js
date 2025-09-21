@@ -245,7 +245,7 @@ export const useStore = create(
       },
     }),
     {
-      name: 'DNAU-storage',
+      name: 'Lablex-storage',
       storage: createJSONStorage(() => safeStorage),
       // Optimize persistence with partialize to reduce storage writes
       partialize: (state) => ({
