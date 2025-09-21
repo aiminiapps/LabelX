@@ -339,7 +339,7 @@ const PremiumLeaderboard = () => {
                   </div>
 
                   {/* Enhanced Podium Base */}
-                  <div className={`w-20 ${podiumHeights[index]} ${user.tier.bgColor} rounded-t-2xl flex flex-col items-center justify-center transition-all duration-500 border-t-2 ${user.tier.borderColor} relative overflow-hidden`}>
+                  <div className={`w-20 ${podiumHeights[index]} bg-[#FF7A1A]/30 rounded-t-2xl flex flex-col items-center justify-center transition-all duration-500 border-t-2 border-[#FF7A1A] relative overflow-hidden`}>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     <IconComponent className={`${user.tier.color} z-10`} size={20} />
                     <span className={`text-xs font-bold ${user.tier.color} mt-1 z-10`}>
