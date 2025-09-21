@@ -67,7 +67,7 @@ const SmartDataPresentation = () => {
       category: 'Fraud Detection',
       difficulty: 'Medium',
       domain: 'Financial',
-      icon: <FaShieldAlt className="text-yellow-400" size={18} />,
+      icon: <FaShieldAlt className="text-[#FF7A1A]" size={18} />,
       context: 'Training ML model for real-time transaction monitoring'
     },
 
@@ -205,7 +205,7 @@ const SmartDataPresentation = () => {
   // Calculate session performance
   const getSessionGrade = () => {
     const accuracy = sessionStats.accuracy;
-    if (accuracy >= 95) return { grade: 'S+', color: 'text-yellow-400', icon: <TbCrown /> };
+    if (accuracy >= 95) return { grade: 'S+', color: 'text-[#FF7A1A]', icon: <TbCrown /> };
     if (accuracy >= 90) return { grade: 'S', color: 'text-purple-400', icon: <TbMedal /> };
     if (accuracy >= 85) return { grade: 'A+', color: 'text-blue-400', icon: <IoTrophy /> };
     if (accuracy >= 80) return { grade: 'A', color: 'text-green-400', icon: <IoCheckmarkCircle /> };
@@ -386,7 +386,7 @@ const SmartDataPresentation = () => {
       case 'text': return <BiText className="text-blue-400" size={18} />;
       case 'image': return <BiImage className="text-green-400" size={18} />;
       case 'audio': return <BiMicrophone className="text-purple-400" size={18} />;
-      default: return <BiBrain className="text-yellow-400" size={18} />;
+      default: return <BiBrain className="text-[#FF7A1A]" size={18} />;
     }
   };
 
@@ -394,7 +394,7 @@ const SmartDataPresentation = () => {
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'Easy': return 'text-green-400 bg-green-400/20 border-green-400/30';
-      case 'Medium': return 'text-yellow-400 bg-yellow-400/20 border-yellow-400/30';
+      case 'Medium': return 'text-[#FF7A1A] bg-yellow-400/20 border-yellow-400/30';
       case 'Hard': return 'text-red-400 bg-red-400/20 border-red-400/30';
       default: return 'text-gray-400 bg-gray-400/20 border-gray-400/30';
     }
@@ -449,7 +449,7 @@ const SmartDataPresentation = () => {
                 <p className="text-sm text-gray-400">Accuracy</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-1">{sessionStats.points}</div>
+                <div className="text-3xl font-bold text-[#FF7A1A] mb-1">{sessionStats.points}</div>
                 <p className="text-sm text-gray-400">Points Earned</p>
               </div>
               <div className="text-center">
@@ -510,7 +510,7 @@ const SmartDataPresentation = () => {
               className="w-full glass-warm p-4 rounded-xl flex items-center justify-center gap-2"
               whileTap={{ scale: 0.98 }}
             >
-              <TbSparkles size={20} className="text-yellow-400" />
+              <TbSparkles size={20} className="text-[#FF7A1A]" />
               <span className="font-medium">Claim {sessionStats.points} Points</span>
             </motion.button>
           </div>
@@ -527,7 +527,7 @@ const SmartDataPresentation = () => {
       <div className="glass rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <TbTarget className="text-yellow-400" size={20} />
+            <TbTarget className="text-[#FF7A1A]" size={20} />
             <span className="text-white font-medium">AI Training Session</span>
           </div>
           <motion.div
@@ -571,7 +571,7 @@ const SmartDataPresentation = () => {
               className="text-xl font-bold flex items-center justify-center gap-1"
             >
               {sessionStats.streak}
-              {sessionStats.streak > 0 && <TbSparkles size={16} className="text-yellow-400" />}
+              {sessionStats.streak > 0 && <TbSparkles size={16} className="text-[#FF7A1A]" />}
             </motion.div>
             <p className="text-xs text-gray-400">Streak</p>
           </div>
@@ -583,12 +583,6 @@ const SmartDataPresentation = () => {
         animate={cardControls}
         className="glass rounded-3xl p-6 relative overflow-hidden"
       >
-        {/* Enhanced background pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full" />
-          <div className="absolute bottom-4 left-4 w-16 h-16 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-full" />
-        </div>
-
         {/* Enhanced Content Header */}
         <div className="relative z-10 mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -604,7 +598,7 @@ const SmartDataPresentation = () => {
           {/* Progress bar */}
           <div className="w-full bg-gray-700/50 rounded-full h-1 mb-2">
             <motion.div 
-              className="bg-gradient-to-r from-blue-500 to-purple-500 h-1 rounded-full"
+              className="bg-[#FF7A1A] h-1 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${((currentIndex + 1) / realisticDataItems.length) * 100}%` }}
               transition={{ duration: 0.5 }}
@@ -724,18 +718,18 @@ const SmartDataPresentation = () => {
             triggerHaptic('light');
             loadNextItem();
           }}
-          className="flex-1 glass-light p-3 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-colors"
+          className="flex-1 bg-[#FF7A1A] p-3 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-colors"
           whileTap={{ scale: 0.98 }}
         >
-          <IoRefreshCircle size={18} className="text-gray-400" />
-          <span className="text-sm text-gray-300">Skip Item</span>
+          <IoRefreshCircle size={18} className="text-white" />
+          <span className="text-sm text-white">Skip Item</span>
         </motion.button>
         
         <motion.button
           className="flex-1 glass-warm p-3 rounded-xl flex items-center justify-center gap-2"
           whileTap={{ scale: 0.98 }}
         >
-          <TbSparkles size={18} className="text-yellow-400" />
+          <TbSparkles size={18} className="text-[#FF7A1A]" />
           <span className="text-sm text-white font-medium">Double Points</span>
         </motion.button>
       </div>
