@@ -348,7 +348,7 @@ function TelegramMiniApp() {
     router.push(`/?tab=${tab}`, { scroll: false });
   }, [router, hapticFeedback]);
 
-  const TopNav = ({ user }) => {
+  const TopNav = ({ user }) => { 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
@@ -486,6 +486,31 @@ function TelegramMiniApp() {
       }
     }, [triggerHaptic]);
   
+    // Get user name with better fallback logic
+    const getUserName = useCallback(() => {
+      // Try multiple sources for user name
+      if (user?.first_name) return user.first_name;
+      if (user?.firstName) return user.firstName;
+      if (user?.username) return user.username;
+      if (user?.name) return user.name;
+      
+      // Try Telegram WebApp user data if available
+      try {
+        const telegram = window?.Telegram?.WebApp;
+        if (telegram?.initDataUnsafe?.user?.first_name) {
+          return telegram.initDataUnsafe.user.first_name;
+        }
+        if (telegram?.initDataUnsafe?.user?.username) {
+          return telegram.initDataUnsafe.user.username;
+        }
+      } catch (error) {
+        // Silently handle telegram access errors
+      }
+      
+      // Final fallback
+      return 'User';
+    }, [user]);
+  
     return (
       <div className="relative">
         <div className="w-full flex justify-between items-center pb-3 px-1">
@@ -501,7 +526,7 @@ function TelegramMiniApp() {
             <div className="text-left">
               <p className="text-gray-300 text-sm">Welcome</p>
               <p className="text-gray-200 text-lg -mt-1 font-semibold">
-                {user?.first_name || 'Dev'}
+                {getUserName()}
               </p>
             </div>
           </div>
@@ -588,6 +613,7 @@ function TelegramMiniApp() {
       </div>
     );
   };
+  
   const renderHomeContent = () => (
     <div className="space-y-6">
       <LabelXNetworkGlobe/>
