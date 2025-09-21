@@ -5,6 +5,7 @@ import { IoArrowBack, IoSend, IoSparkles, IoHeart, IoSchool, IoFitness, IoBusine
 import { BiBot, BiUser, BiTime, BiShield, BiData } from 'react-icons/bi';
 import { TbBrain, TbStars, TbMoodSmile, TbBooks, TbHeartHandshake, TbRobot, TbCrystalBall } from 'react-icons/tb';
 import { LuCpu } from "react-icons/lu";
+import Image from 'next/image';
 
 const LabelXAgentShowcase = () => {
   // Core state
@@ -561,7 +562,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-4 p-4 glass-light border-b border-gray-800/50"
+        className="flex items-center gap-4 p-2 glass-light rounded-xl border-b border-gray-800/50"
       >
         <button
           onClick={() => setSelectedAgent(null)}
@@ -591,7 +592,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       {/* Messages */}
       <div
         ref={chatScrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4"
+        className="flex-1 max-h-[60%] overflow-y-auto p-4 space-y-4"
       >
         {conversation.map((message) => (
           <motion.div
@@ -603,9 +604,9 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
             <div className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
               {message.role === 'assistant' && (
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="p-1 rounded-lg glass-light" style={{ backgroundColor: theme.surface }}>
-                    <BiBot size={16} className="text-orange-400" />
-                  </div>
+                 <div className="p-0.5 rounded-full glass-light" style={{ backgroundColor: theme.surface }}>
+                <Image src='/agent/agentlogo.png' alt='Logo' width={20} height={20}/>
+              </div>
                   <span className="text-xs font-medium text-orange-400">{message.agentName}</span>
                   <span className="text-xs text-gray-500">{message.timestamp}</span>
                 </div>
@@ -641,8 +642,8 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
             className="flex justify-start"
           >
             <div className="flex items-center gap-2">
-              <div className="p-1 rounded-lg glass-light" style={{ backgroundColor: theme.surface }}>
-                <BiBot size={16} className="text-orange-400" />
+              <div className="p-0.5 rounded-full glass-light" style={{ backgroundColor: theme.surface }}>
+                <Image src='/agent/agentlogo.png' alt='Logo' width={20} height={20}/>
               </div>
               <div className="glass-light p-3 rounded-2xl">
                 <div className="flex items-center gap-1">
