@@ -8,13 +8,10 @@ import { useStore } from '@/lib/storage';
 import { useTelegram } from '@/lib/useTelegram';
 import CustomLoader from '@/components/Loader';
 import BottomNav from '@/components/BottomNav';
-import CoinAgent from '@/components/CoinAgent';
 import Agent from '@/components/Agent';
-import AiNews from '@/components/AiNews';
-import TaskCenter from '@/components/TaskCenter';
 import InviteCenter from '@/components/InviteCenter';
 import DataCenterHome from '@/components/DataCenterHome';
-import { SquareCheckBig, UserPlus, History, Check, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { CiMenuKebab } from "react-icons/ci";
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoShareSocial, IoLink } from 'react-icons/io5';
@@ -23,6 +20,7 @@ import InteractivePeerReview from '@/components/InteractivePeerReview';
 import PremiumLeaderboard from '@/components/Leaderboard';
 import Link from 'next/link';
 import { LiaUserFriendsSolid } from "react-icons/lia";
+import MultiAgentChatHub from '@/components/MultiAgentChatHub';
 
 
 // Earning Timer Component
@@ -613,7 +611,8 @@ function TelegramMiniApp() {
       case 'SPAI':
         return <Agent />;
       case 'task':
-        return <TaskCenter user={user} />;
+        return <MultiAgentChatHub/>;
+        // return <TaskCenter user={user} />;
       case 'invite':
         return <InviteCenter user={user} />;
       default:
