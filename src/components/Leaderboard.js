@@ -214,8 +214,8 @@ const PremiumLeaderboard = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Trophy className="text-yellow-400" size={28} />
-                <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur" />
+                <Trophy className="text-[#FF7A1A]" size={28} />
+                <div className="absolute -inset-1 bg-[#FF7A1A]/20 rounded-full blur" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Leaderboard</h2>
@@ -285,14 +285,14 @@ const PremiumLeaderboard = () => {
                   {/* Crown animation for #1 */}
                   {user.rank === 1 && (
                     <div className="mb-3 relative">
-                      <Crown className="text-yellow-400" size={32} />
-                      <div className="absolute -inset-2 bg-yellow-400/20 rounded-full blur-xl animate-pulse" />
+                      <Crown className="text-[#FF7A1A]" size={32} />
+                      <div className="absolute -inset-2 bg-[#FF7A1A]/20 rounded-full blur-xl animate-pulse" />
                     </div>
                   )}
 
                   {/* Enhanced User Avatar */}
                   <div className={`relative mb-3 ${user.rank === 1 ? 'w-20 h-20' : 'w-16 h-16'}`}>
-                    <div className={`w-full h-full rounded-full ${user.tier.bgColor} p-1 border-2 ${user.tier.borderColor} ${user.tier.glowColor} shadow-xl`}>
+                    <div className={`w-full h-full rounded-full ${user.tier.bgColor} p-1 border-2 border-[#FF7A1A] shadow-xl`}>
                       <img 
                         src={user.avatar} 
                         alt={user.username}
@@ -310,9 +310,9 @@ const PremiumLeaderboard = () => {
                     
                     {/* Enhanced Rank Badge */}
                     <div className={`absolute -top-2 -left-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-lg ${
-                      user.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-500 text-black shadow-yellow-400/50' :
-                      user.rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-black shadow-gray-400/50' :
-                      'bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-orange-400/50'
+                      user.rank === 1 ? 'bg-[#FF7A1A] text-white shadow-yellow-400/50' :
+                      user.rank === 2 ? 'bg-yellow-400 text-white shadow-gray-400/50' :
+                      'bg-gradient-to-br from-orange-300 to-orange-400 text-white shadow-orange-400/50'
                     }`}>
                       {user.rank}
                     </div>
@@ -325,14 +325,14 @@ const PremiumLeaderboard = () => {
 
                   {/* Enhanced Username */}
                   <p className={`font-bold text-center mb-2 max-w-20 truncate ${
-                    user.rank === 1 ? 'text-yellow-300 text-lg' : 'text-white text-sm'
+                    user.rank === 1 ? 'text-[#FF7A1A] text-lg' : 'text-white text-sm'
                   }`}>
                     {user.username}
                   </p>
 
                   {/* Enhanced Points Display */}
                   <div className="text-center mb-3">
-                    <p className={`font-bold ${user.rank === 1 ? 'text-lg text-yellow-300' : 'text-white'}`}>
+                    <p className={`font-bold ${user.rank === 1 ? 'text-lg text-[#FF7A1A]' : 'text-white'}`}>
                       {user.points.toLocaleString()}
                     </p>
                     <p className="text-xs text-gray-400">points</p>
@@ -464,13 +464,13 @@ const PremiumLeaderboard = () => {
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center gap-20">
               <div className="relative">
-                <div className="text-3xl font-black text-yellow-300 flex items-center">
+                <div className="text-3xl font-black text-[#FF7A1A] flex items-center">
                   #{userRank.toLocaleString()}
                 </div>
               </div>
               <div>
                 <p className="text-lg font-bold text-white flex items-center gap-2">
-                  <Award className="text-yellow-400" size={20} />
+                  <Award className="text-[#FF7A1A]" size={20} />
                   Your Rank
                 </p>
                 <p className="text-xs text-gray-300">
