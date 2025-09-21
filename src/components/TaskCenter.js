@@ -37,11 +37,8 @@ const TaskCenter = () => {
   return (
     <div className="text-white">
       {/* Header */}
-      <div className="flex items-center justify-between pb-4">
-        <h2 className="text-3xl font-semibold text-black">Task Center</h2>
-        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-lg">
-        <Image src='/agent/agentlogo.png' alt='logo' width={50} height={50}/>
-        </div>
+      <div className="flex items-center justify-between pb-4 mt-4">
+        <h2 className="text-3xl font-semibold text-white">Task Center</h2>
       </div>
 
       <div className="max-w-md mx-auto">
@@ -49,10 +46,10 @@ const TaskCenter = () => {
         {/* Daily Task Section */}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <SynaptAIIcon />
+            {/* <SynaptAIIcon /> */}
             <div>
-              <h3 className="text-xl font-medium text-black">Daily Task</h3>
-              <p className="text-gray-700 text-sm">Earn Every day</p>
+              <h3 className="text-xl font-medium text-white">Daily Task</h3>
+              <p className="text-gray-400   text-sm">Earn Every day</p>
             </div>
           </div>
 
@@ -62,8 +59,8 @@ const TaskCenter = () => {
               <div className="flex items-center gap-4">
                 <SynaptAIIcon />
                 <div>
-                  <h4 className="text-black font-semibold">Daily Reward</h4>
-                  <p className="text-gray-700 text-sm">100 LBLX POINT</p>
+                  <h4 className="text-white font-semibold">Daily Reward</h4>
+                  <p className="text-gray-400   text-sm">100 LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -79,7 +76,7 @@ const TaskCenter = () => {
             {!tasks.dailyReward.completed && (
               <button
                 onClick={() => handleTask('dailyReward', 100)}
-                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-stone-900 font-medium transition-all duration-300"
+                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-[#FF7A1A] font-medium transition-all duration-300"
               >
                 Claim Reward
               </button>
@@ -92,8 +89,8 @@ const TaskCenter = () => {
               <div className="flex items-center gap-4">
                 <SynaptAIIcon />
                 <div>
-                  <h4 className="text-black font-semibold">RT Our Post</h4>
-                  <p className="text-gray-700 text-sm">1K LBLX POINT</p>
+                  <h4 className="text-white font-semibold">RT Our Post</h4>
+                  <p className="text-gray-400   text-sm">1K LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -109,7 +106,7 @@ const TaskCenter = () => {
             {!tasks.rtPost.completed && (
               <button
                 onClick={() => handleTask('rtPost', 1000, () => window.open('https://x.com/AIDatanaut', '_blank'))}
-                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-stone-900 font-medium transition-all duration-300"
+                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-[#FF7A1A] font-medium transition-all duration-300"
               >
                 Retweet & Claim
               </button>
@@ -120,10 +117,10 @@ const TaskCenter = () => {
         {/* Optional Task Section */}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <SynaptAIIcon />
+            {/* <SynaptAIIcon /> */}
             <div>
-              <h3 className="text-xl font-medium text-black">Option Task</h3>
-              <p className="text-gray-700 text-sm">1/Task</p>
+              <h3 className="text-xl font-medium text-white">Option Task</h3>
+              <p className="text-gray-400   text-sm">1/Task</p>
             </div>
           </div>
 
@@ -133,8 +130,8 @@ const TaskCenter = () => {
               <div className="flex items-center gap-4">
                 <SynaptAIIcon />
                 <div>
-                  <h4 className="text-black font-semibold">Follow X</h4>
-                  <p className="text-gray-700 text-sm">1K LBLX POINT</p>
+                  <h4 className="text-white font-semibold">Follow X</h4>
+                  <p className="text-gray-400   text-sm">1K LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -155,7 +152,7 @@ const TaskCenter = () => {
                     window.open('https://x.com/AIDatanaut', '_blank');
                   })
                 }
-                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-stone-900 font-medium transition-all duration-300"
+                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-[#FF7A1A] font-medium transition-all duration-300"
               >
                 Follow & Claim
               </button>
@@ -168,8 +165,8 @@ const TaskCenter = () => {
               <div className="flex items-center gap-4">
                 <SynaptAIIcon />
                 <div>
-                  <h4 className="text-black font-semibold">Invite 5 users</h4>
-                  <p className="text-gray-700 text-sm">5K LBLX POINT</p>
+                  <h4 className="text-white font-semibold">Invite 5 users</h4>
+                  <p className="text-gray-400   text-sm">5K LBLX POINT</p>
                 </div>
               </div>
               <div className="flex items-center">
@@ -185,7 +182,7 @@ const TaskCenter = () => {
             {!tasks.inviteFive.completed && (
               <button
                 disabled={tasks.inviteFive.completed}
-                className="w-full mt-3 py-2 glass-light glass-blue rounded-xl text-stone-900 font-medium transition-all duration-300"
+                className="w-full mt-3 py-2 glass-light  glass-blue rounded-xl text-[#FF7A1A] font-medium transition-all duration-300"
               >
                 Invite & Claim
               </button>
@@ -194,8 +191,8 @@ const TaskCenter = () => {
         </div>
       </div>
       {/* Description */}
-      <p className="text-black mb-6 text-center leading-relaxed">
-          <span className="font-semibold text-gray-800">Use LBLX Points to purchase a pass and activate your AI Agent.</span>  Once activated, you can submit your predictions and start earning rewards based on your performance.
+      <p className="text-gray-400 mb-6 text-center leading-relaxed">
+          <span className="font-semibold text-gray-200">Use LBLX Points to purchase a pass and activate your AI Agent.</span>  Once activated, you can submit your predictions and start earning rewards based on your performance.
         </p>
 
         {error && (
