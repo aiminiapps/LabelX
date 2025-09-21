@@ -445,7 +445,7 @@ const OptimizedLabelXApp = () => {
         <div className="flex items-center gap-1 bg-gray-800/50 rounded-xl p-1">
           {[
             { id: 'home', icon: IoHome, label: 'Home' },
-            { id: 'ai-chat', icon: TbBrain, label: 'AI Helper' },
+            // { id: 'ai-chat', icon: TbBrain, label: 'AI Helper' },
             { id: 'rewards', icon: IoGift, label: 'Rewards' },
             { id: 'profile', icon: IoPerson, label: 'Profile' }
           ].map(tab => (
@@ -800,9 +800,9 @@ const OptimizedLabelXApp = () => {
     <div className="flex flex-col h-screen">
       <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-32">
         <div className="text-center mb-6">
-          <div className="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-3">
+          {/* <div className="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-3">
             <TbBrain className="text-orange-400" size={32} />
-          </div>
+          </div> */}
           <h2 className="text-xl font-bold text-white">AI Helper</h2>
           <p className="text-gray-400 text-sm">Ask me anything about missions and AI training</p>
         </div>
@@ -855,7 +855,7 @@ const OptimizedLabelXApp = () => {
       </div>
 
       {/* Chat Input */}
-      <div className="fixed bottom-0 left-0 right-0 glass-nav border-t border-gray-800/50 p-4">
+      <div className="fixed bottom-50 left-0 right-0 glass border-t border-gray-800/50 p-4">
         <div className="flex items-center gap-3 max-w-md mx-auto">
           <input
             type="text"
@@ -1213,7 +1213,7 @@ const OptimizedLabelXApp = () => {
           {currentView === 'home' && renderHome()}
           {currentView === 'mission' && renderMission()}
           {currentView === 'mission-complete' && renderMissionComplete()}
-          {currentView === 'ai-chat' && renderAIChat()}
+          {/* {currentView === 'ai-chat' && renderAIChat()} */}
           {currentView === 'reviews' && renderReviews()}
           {currentView === 'review' && renderReview()}
           {currentView === 'rewards' && renderRewards()}
