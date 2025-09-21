@@ -254,7 +254,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
               ref={shareButtonRef}
               onClick={handleTelegramShare}
               disabled={isSharing}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full bg-[#FF7A1A] hover:bg-[#FF7A1A]/80 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
               animate={buttonControls}
               whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)" }}
               whileTap={{ scale: 0.98 }}
@@ -337,7 +337,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <div className="flex items-center justify-center gap-2 text-yellow-400 mb-2">
+            <div className="flex items-center justify-center gap-2 text-[#FF7A1A] mb-2">
               <IoGift size={20} />
               <span className="font-semibold">Bonus Rewards</span>
             </div>
