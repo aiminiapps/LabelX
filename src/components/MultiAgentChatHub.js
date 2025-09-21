@@ -427,7 +427,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
 
   // Render agent selection grid with LabelX styling
   const renderAgentGrid = () => (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 py-4">
       {/* Header with LabelX branding */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -698,7 +698,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
 
   // Main render
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white pb-10">
       <AnimatePresence mode="wait">
         {selectedAgent ? (
           <motion.div
