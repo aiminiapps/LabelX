@@ -987,17 +987,17 @@ const OptimizedLabelXApp = () => {
   );
 
   const renderProfile = () => (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 py-4 pb-16">
       <motion.div
         className="text-center mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-yellow-500 flex items-center justify-center mx-auto mb-4">
+        {/* <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-yellow-500 flex items-center justify-center mx-auto mb-4">
           <span className="text-3xl font-bold text-white">
             {user?.firstName?.charAt(0) || 'U'}
           </span>
-        </div>
+        </div> */}
         <h2 className="text-2xl font-bold text-white">{user?.firstName} {user?.lastName}</h2>
         <p className="text-gray-400">@{user?.username}</p>
         <div className="inline-block px-4 py-2 mt-3 rounded-xl bg-orange-500/20 text-orange-400 font-medium">
