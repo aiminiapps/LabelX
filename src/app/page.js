@@ -597,7 +597,7 @@ function TelegramMiniApp() {
         earningTimer={earningTimer}
         startEarningTimer={startEarningTimer}
       /> */}
-      <div className="h-10" />
+      <div className="h-14" />
     </div>
   );
 
