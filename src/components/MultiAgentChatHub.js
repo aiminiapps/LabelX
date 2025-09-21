@@ -663,7 +663,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       </div>
 
       {/* Input area */}
-      <div className="p-4 glass-light border-t border-gray-800/50">
+      <div className="p-4 glass-light rounded-xl border-t border-gray-800/50">
         <div className="flex items-center gap-3">
           <input
             ref={inputRef}
