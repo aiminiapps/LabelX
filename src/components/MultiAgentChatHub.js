@@ -463,15 +463,13 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
           >
             <div className="relative z-10">
               {/* Agent header */}
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-2xl glass-light" style={{ backgroundColor: theme.surface }}>
                     {agent.icon}
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white mb-1">{agent.name}</h3>
-                    <p className="text-orange-400 text-sm font-medium mb-2">{agent.title}</p>
-                    <p className="text-gray-400 text-sm leading-relaxed">{agent.description}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -481,6 +479,8 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
                   <div className="text-xs text-gray-400 mt-2">1 Credit</div>
                 </div>
               </div>
+                    <p className="text-gray-400 text-sm leading-relaxed">{agent.description}</p>
+                    <p className="text-orange-400 text-sm font-medium mb-4">{agent.title}</p>
 
               {/* Enhanced stats grid */}
               <div className="grid grid-cols-4 gap-4 mb-6 pt-4 border-t border-gray-700/30">
