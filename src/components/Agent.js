@@ -440,7 +440,7 @@ const OptimizedLabelXApp = () => {
 
   // Top Navigation Component
   const TopNavigation = () => (
-    <div className="sticky top-0 z-50 glass-nav backdrop-blur-xl border-b border-gray-800/50">
+    <div className="sticky -top-4 z-50 border-b border-gray-800/50">
       <div className="flex items-center justify-center p-4">
         <div className="flex items-center gap-1 bg-gray-800/50 rounded-xl p-1">
           {[
@@ -480,10 +480,10 @@ const OptimizedLabelXApp = () => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-2xl font-bold text-white mb-2">
           Welcome back, {user?.firstName}! 👋
         </h1>
-        <p className="text-gray-400">Ready to help train the next generation of AI?</p>
+        <p className="text-gray-400 text-balance">Ready to help train the next generation of AI?</p>
       </motion.div>
 
       {/* Stats Overview */}
@@ -1199,7 +1199,7 @@ const OptimizedLabelXApp = () => {
 
   // Main Render
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white">
       <TopNavigation />
       
       <AnimatePresence mode="wait">
