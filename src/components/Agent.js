@@ -457,7 +457,7 @@ const OptimizedLabelXApp = () => {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 currentView === tab.id 
-                  ? 'bg-orange-500 text-white shadow-lg' 
+                  ? 'bg-orange-500 glass-dark text-white shadow-lg' 
                   : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
               }`}
               whileTap={{ scale: 0.95 }}
