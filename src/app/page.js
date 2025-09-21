@@ -21,7 +21,7 @@ import PremiumLeaderboard from '@/components/Leaderboard';
 import Link from 'next/link';
 import { LiaUserFriendsSolid } from "react-icons/lia";
 import MultiAgentChatHub from '@/components/MultiAgentChatHub';
-
+import { GoTasklist } from "react-icons/go";
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -506,7 +506,10 @@ function TelegramMiniApp() {
           </div>
           
           {/* Menu Button */}
-          <div className="relative">
+          <div className="relative flex items-center gap-2">
+            <Link href='' className='glass-light flex items-center gap-0.5 font-semibold text-sm text-[#FF7A1A] p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'>
+            <GoTasklist size={25}/> Tasks
+            </Link>
             <button
               ref={buttonRef}
               onClick={toggleMenu}
