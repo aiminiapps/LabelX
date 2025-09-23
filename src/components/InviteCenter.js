@@ -1,9 +1,9 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { IoClose, IoHelpCircleOutline, IoShareSocial, IoLink, IoCopy, IoPeople, IoGift, IoSparkles, IoCheckmark } from 'react-icons/io5';
-import { BiUserPlus, BiSend, BiCoin } from 'react-icons/bi';
-import { TbUsers, TbGift, TbStars } from 'react-icons/tb';
+import { IoShareSocial, IoCopy, IoGift, IoSparkles, IoCheckmark } from 'react-icons/io5';
+import { BiCoin } from 'react-icons/bi';
+import { TbUsers, TbGift } from 'react-icons/tb';
 import Image from 'next/image';
 
 const InviteFriendsPage = ({ onClose }) => {
