@@ -23,6 +23,7 @@ import { LiaUserFriendsSolid } from "react-icons/lia";
 import MultiAgentChatHub from '@/components/MultiAgentChatHub';
 import { GoTasklist } from "react-icons/go";
 import TaskCenter from '@/components/TaskCenter';
+import NewTaskCenter from '@/components/NewTaskCenter';
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -643,7 +644,8 @@ function TelegramMiniApp() {
       case 'task':
         return <MultiAgentChatHub/>;
       case 'task2':
-        return <TaskCenter user={user} />;
+        // return <TaskCenter user={user} />;
+        return <NewTaskCenter/>
       case 'invite':
         return <InviteCenter user={user} />;
       default:
