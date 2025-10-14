@@ -650,7 +650,7 @@ function SuccessModal({ show, onClose, txHash, amount }) {
             href={`https://bscscan.com/tx/${txHash}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 text-sm hover:text-blue-300 block mb-4 flex items-center justify-center space-x-1"
+            className="text-blue-400 text-sm hover:text-blue-300 mb-4 flex items-center justify-center space-x-1"
           >
             <FaEye />
             <span>View Transaction</span>
