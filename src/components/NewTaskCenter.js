@@ -309,7 +309,7 @@ function NinjaWalletCard({ wallet }) {
       <motion.div className="glass glass-particles rounded-2xl mb-6" {...fadeIn}>
         <div className="text-center">
           <FaSpinner className="animate-spin text-orange-400 text-2xl mx-auto mb-3" />
-          <p className="text-white">🥷 Initializing...</p>
+          <p className="text-white"> Initializing...</p>
         </div>
       </motion.div>
     );
