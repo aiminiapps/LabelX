@@ -146,6 +146,8 @@ export async function POST(request) {
     const tokenAmount = ethers.utils.parseUnits(reward.toString(), decimals);
     console.log('💰 Exact token amount:', tokenAmount.toString());
 
+    // ✅ FIXED: Proper transaction data encoding
+    const transactionData = createTransferData(address, tokenAmount);
 
     // Build transaction
     const rawTransaction = {
