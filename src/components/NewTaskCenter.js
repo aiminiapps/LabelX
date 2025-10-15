@@ -656,7 +656,7 @@ export default function LabelXTaskCenter() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
-            className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full px-4"
+            className="fixed top-4 backdrop-blur-sm left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full px-4"
           >
             <div
               className={`glass-light rounded-2xl p-4 shadow-2xl border ${
