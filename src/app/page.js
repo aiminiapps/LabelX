@@ -685,7 +685,7 @@ function TelegramMiniApp() {
       case 'dataCenter':
         // return <CoinAgent />;
         return <PremiumLeaderboard/>;
-      case 'SPAI':
+      case 'agents':
         return <Agent />;
       case 'task':
         return <MultiAgentChatHub/>;
