@@ -611,14 +611,7 @@ export default function TaskCenter() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
-        <div className="absolute -bottom-40 left-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
-      </div>
-
+    <div className="min-h-screen relative overflow-hidden">
       {/* Floating Notifications */}
       <AnimatePresence>
         {notification && (
@@ -626,7 +619,7 @@ export default function TaskCenter() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
-            className="fixed top-4 right-4 z-50 max-w-md"
+            className="fixed top-4 right-4 z-50 max-w-md mx-4"
           >
             <div className={`p-4 rounded-2xl shadow-2xl backdrop-blur-lg border-2 ${
               notification.type === 'success' 
@@ -666,7 +659,7 @@ export default function TaskCenter() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 mx-3"
           >
             <div className="bg-gradient-to-br from-purple-800 to-pink-800 rounded-3xl p-8 max-w-md shadow-2xl border-2 border-purple-400">
               <div className="text-center">
@@ -715,16 +708,11 @@ export default function TaskCenter() {
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
+      <div className="relative z-10 container mx-auto py-8 max-w-7xl">
         {/* Header */}
         <motion.div {...fadeIn} className="text-center mb-12">
-          <Link href="/ai" className="inline-block mb-4">
-            <button className="text-white/60 hover:text-white flex items-center space-x-2 transition-colors">
-              <span>← Back to Chat</span>
-            </button>
-          </Link>
           <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 mb-4">
-            💤 Task Center
+            Task Center
           </h1>
           <p className="text-xl text-gray-300">
             Complete tasks and earn real SOMNUS tokens on BSC
