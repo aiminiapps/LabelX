@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaTwitter, FaWallet, FaSpinner, FaCheckCircle, FaTelegram, 
   FaExternalLinkAlt, FaRetweet, FaComment, FaThumbsUp, FaCopy, 
-  FaInfoCircle, FaGift, FaCoins, FaShieldAlt, FaChartLine, 
-  FaTrophy, FaFire, FaUserCircle, FaBell, FaShare, FaUsers, 
-  FaMobileAlt, FaCheckDouble, FaEye, FaTimes 
+  FaInfoCircle, FaGift, FaCoins,  FaChartLine, 
+  FaTrophy, FaFire,  FaShare, FaUsers, 
+  FaMobileAlt, FaCheckDouble, FaEye
 } from 'react-icons/fa';
-import { TbBrain, TbTarget, TbSparkles, TbDatabase } from 'react-icons/tb';
+import {  TbTarget } from 'react-icons/tb';
 import { BiCoin, BiData, BiShield } from 'react-icons/bi';
 import Link from 'next/link';
 
