@@ -24,6 +24,8 @@ import MultiAgentChatHub from '@/components/MultiAgentChatHub';
 import { GoTasklist } from "react-icons/go";
 import TaskCenter from '@/components/TaskCenter';
 import NewTaskCenter from '@/components/NewTaskCenter';
+import { TbWallet, TbWalletOff } from "react-icons/tb";
+
 
 // Earning Timer Component
 const EarningTimer = () => {
@@ -541,13 +543,13 @@ function TelegramMiniApp() {
         return {
           text: formatWalletAddress(walletStatus.address),
           color: 'text-green-400',
-          icon: '🟢'
+          icon: <TbWallet className='size-4 text-green-400'/>
         };
       }
       return {
-        text: 'Wallet not connected',
+        text: 'Not connected',
         color: 'text-gray-400',
-        icon: '⚪'
+        icon: <TbWalletOff className='size-4 text-red-400'/>
       };
     }, [walletStatus, formatWalletAddress]);
   
@@ -568,7 +570,7 @@ function TelegramMiniApp() {
             <div className="text-left">
               <p className="text-gray-400 text-xs font-medium">Wallet Status</p>
               <div className="flex items-center gap-2 -mt-0.5">
-                <span className="text-xs">{statusDisplay.icon}</span>
+                {statusDisplay.icon}
                 <p className={`${statusDisplay.color} text-sm font-semibold`}>
                   {statusDisplay.text}
                 </p>
