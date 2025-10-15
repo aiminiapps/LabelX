@@ -20,7 +20,7 @@ const CompactEarnBanner = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-4xl mx-auto p-4"
+      className="w-full max-w-4xl mx-auto py-4"
     >
       <div className="glass rounded-3xl p-6 relative overflow-hidden">
         {/* Background glow */}
