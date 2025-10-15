@@ -680,7 +680,7 @@ export default function TaskCenter() {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
             onClick={() => wallet.welcomeBonusStatus.sent = false}
           >
-            <div className="bg-gradient-to-br from-green-800 to-emerald-800 rounded-3xl p-8 max-w-md shadow-2xl border-2 border-green-400">
+            <div className="bg-gradient-to-br from-green-800 to-emerald-800 rounded-3xl p-8 max-w-md shadow-2xl border-2 border-green-400 mx-3">
               <div className="text-center">
                 <FaCheckCircle className="text-6xl text-green-400 mx-auto mb-4" />
                 <h3 className="text-3xl font-bold text-white mb-2">Welcome Bonus Received!</h3>
