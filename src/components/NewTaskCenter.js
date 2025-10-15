@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaTwitter, FaWallet, FaSpinner, FaCheckCircle, 
+import {
+  FaTwitter, FaWallet, FaSpinner, FaCheckCircle,
   FaExternalLinkAlt, FaTelegram, FaRetweet, FaComment,
   FaCopy, FaEye, FaInfoCircle
 } from 'react-icons/fa';
-import { 
+import {
   GiNinjaStar, GiNinjaMask, GiTargetPrize, GiShuriken
 } from 'react-icons/gi';
 
@@ -23,7 +23,6 @@ const STORAGE_KEY = 'finja-app-data';
 
 const getStorageData = () => {
   if (typeof window === 'undefined') return null;
-  
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : null;
@@ -50,6 +49,7 @@ const initializeStorage = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
     return defaultData;
   }
+  
   return existing;
 };
 
@@ -60,7 +60,7 @@ const updateStorage = (updates) => {
   return newData;
 };
 
-// Wallet Hook - Fixed to prevent infinite re-renders
+// FIXED: Wallet Hook with proper ethers v6 support
 const useWallet = () => {
   const [wallet, setWallet] = useState({
     address: null,
@@ -87,8 +87,10 @@ const useWallet = () => {
     setWallet(prev => ({ ...prev, isConnecting: true, error: null }));
 
     try {
-      const { ethers } = await import('ethers');
-      
+      // Dynamic import with proper handling for both v5 and v6
+      const ethersModule = await import('ethers');
+      const ethers = ethersModule.default || ethersModule;
+
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts',
       });
@@ -118,15 +120,33 @@ const useWallet = () => {
         }
       }
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      // Support both ethers v5 and v6
+      let provider, signer, balance = '0';
       
-      let balance = '0';
-      try {
-        const rawBalance = await provider.getBalance(accounts[0]);
-        balance = ethers.utils.formatEther(rawBalance);
-      } catch (balanceError) {
-        console.warn('Balance fetch failed:', balanceError);
+      if (ethers.BrowserProvider) {
+        // Ethers v6
+        console.log('Using ethers v6');
+        provider = new ethers.BrowserProvider(window.ethereum);
+        signer = await provider.getSigner();
+        try {
+          const rawBalance = await provider.getBalance(accounts[0]);
+          balance = ethers.formatEther(rawBalance);
+        } catch (balanceError) {
+          console.warn('Balance fetch failed:', balanceError);
+        }
+      } else if (ethers.providers && ethers.providers.Web3Provider) {
+        // Ethers v5
+        console.log('Using ethers v5');
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        try {
+          const rawBalance = await provider.getBalance(accounts[0]);
+          balance = ethers.utils.formatEther(rawBalance);
+        } catch (balanceError) {
+          console.warn('Balance fetch failed:', balanceError);
+        }
+      } else {
+        throw new Error('Ethers library not properly loaded');
       }
 
       const newWalletState = {
@@ -152,11 +172,13 @@ const useWallet = () => {
         }
       });
 
+      console.log('✅ Wallet connected:', accounts[0]);
+
     } catch (error) {
       console.error('Connection failed:', error);
-      setWallet(prev => ({ 
-        ...prev, 
-        isConnecting: false, 
+      setWallet(prev => ({
+        ...prev,
+        isConnecting: false,
         error: error.message,
         isInitialized: true
       }));
@@ -180,32 +202,46 @@ const useWallet = () => {
     });
   }, []);
 
-  // Auto-reconnect effect - Fixed dependencies
+  // Auto-reconnect effect - Fixed with proper ethers handling
   useEffect(() => {
     let isMounted = true;
 
     const reconnect = async () => {
       try {
         const savedData = getStorageData();
-        
         if (savedData?.wallet?.isConnected && savedData.wallet.address && window.ethereum) {
-          const isRecent = savedData.wallet.lastConnected && 
+          const isRecent = savedData.wallet.lastConnected &&
             (Date.now() - savedData.wallet.lastConnected) < 24 * 60 * 60 * 1000;
 
           if (isRecent) {
-            const { ethers } = await import('ethers');
+            const ethersModule = await import('ethers');
+            const ethers = ethersModule.default || ethersModule;
+
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            
+
             if (accounts.length > 0 && accounts[0].toLowerCase() === savedData.wallet.address.toLowerCase()) {
-              const provider = new ethers.providers.Web3Provider(window.ethereum);
-              const signer = provider.getSigner();
-              
-              let balance = savedData.wallet.balance;
-              try {
-                const rawBalance = await provider.getBalance(accounts[0]);
-                balance = ethers.utils.formatEther(rawBalance);
-              } catch (error) {
-                console.warn('Balance update failed:', error);
+              let provider, signer, balance = savedData.wallet.balance;
+
+              if (ethers.BrowserProvider) {
+                // Ethers v6
+                provider = new ethers.BrowserProvider(window.ethereum);
+                signer = await provider.getSigner();
+                try {
+                  const rawBalance = await provider.getBalance(accounts[0]);
+                  balance = ethers.formatEther(rawBalance);
+                } catch (error) {
+                  console.warn('Balance update failed:', error);
+                }
+              } else if (ethers.providers && ethers.providers.Web3Provider) {
+                // Ethers v5
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                try {
+                  const rawBalance = await provider.getBalance(accounts[0]);
+                  balance = ethers.utils.formatEther(rawBalance);
+                } catch (error) {
+                  console.warn('Balance update failed:', error);
+                }
               }
 
               if (isMounted) {
@@ -226,7 +262,7 @@ const useWallet = () => {
             }
           }
         }
-        
+
         if (isMounted) {
           setWallet(prev => ({ ...prev, isInitialized: true }));
         }
@@ -255,7 +291,6 @@ function MobileMetaMaskNotice() {
   useEffect(() => {
     const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
     const hasMetaMask = window.ethereum?.isMetaMask;
-    
     if (isMobile && !hasMetaMask) {
       setShow(true);
     }
@@ -265,450 +300,113 @@ function MobileMetaMaskNotice() {
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      {...fadeIn}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="fixed bottom-4 left-4 right-4 bg-gradient-to-r from-purple-900 to-indigo-900 border-2 border-purple-500 rounded-2xl p-4 shadow-2xl z-50 backdrop-blur-lg"
     >
-      <div className="glass glass-particles p-8 rounded-3xl max-w-sm w-full text-center border-2 border-orange-500/50">
-        <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
-          <GiNinjaMask className="text-3xl text-white" />
-        </div>
-        <h2 className="text-2xl font-bold text-white tektur mb-4">🥷 Mobile Setup</h2>
-        <p className="text-gray-300 mb-6">Open in MetaMask app for best experience.</p>
-        <button
-          // onClick={() => window.location.href = `https://metamask.app.link/dapp/${window.location.host}`}
-          onClick={() => window.location.href = `https://metamask.app.link/dapp/https://finja-chi.vercel.app/?tab=task`}
-          className="w-full flex items-center justify-center gap-3 glass-blue py-4 px-6 rounded-lg font-bold text-white mb-4"
-        >
-          <FaWallet size={23}/>
-          Open in MetaMask
-        </button>
-        <button
-          onClick={() => setShow(false)}
-          className="text-gray-400 hover:text-white transition-colors text-sm"
-        >
-          Continue anyway
-        </button>
-      </div>
-    </motion.div>
-  );
-}
-
-// Wallet Card Component
-function NinjaWalletCard({ wallet }) {
-  const { isConnected, address, balance, isConnecting, connectWallet, error, isInitialized } = wallet;
-  const [copied, setCopied] = useState(false);
-
-  const copyAddress = () => {
-    navigator.clipboard.writeText(address);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  if (!isInitialized) {
-    return (
-      <motion.div className="glass glass-particles rounded-2xl mb-6" {...fadeIn}>
-        <div className="text-center">
-          <FaSpinner className="animate-spin text-orange-400 text-2xl mx-auto mb-3" />
-          <p className="text-white"> Initializing...</p>
-        </div>
-      </motion.div>
-    );
-  }
-
-  if (isConnected) {
-    return (
-      <motion.div 
-        className="glass rounded-2xl mb-4 border-2 border-green-500/30"
-        {...fadeIn}
-        style={{padding:"5px"}}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-              <FaCheckCircle className="text-2xl text-white" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white tektur">🥷 Connected</h3>
-              <p className="text-green-400 font-mono text-sm">
-                {address.slice(0, 8)}...{address.slice(-6)}
-              </p>
-              <p className="text-gray-400 text-xs">
-                ⚡ {parseFloat(balance).toFixed(4)} BNB
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex space-x-2">
-            <button
-              onClick={copyAddress}
-              className="p-3 glass-particles bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors"
-            >
-              {copied ? <FaCheckCircle className="text-green-400" /> : <FaCopy className="text-gray-300" />}
-            </button>
-            <a
-              href={`https://bscscan.com/address/${address}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 glass-particles bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors"
-            >
-              <FaExternalLinkAlt className="text-gray-300" />
-            </a>
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div 
-      className="glass p-8 rounded-2xl mb-6 text-center border-2 border-orange-500/30"
-      {...fadeIn}
-    >
-      <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
-        <GiNinjaMask className="text-3xl text-white" />
-      </div>
-      
-      <h2 className="text-2xl font-bold text-white tektur mb-4">Connect Your Ninja Wallet</h2>
-      <p className="text-gray-300 mb-6">Connect MetaMask to start earning FINJ tokens.</p>
-      
-      {error && (
-        <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-4">
-          <p className="text-red-400 text-sm">{error}</p>
-        </div>
-      )}
-      
-      <button
-        onClick={connectWallet}
-        disabled={isConnecting}
-        className="glass-blue w-full flex items-center justify-center px-8 py-4 rounded-xl font-bold text-lg text-white"
-      >
-        {isConnecting ? (
-          <>
-            <FaSpinner className="animate-spin mr-2" />
-            Connecting...
-          </>
-        ) : (
-          <>
-            <FaWallet className="mr-2" />
-            Connect MetaMask
-          </>
-        )}
-      </button>
-    </motion.div>
-  );
-}
-
-// Task Card Component
-function NinjaTaskCard({ task, onComplete, isProcessing, wallet }) {
-  // Memoize storage data to prevent re-renders
-  const taskData = useMemo(() => {
-    const data = getStorageData();
-    return data?.tasks?.[task.id] || { completed: false, reward: 0, txHash: '', timestamp: null };
-  }, [task.id]);
-
-  const isCompleted = taskData.completed;
-
-  const handleTaskAction = useCallback(() => {
-    if (isCompleted || !wallet.isConnected) return;
-
-    const links = {
-      followX: 'https://x.com/fhinjaai',
-      commentX: 'https://x.com/fhinjaai/status/1972966938935693555',
-      retweetX: 'https://x.com/fhinjaai/status/1972522641451028489',
-      joinTelegram: 'https://t.me/FHINJA_Bot'
-    };
-
-    if (links[task.id]) {
-      window.open(links[task.id], '_blank');
-    }
-
-    setTimeout(() => {
-      onComplete(task.id);
-    }, 3000);
-  }, [isCompleted, wallet.isConnected, task.id, onComplete]);
-
-  return (
-    <motion.div
-      className={`glass p-6 rounded-2xl mb-4 border-2 transition-all duration-300 ${
-        isCompleted 
-          ? 'border-green-500/50 bg-green-500/10' 
-          : 'border-orange-500/30 hover:border-orange-400/60 cursor-pointer'
-      }`}
-      {...fadeIn}
-      whileHover={!isCompleted ? { scale: 1.01 } : {}}
-      onClick={handleTaskAction}
-      style={{padding:"8px"}}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className={`w-16 h-16 bg-gradient-to-br rounded-xl flex items-center justify-center ${
-            isCompleted ? 'from-green-500 to-emerald-600' : 'from-orange-500 to-red-500'
-          }`}>
-            {isCompleted ? (
-              <FaCheckCircle className="text-2xl text-white" />
-            ) : (
-              <task.icon className="text-2xl text-white" />
-            )}
-          </div>
-          
-          <div>
-            <h3 className="text-xl font-bold text-white tektur">{task.title}</h3>
-            <p className="text-gray-300 text-sm">{task.description}</p>
-            
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <GiNinjaStar className="text-yellow-400" />
-                <span className="text-orange-400 font-bold">{task.reward} FINJ</span>
-              </div>
-              <div className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded">BSC</div>
-              {isCompleted && taskData.txHash && (
-                <a
-                  href={`https://bscscan.com/tx/${taskData.txHash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center space-x-1"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <FaEye />
-                  <span>View TX</span>
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-
-      </div>
-        <div className="text-center">
-          {isCompleted ? (
-            <div className="flex flex-col items-center space-y-2 mt-3">
-              <div className="w-full bg-green-500 rounded-lg  flex items-center gap-3 justify-center py-2">
-                <FaCheckCircle className="text-xl text-white" />
-              <span className="text-gray-200 text-sm font-bold">Completed!</span>
-              </div>
-            </div>
-          ) : !wallet.isConnected ? (
-            <div className="text-gray-400 text-sm">Connect wallet first</div>
-          ) : (
-            <button
-              className="glass-blue w-full px-6 py-3 rounded-xl mt-3 font-bold text-white flex items-center justify-center space-x-2"
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <FaSpinner className="animate-spin" />
-                  <span>Processing...</span>
-                </>
-              ) : (
-                <>
-                  <FaExternalLinkAlt />
-                  <span>Complete</span>
-                </>
-              )}
-            </button>
-          )}
-        </div>
-    </motion.div>
-  );
-}
-
-// Progress Dashboard Component
-function NinjaProgressDashboard({ wallet }) {
-  const stats = useMemo(() => {
-    const data = getStorageData();
-    return data?.stats || { totalEarned: 0, tasksCompleted: 0 };
-  }, []);
-  
-  return (
-    <motion.div 
-      className="glass rounded-2xl mb-6"
-      {...fadeIn}
-      transition={{ delay: 0.2 }}
-      style={{padding:"8px"}}
-    >
-      <div className="flex items-center space-x-3 mb-6">
-        <GiTargetPrize className="text-orange-400 text-2xl" />
-        <h2 className="text-xl font-bold text-white tektur">Progress Dashboard</h2>
-      </div>
-
-      <div className="grid grid-cols-3 gap-4">
-        <div className="text-center p-4 bg-black/20 rounded-xl border border-orange-500/20">
-          <div className="text-2xl font-bold text-orange-400 mb-1">{stats.tasksCompleted}</div>
-          <div className="text-sm text-gray-400">Tasks Done</div>
-        </div>
-        <div className="text-center p-4 bg-black/20 rounded-xl border border-green-500/20">
-          <div className="text-2xl font-bold text-green-400 mb-1">{stats.totalEarned}</div>
-          <div className="text-sm text-gray-400">FINJ Earned</div>
-        </div>
-        <div className="text-center p-4 bg-black/20 rounded-xl border border-blue-500/20">
-          <div className="text-2xl font-bold text-blue-400 mb-1">
-            {wallet.isConnected ? '✓' : '✗'}
-          </div>
-          <div className="text-sm text-gray-400">Connected</div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// Token Import Instructions
-function TokenImportInstructions() {
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [copied, setCopied] = useState(false);
-  
-  const tokenAddress = '0x90bdcDBd62e2de5a72AF8bFC21c71dF7577fc756';
-
-  const copyTokenAddress = () => {
-    navigator.clipboard.writeText(tokenAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <motion.div 
-      className="glass p-6 rounded-2xl mb-6"
-      {...fadeIn}
-      transition={{ delay: 0.4 }}
-      style={{padding:"8px"}}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3 mt-3">
-          <FaInfoCircle className="text-blue-400 text-xl" />
-          <h2 className="text-xl font-bold text-white tektur ">How to See Your FINJ Tokens</h2>
-        </div>
-        <button
-          onClick={() => setShowInstructions(!showInstructions)}
-          className="text-gray-200 bg-black px-2 rounded-lg mt-3 transition-colors"
-        >
-          {showInstructions ? 'Hide' : 'Show'}
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {showInstructions && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="space-y-4"
+      <div className="flex items-start space-x-3">
+        <FaInfoCircle className="text-yellow-400 text-2xl flex-shrink-0 mt-1" />
+        <div>
+          <p className="text-white font-bold mb-1">🥷 Mobile Setup</p>
+          <p className="text-gray-300 text-sm">
+            Open in MetaMask app for best experience.
+          </p>
+          <button
+            onClick={() => setShow(false)}
+            className="mt-2 text-purple-300 text-xs underline hover:text-purple-100 transition-colors"
           >
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-              <div className="space-y-3 text-sm text-gray-300">
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                  <div>Open MetaMask → Import Tokens → Custom Token</div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                  <div>
-                    <div>Paste contract address:</div>
-                    <div className="mt-2 p-3 bg-gray-800 rounded-lg flex items-center justify-between">
-                      <code className="text-orange-400 font-mono text-xs break-all">
-                        {tokenAddress}
-                      </code>
-                      <button onClick={copyTokenAddress} className="ml-2 p-1 hover:bg-gray-700 rounded">
-                        {copied ? <FaCheckCircle className="text-green-400" /> : <FaCopy className="text-gray-400" />}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
-                  <div className="text-green-400">Your FINJ tokens will appear!</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-// Success Modal
-function SuccessModal({ show, onClose, txHash, amount }) {
-  if (!show) return null;
-
-  return (
-    <motion.div
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <motion.div
-        className="glass glass-particles p-8 rounded-3xl text-center max-w-sm w-full border-2 border-green-500/50"
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-      >
-        <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-          <FaCheckCircle className="text-3xl text-white" />
+            Dismiss
+          </button>
         </div>
-        <h2 className="text-2xl font-bold text-white tektur mb-2">🥷 Mission Complete!</h2>
-        <p className="text-green-400 font-bold mb-4">+{amount} FINJ tokens earned!</p>
-        
-        {txHash && (
-          <a
-            href={`https://bscscan.com/tx/${txHash}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 text-sm hover:text-blue-300 mb-4 flex items-center justify-center space-x-1"
-          >
-            <FaEye />
-            <span>View Transaction</span>
-          </a>
-        )}
-        
-        <button
-          onClick={onClose}
-          className="glass-button px-6 py-3 rounded-xl font-bold text-white"
-        >
-          Continue
-        </button>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
 
 // Main Component
-export default function FINJATaskCenter() {
+export default function TaskCenter() {
   const wallet = useWallet();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [successData, setSuccessData] = useState({ txHash: '', amount: 0 });
+  const [tasks, setTasks] = useState({});
+  const [processingTask, setProcessingTask] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  const availableTasks = useMemo(() => [
-    { id: 'followX', title: 'Follow FINJA on X', description: 'Follow @FhinjaAI on X (Twitter)', reward: 100, icon: FaTwitter },
-    { id: 'commentX', title: 'Comment on X Post', description: 'Comment on our announcement', reward: 75, icon: FaComment },
-    { id: 'retweetX', title: 'Retweet X Post', description: 'Retweet our pinned post', reward: 60, icon: FaRetweet },
-    { id: 'joinTelegram', title: 'Join Telegram', description: 'Join our community', reward: 80, icon: FaTelegram }
-  ], []);
+  // Task definitions
+  const taskDefinitions = useMemo(() => ({
+    followX: {
+      id: 'followX',
+      title: 'Follow on X',
+      description: 'Follow @FinjaAI on X (Twitter)',
+      reward: 100,
+      icon: FaTwitter,
+      action: 'https://twitter.com/intent/follow?screen_name=FinjaAI',
+      type: 'social'
+    },
+    commentX: {
+      id: 'commentX',
+      title: 'Comment on X',
+      description: 'Comment on our latest X post',
+      reward: 75,
+      icon: FaComment,
+      action: 'https://twitter.com/FinjaAI',
+      type: 'social'
+    },
+    retweetX: {
+      id: 'retweetX',
+      title: 'Retweet',
+      description: 'Retweet our latest post',
+      reward: 60,
+      icon: FaRetweet,
+      action: 'https://twitter.com/FinjaAI',
+      type: 'social'
+    },
+    joinTelegram: {
+      id: 'joinTelegram',
+      title: 'Join Telegram',
+      description: 'Join our Telegram community',
+      reward: 80,
+      icon: FaTelegram,
+      action: 'https://t.me/FinjaAI',
+      type: 'social'
+    }
+  }), []);
 
-  const handleTaskCompletion = useCallback(async (taskId) => {
+  // Initialize tasks from storage
+  useEffect(() => {
+    const savedData = getStorageData();
+    if (savedData?.tasks) {
+      setTasks(savedData.tasks);
+    }
+  }, []);
+
+  // Task stats
+  const stats = useMemo(() => {
+    const completed = Object.values(tasks).filter(t => t.completed).length;
+    const total = Object.keys(taskDefinitions).length;
+    const earned = Object.values(tasks).reduce((sum, t) => sum + (t.reward || 0), 0);
+    return { completed, total, earned, progress: total > 0 ? (completed / total) * 100 : 0 };
+  }, [tasks, taskDefinitions]);
+
+  // Complete task
+  const completeTask = useCallback(async (taskId) => {
     if (!wallet.isConnected || !wallet.signer) {
-      alert('🥷 Please connect your wallet first!');
+      alert('Please connect your wallet first!');
       return;
     }
 
-    // Check if already completed
-    const data = getStorageData();
-    if (data?.tasks?.[taskId]?.completed) {
-      alert('🥷 This task is already completed!');
-      return;
+    const task = taskDefinitions[taskId];
+    if (!task || tasks[taskId]?.completed) return;
+
+    // Open external link
+    if (task.action) {
+      window.open(task.action, '_blank', 'noopener,noreferrer');
     }
 
-    setIsProcessing(true);
+    setProcessingTask(taskId);
 
     try {
-      const task = availableTasks.find(t => t.id === taskId);
-      if (!task) throw new Error('Task not found');
-
-      const nonce = Date.now().toString();
-      const expiry = Math.floor(Date.now() / 1000 + 60 * 10);
-      const message = `FINJA Task Completion
-Task: ${task.title}
-Reward: ${task.reward} FINJ
-Address: ${wallet.address}
-Nonce: ${nonce}
-Expiry: ${expiry}`;
+      const nonce = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const expiry = Math.floor(Date.now() / 1000) + 3600;
+      const message = `Complete task: ${taskId}\nAddress: ${wallet.address}\nReward: ${task.reward} FINJ\nNonce: ${nonce}\nExpiry: ${expiry}`;
 
       const signature = await wallet.signer.signMessage(message);
 
@@ -726,98 +424,400 @@ Expiry: ${expiry}`;
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Transaction failed');
+      const data = await response.json();
+
+      if (data.success) {
+        const newTasks = {
+          ...tasks,
+          [taskId]: {
+            completed: true,
+            reward: task.reward,
+            txHash: data.txHash,
+            timestamp: Date.now()
+          }
+        };
+
+        setTasks(newTasks);
+
+        const savedData = getStorageData();
+        updateStorage({
+          tasks: newTasks,
+          stats: {
+            totalEarned: savedData.stats.totalEarned + task.reward,
+            tasksCompleted: savedData.stats.tasksCompleted + 1
+          }
+        });
+
+        setSuccessMessage({
+          task: task.title,
+          amount: task.reward,
+          txHash: data.txHash
+        });
+
+        setTimeout(() => setSuccessMessage(null), 5000);
+      } else {
+        throw new Error(data.error || 'Transaction failed');
       }
-
-      const result = await response.json();
-
-      // Update storage
-      const currentData = getStorageData() || {};
-      const updatedTasks = {
-        ...currentData.tasks,
-        [taskId]: { completed: true, reward: task.reward, txHash: result.txHash, timestamp: Date.now() }
-      };
-      
-      const completedCount = Object.values(updatedTasks).filter(t => t.completed).length;
-      const totalEarned = Object.values(updatedTasks).reduce((sum, t) => sum + (t.reward || 0), 0);
-
-      updateStorage({
-        ...currentData,
-        tasks: updatedTasks,
-        stats: { tasksCompleted: completedCount, totalEarned }
-      });
-
-      setSuccessData({ txHash: result.txHash, amount: task.reward });
-      setShowSuccess(true);
-      
     } catch (error) {
-      console.error('Task completion failed:', error);
-      alert(`🥷 Task completion failed: ${error.message}`);
+      console.error('Task error:', error);
+      alert(`Task failed: ${error.message}`);
     } finally {
-      setIsProcessing(false);
+      setProcessingTask(null);
     }
-  }, [wallet.isConnected, wallet.signer, wallet.address, availableTasks]);
+  }, [wallet, tasks, taskDefinitions]);
 
-  // Initialize storage on mount
-  useEffect(() => {
-    initializeStorage();
+  // Copy address
+  const copyAddress = useCallback((text) => {
+    navigator.clipboard.writeText(text);
+    alert('Copied!');
   }, []);
 
-  return (
-    <div className="min-h-screen text-white pb-24">
-      <MobileMetaMaskNotice />
-      
-      <SuccessModal
-        show={showSuccess}
-        onClose={() => setShowSuccess(false)}
-        txHash={successData.txHash}
-        amount={successData.amount}
-      />
+  if (!wallet.isInitialized) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center">
+        <div className="text-center">
+          <FaSpinner className="text-6xl text-white animate-spin mx-auto mb-4" />
+          <p className="text-white text-xl">Initializing...</p>
+        </div>
+      </div>
+    );
+  }
 
-      <div className="max-w-2xl mx-auto">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 relative overflow-hidden">
+      <MobileMetaMaskNotice />
+
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
-        <motion.div className="text-center mb-8 mt-4" {...fadeIn}>
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center">
-              <GiNinjaMask className="text-2xl text-white" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-2xl font-bold text-white tektur">FINJA</h1>
-              <p className="text-orange-400 text-sm">Ninja Trading</p>
-            </div>
+        <motion.div {...fadeIn} className="text-center mb-12">
+          <div className="flex items-center justify-center mb-4">
+            <GiNinjaStar className="text-6xl text-yellow-400 animate-spin-slow" />
           </div>
-          <h2 className="text-3xl font-bold text-white tektur mb-2">Task Center</h2>
-          <p className="text-gray-300">Complete missions and earn FINJ tokens</p>
+          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 mb-4">
+            Ninja Trading
+          </h1>
+          <p className="text-xl text-gray-300">
+            Complete missions and earn FINJ tokens
+          </p>
         </motion.div>
 
-        {/* Components */}
-        <NinjaWalletCard wallet={wallet} />
-        {wallet.isConnected && <NinjaProgressDashboard wallet={wallet} />}
-        {wallet.isConnected && <TokenImportInstructions />}
-
-        {/* Tasks */}
-        {wallet.isConnected && (
-          <motion.div {...fadeIn} transition={{ delay: 0.3 }}>
-            <div className="flex items-center space-x-2 mb-6">
-              <GiShuriken className="text-orange-400 text-xl" />
-              <h2 className="text-xl font-bold text-white tektur">Available Missions</h2>
-            </div>
-            <div className="space-y-4">
-              {availableTasks.map((task) => (
-                <NinjaTaskCard
-                  key={task.id}
-                  task={task}
-                  onComplete={handleTaskCompletion}
-                  isProcessing={isProcessing}
-                  wallet={wallet}
-                />
-              ))}
+        {/* Wallet Connection */}
+        {!wallet.isConnected ? (
+          <motion.div
+            {...fadeIn}
+            className="max-w-md mx-auto bg-gradient-to-r from-purple-800/50 to-indigo-800/50 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500 shadow-2xl"
+          >
+            <div className="text-center">
+              <GiNinjaMask className="text-7xl text-purple-400 mx-auto mb-6" />
+              <h2 className="text-3xl font-bold text-white mb-4">Connect Your Ninja Wallet</h2>
+              <p className="text-gray-300 mb-6">
+                Connect MetaMask to start earning FINJ tokens.
+              </p>
+              {wallet.error && (
+                <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-4">
+                  <p className="text-red-200 text-sm">{wallet.error}</p>
+                </div>
+              )}
+              <button
+                onClick={wallet.connectWallet}
+                disabled={wallet.isConnecting}
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center space-x-2"
+              >
+                {wallet.isConnecting ? (
+                  <>
+                    <FaSpinner className="animate-spin text-xl" />
+                    <span>Connecting...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaWallet className="text-xl" />
+                    <span>Connect MetaMask</span>
+                  </>
+                )}
+              </button>
             </div>
           </motion.div>
+        ) : (
+          <>
+            {/* Wallet Info */}
+            <motion.div
+              {...fadeIn}
+              className="max-w-2xl mx-auto bg-gradient-to-r from-purple-800/50 to-indigo-800/50 backdrop-blur-lg rounded-2xl p-6 border-2 border-purple-500 shadow-2xl mb-8"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
+                    <FaWallet className="text-white text-xl" />
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Connected Wallet</p>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-white font-mono text-sm">
+                        {wallet.address?.slice(0, 6)}...{wallet.address?.slice(-4)}
+                      </p>
+                      <button
+                        onClick={() => copyAddress(wallet.address)}
+                        className="text-purple-400 hover:text-purple-300 transition-colors"
+                      >
+                        <FaCopy />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={wallet.disconnect}
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                >
+                  Disconnect
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-black/30 rounded-lg p-3">
+                  <p className="text-gray-400 text-xs mb-1">BNB Balance</p>
+                  <p className="text-white font-bold">{parseFloat(wallet.balance).toFixed(4)}</p>
+                </div>
+                <div className="bg-black/30 rounded-lg p-3">
+                  <p className="text-gray-400 text-xs mb-1">Network</p>
+                  <p className="text-green-400 font-bold">BSC</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Success Message */}
+            <AnimatePresence>
+              {successMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -50 }}
+                  className="max-w-2xl mx-auto bg-green-500/20 border-2 border-green-500 rounded-2xl p-6 mb-8"
+                >
+                  <div className="flex items-center space-x-4">
+                    <FaCheckCircle className="text-green-400 text-4xl" />
+                    <div className="flex-1">
+                      <h3 className="text-white font-bold text-lg mb-1">
+                        {successMessage.task} Complete!
+                      </h3>
+                      <p className="text-gray-300">
+                        +{successMessage.amount} FINJ tokens earned!
+                      </p>
+                      {successMessage.txHash && (
+                        <a
+                          href={`https://bscscan.com/tx/${successMessage.txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:text-blue-300 text-sm flex items-center space-x-1 mt-2"
+                        >
+                          <span>View Transaction</span>
+                          <FaExternalLinkAlt />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Progress Dashboard */}
+            <motion.div
+              {...fadeIn}
+              className="max-w-2xl mx-auto bg-gradient-to-r from-purple-800/50 to-indigo-800/50 backdrop-blur-lg rounded-2xl p-6 border-2 border-purple-500 shadow-2xl mb-8"
+            >
+              <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
+                <GiTargetPrize className="mr-3 text-yellow-400" />
+                Progress Dashboard
+              </h2>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-white">{stats.completed}/{stats.total}</p>
+                  <p className="text-gray-400 text-sm">Tasks Done</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-yellow-400">{stats.earned}</p>
+                  <p className="text-gray-400 text-sm">FINJ Earned</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-green-400">{Math.round(stats.progress)}%</p>
+                  <p className="text-gray-400 text-sm">Complete</p>
+                </div>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${stats.progress}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500"
+                />
+              </div>
+            </motion.div>
+
+            {/* Tasks Grid */}
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {Object.values(taskDefinitions).map((task, index) => {
+                const taskState = tasks[task.id];
+                const isCompleted = taskState?.completed;
+                const isProcessing = processingTask === task.id;
+                const IconComponent = task.icon;
+
+                return (
+                  <motion.div
+                    key={task.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`relative bg-gradient-to-br ${
+                      isCompleted
+                        ? 'from-green-800/50 to-emerald-800/50 border-green-500'
+                        : 'from-purple-800/50 to-indigo-800/50 border-purple-500'
+                    } backdrop-blur-lg rounded-2xl p-6 border-2 shadow-2xl transition-all duration-300 hover:scale-105`}
+                  >
+                    {isCompleted && (
+                      <div className="absolute -top-3 -right-3 bg-green-500 rounded-full p-2 shadow-lg">
+                        <FaCheckCircle className="text-white text-xl" />
+                      </div>
+                    )}
+
+                    <div className="flex items-start space-x-4 mb-4">
+                      <div className={`p-4 rounded-xl ${
+                        isCompleted ? 'bg-green-500/20' : 'bg-purple-500/20'
+                      }`}>
+                        {isProcessing ? (
+                          <FaSpinner className="text-3xl text-white animate-spin" />
+                        ) : (
+                          <IconComponent className="text-3xl text-white" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-1">{task.title}</h3>
+                        <p className="text-gray-300 text-sm mb-2">{task.description}</p>
+                        <div className="flex items-center space-x-2">
+                          <GiShuriken className="text-yellow-400" />
+                          <span className="text-yellow-400 font-bold">+{task.reward} FINJ</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => completeTask(task.id)}
+                      disabled={isCompleted || isProcessing}
+                      className={`w-full py-3 px-6 rounded-xl font-bold transition-all duration-300 ${
+                        isCompleted
+                          ? 'bg-green-500/50 text-white cursor-default'
+                          : isProcessing
+                          ? 'bg-yellow-500/50 text-white cursor-wait'
+                          : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white transform hover:scale-105'
+                      } disabled:opacity-50`}
+                    >
+                      {isCompleted ? 'Completed ✓' : isProcessing ? 'Processing...' : 'Complete Task'}
+                    </button>
+
+                    {isCompleted && taskState?.txHash && (
+                      <a
+                        href={`https://bscscan.com/tx/${taskState.txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-center text-blue-400 hover:text-blue-300 text-sm mt-2 flex items-center justify-center space-x-1"
+                      >
+                        <FaExternalLinkAlt />
+                        <span>View on BSCScan</span>
+                      </a>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Completion Message */}
+            {stats.completed === stats.total && stats.total > 0 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="max-w-2xl mx-auto bg-gradient-to-r from-yellow-800/50 to-orange-800/50 backdrop-blur-lg rounded-2xl p-8 border-2 border-yellow-500 shadow-2xl text-center"
+              >
+                <GiNinjaMask className="text-8xl text-yellow-400 mx-auto mb-4" />
+                <h2 className="text-4xl font-bold text-white mb-4">🥷 Mission Complete!</h2>
+                <p className="text-xl text-gray-300 mb-2">
+                  You've completed all tasks!
+                </p>
+                <p className="text-3xl font-bold text-yellow-400">
+                  Total Earned: {stats.earned} FINJ
+                </p>
+              </motion.div>
+            )}
+
+            {/* Token Info */}
+            <motion.div
+              {...fadeIn}
+              className="max-w-2xl mx-auto bg-gradient-to-r from-purple-800/50 to-indigo-800/50 backdrop-blur-lg rounded-2xl p-6 border-2 border-purple-500 shadow-2xl mt-8"
+            >
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <FaInfoCircle className="mr-2" />
+                How to See Your FINJ Tokens
+              </h3>
+              <ol className="space-y-3 text-gray-300">
+                <li className="flex items-start">
+                  <span className="font-bold text-purple-400 mr-2">1.</span>
+                  <span>Open MetaMask and switch to BNB Smart Chain</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="font-bold text-purple-400 mr-2">2.</span>
+                  <span>Click "Import tokens" at the bottom</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="font-bold text-purple-400 mr-2">3.</span>
+                  <div className="flex-1">
+                    <span>Paste the token contract address:</span>
+                    <div className="mt-2 bg-black/50 rounded-lg p-3 font-mono text-xs break-all flex items-center justify-between">
+                      <span>{process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS || '0x...'}</span>
+                      <button
+                        onClick={() => copyAddress(process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS)}
+                        className="ml-2 text-purple-400 hover:text-purple-300 transition-colors"
+                      >
+                        <FaCopy />
+                      </button>
+                    </div>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <span className="font-bold text-purple-400 mr-2">4.</span>
+                  <span>Your FINJ balance will appear!</span>
+                </li>
+              </ol>
+            </motion.div>
+          </>
         )}
       </div>
+
+      <style jsx global>{`
+        @keyframes blob {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+        .animate-spin-slow {
+          animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
