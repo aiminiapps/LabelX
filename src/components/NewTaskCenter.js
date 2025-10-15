@@ -875,7 +875,7 @@ export default function LabelXTaskCenter() {
             {/* Tasks Grid */}
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <TbTarget className="text-orange-400" />
+                {/* <TbTarget className="text-orange-400" /> */}
                 Available Tasks
               </h2>
 
@@ -895,12 +895,12 @@ export default function LabelXTaskCenter() {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-start gap-4 flex-1">
-                        <div
+                        {/* <div
                           className="p-3 rounded-2xl flex-shrink-0"
                           style={{ backgroundColor: theme.surface }}
                         >
                           <task.icon className="text-orange-400" size={24} />
-                        </div>
+                        </div> */}
 
                         <div className="flex-1">
                           <h3 className="text-lg font-bold text-white mb-1">
