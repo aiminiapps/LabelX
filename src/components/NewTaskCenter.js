@@ -708,13 +708,13 @@ export default function TaskCenter() {
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 container mx-auto py-8 max-w-7xl">
+      <div className="relative z-10 container mx-auto pt-8 max-w-7xl">
         {/* Header */}
         <motion.div {...fadeIn} className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-2">
             Task Center
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-sm text-balance text-gray-300">
             Complete tasks and earn real SOMNUS tokens on BSC
           </p>
         </motion.div>
@@ -722,7 +722,7 @@ export default function TaskCenter() {
         {/* Wallet Section */}
         {!wallet.isConnected ? (
           <motion.div {...fadeIn} className="max-w-md mx-auto mb-12">
-            <div className="bg-gradient-to-br from-purple-800/50 to-pink-800/50 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-400 shadow-2xl">
+            <div className="glass  rounded-3xl shadow-2xl">
               <div className="text-center">
                 <FaWallet className="text-7xl text-purple-400 mx-auto mb-6" />
                 <h2 className="text-3xl font-bold text-white mb-4">Connect Your Wallet</h2>
@@ -737,7 +737,7 @@ export default function TaskCenter() {
                 <button
                   onClick={wallet.connectWallet}
                   disabled={wallet.isConnecting}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center space-x-2"
+                  className="w-full glass-button bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center space-x-2"
                 >
                   {wallet.isConnecting ? (
                     <>
