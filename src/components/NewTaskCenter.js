@@ -599,7 +599,7 @@ export default function LabelXTaskCenter() {
             address: TOKEN_CONTRACT,
             symbol: 'LBLX',
             decimals: 18,
-            image: 'https://labelx.ai/logo.png'
+            image: 'https://label-x.vercel.app/agent/agentlogo.png'
           }
         }
       });
