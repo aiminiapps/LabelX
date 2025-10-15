@@ -172,7 +172,7 @@ const SocialTask = () => {
   };
 
   return (
-    <div className="backdrop-blur-lg glass rounded-xl p-4 border border-green-400/20 mb-6 border-l-2 border-l-green-500/30 border-r-2 border-r-green-500/30">
+    <div className="backdrop-blur-lg glass mt-6 rounded-xl p-4 border border-green-400/20 mb-6 border-l-2 border-l-green-500/30 border-r-2 border-r-green-500/30">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
@@ -668,20 +668,13 @@ function TelegramMiniApp() {
   
   
   const renderHomeContent = () => (
-    <div className="space-y-6">
+    <div className="space-y-">
       <EarnRewardsBanner/>
       <LabelXNetworkGlobe/>
       <DataCenterHome />
       <SocialTask />
       <InteractivePeerReview/>
-      {/* <EarningTimer /> */}
-      <UserBalance />
-      {/* <NavigationButtons
-        setActiveTab={handleTabNavigation}
-        earningTimer={earningTimer}
-        startEarningTimer={startEarningTimer}
-      /> */}
-      <div className="h-14" />
+      <div className="h-20" />
     </div>
   );
 

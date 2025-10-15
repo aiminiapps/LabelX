@@ -182,7 +182,7 @@ export function UltraLabelXGlobe({ className, config = ENHANCED_GLOBE_CONFIG }) 
   }, [rs, config]);
 
   return (
-    <div className="glass rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl">
+    <div className="glass rounded-3xl relative overflow-hidden backdrop-blur-xl">
       {/* Dynamic header with real-time stats */}
       <div className="relative z-10 mb-5">
         <div className="flex items-center justify-between gap-2.5 mb-4">
