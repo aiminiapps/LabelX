@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 
-// ✅ SOMNUS Token Transaction API
+// ✅ LBLX Token Transaction API - Updated for LabelX
+
 const ADMIN_PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
 const TOKEN_CONTRACT_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS;
 const BSC_RPC_URL = 'https://bsc-dataseed1.binance.org';
 
-console.log('🔧 SOMNUS Transaction API Configuration:');
+console.log('🔧 LBLX Transaction API Configuration:');
 console.log('- Admin Key:', ADMIN_PRIVATE_KEY ? '✅ Present' : '❌ Missing');
 console.log('- Token Address:', TOKEN_CONTRACT_ADDRESS ? '✅ Present' : '❌ Missing');
 
@@ -33,14 +34,12 @@ async function directRPCCall(method, params = []) {
   return data.result;
 }
 
-// ✅ Create transfer data for ERC-20 (works with ethers v6)
+// ✅ Create transfer data for ERC-20
 function createTransferData(recipientAddress, tokenAmountWei) {
   const cleanAddress = recipientAddress.replace('0x', '').toLowerCase();
   const paddedAddress = cleanAddress.padStart(64, '0');
-  
   const amountHex = BigInt(tokenAmountWei).toString(16);
   const paddedAmount = amountHex.padStart(64, '0');
-  
   const data = TRANSFER_FUNCTION_SIGNATURE + paddedAddress + paddedAmount;
   
   console.log('🔍 Transfer Data Construction:');
@@ -54,7 +53,7 @@ function createTransferData(recipientAddress, tokenAmountWei) {
 
 export async function POST(request) {
   const startTime = Date.now();
-  console.log('\n💤 SOMNUS Transaction API called at:', new Date().toISOString());
+  console.log('\n🎯 LBLX Transaction API called at:', new Date().toISOString());
 
   try {
     // Environment validation
@@ -67,10 +66,10 @@ export async function POST(request) {
     // Parse request
     const body = await request.json();
     const { taskId, address, message, signature, nonce, expiry, reward, isWelcomeBonus } = body;
-    
+
     console.log('📦 Processing:', isWelcomeBonus ? 'Welcome Bonus' : `Task ${taskId}`);
     console.log('👤 To User:', address);
-    console.log('💰 Amount:', reward, 'SOMNUS');
+    console.log('💰 Amount:', reward, 'LBLX');
 
     // Load ethers v6
     const ethers = await import('ethers');
@@ -92,12 +91,12 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Validate address (ethers v6 syntax)
+    // Validate address
     if (!ethersLib.isAddress(address)) {
       return NextResponse.json({ error: 'Invalid address format' }, { status: 400 });
     }
 
-    // Verify signature (ethers v6 syntax)
+    // Verify signature
     try {
       const recoveredAddress = ethersLib.verifyMessage(message, signature);
       if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
@@ -122,11 +121,11 @@ export async function POST(request) {
 
     processedNonces.add(nonceKey);
 
-    // Task validation
-    const validTasks = { 
-      followX: 100, 
-      commentX: 75, 
-      retweetX: 60, 
+    // Task validation - Updated rewards for LabelX
+    const validTasks = {
+      followX: 100,
+      commentX: 75,
+      retweetX: 60,
       joinTelegram: 80,
       likeX: 50,
       shareX: 90,
@@ -155,7 +154,7 @@ export async function POST(request) {
 
     const bufferedGasPrice = Math.floor(parseInt(gasPrice, 16) * 1.2);
 
-    // Token amount calculation (ethers v6 syntax)
+    // Token amount calculation
     const decimals = 18;
     const tokenAmountWei = ethersLib.parseUnits(reward.toString(), decimals);
     console.log('💰 Token amount (wei):', tokenAmountWei.toString());
@@ -192,6 +191,7 @@ export async function POST(request) {
       } catch (error) {
         // Not ready yet
       }
+
       attempts++;
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -218,8 +218,9 @@ export async function POST(request) {
     }
 
     const processingTime = Date.now() - startTime;
-    console.log('🎉 SOMNUS TRANSACTION SUCCESSFUL!');
-    console.log('✅ Sent', reward, 'SOMNUS from', adminWallet.address, 'to', address);
+
+    console.log('🎉 LBLX TRANSACTION SUCCESSFUL!');
+    console.log('✅ Sent', reward, 'LBLX from', adminWallet.address, 'to', address);
     console.log('✅ TX Hash:', txHash);
     console.log('⏱️ Processing time:', processingTime, 'ms');
 
@@ -229,7 +230,7 @@ export async function POST(request) {
       blockNumber: parseInt(receipt.blockNumber, 16),
       gasUsed: parseInt(receipt.gasUsed, 16),
       amount: reward,
-      symbol: 'SOMNUS',
+      symbol: 'LBLX',
       recipient: address,
       sender: adminWallet.address,
       processingTime,
@@ -260,7 +261,7 @@ export async function GET() {
       blockNumber: parseInt(blockNumber, 16),
       adminWallet: adminWallet.address,
       tokenContract: TOKEN_CONTRACT_ADDRESS,
-      tokenSymbol: 'SOMNUS',
+      tokenSymbol: 'LBLX',
       network: 'Binance Smart Chain',
       chainId: 56,
       rpcUrl: BSC_RPC_URL,
