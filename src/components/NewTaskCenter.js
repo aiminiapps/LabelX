@@ -1008,8 +1008,9 @@ export default function LabelXTaskCenter() {
                   <div className="glass-light rounded-xl p-4 mb-4">
                     <div className="text-xs text-gray-400 mb-1">Token Contract</div>
                     <div className="flex items-center gap-2">
-                      <p className="text-white font-mono text-sm flex-1 truncate">
-                        {TOKEN_CONTRACT}
+                      <p className="text-white font-mono text-sm flex-1">
+                        {/* {TOKEN_CONTRACT} */}
+                        {TOKEN_CONTRACT?.slice(0, 15)}...{TOKEN_CONTRACT?.slice(-4)}
                       </p>
                       <button
                         onClick={() => copyToClipboard(TOKEN_CONTRACT)}
