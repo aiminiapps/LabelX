@@ -25,6 +25,7 @@ import { GoTasklist } from "react-icons/go";
 import TaskCenter from '@/components/TaskCenter';
 import NewTaskCenter from '@/components/NewTaskCenter';
 import { TbWallet, TbWalletOff } from "react-icons/tb";
+import EarnRewardsBanner from '@/components/EarnRewardsBanner';
 
 
 // Earning Timer Component
@@ -668,6 +669,7 @@ function TelegramMiniApp() {
   
   const renderHomeContent = () => (
     <div className="space-y-6">
+      <EarnRewardsBanner/>
       <LabelXNetworkGlobe/>
       <DataCenterHome />
       <SocialTask />
