@@ -838,7 +838,7 @@ export default function LabelXTaskCenter() {
             </motion.div>
 
             {/* Stats Overview */}
-            <motion.div {...fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <motion.div {...fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="glass rounded-2xl p-6 text-center">
                 <FaCheckCircle className="text-green-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
@@ -853,7 +853,8 @@ export default function LabelXTaskCenter() {
                 <p className="text-gray-400 text-sm">LBLX Earned</p>
               </div>
 
-              <div className="glass rounded-2xl p-6 text-center">
+              <div className="glass rounded-2xl p-6 text-center"
+              style={{marginTop:'-25px'}}>
                 <FaChartLine className="text-blue-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
                   {Math.round(stats.progress)}%
@@ -861,7 +862,8 @@ export default function LabelXTaskCenter() {
                 <p className="text-gray-400 text-sm">Complete</p>
               </div>
 
-              <div className="glass rounded-2xl p-6 text-center">
+              <div className="glass rounded-2xl p-6 text-center"
+              style={{marginTop:'-25px'}}>
                 <FaFire className="text-red-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
                   {getStorage()?.stats?.currentStreak || 0}
