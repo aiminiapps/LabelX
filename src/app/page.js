@@ -351,8 +351,50 @@ function TelegramMiniApp() {
 
   const TopNav = ({ user }) => { 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [walletStatus, setWalletStatus] = useState({
+      isConnected: false,
+      address: null
+    });
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
+  
+    // Load wallet status from localStorage
+    useEffect(() => {
+      const loadWalletStatus = () => {
+        try {
+          const data = localStorage.getItem('labelx-task-center');
+          if (data) {
+            const parsed = JSON.parse(data);
+            if (parsed?.wallet) {
+              setWalletStatus({
+                isConnected: parsed.wallet.isConnected || false,
+                address: parsed.wallet.address || null
+              });
+            }
+          }
+        } catch (error) {
+          // Silent fail
+        }
+      };
+  
+      // Initial load
+      loadWalletStatus();
+  
+      // Listen for storage changes
+      const handleStorageChange = () => {
+        loadWalletStatus();
+      };
+  
+      window.addEventListener('storage', handleStorageChange);
+      
+      // Also check periodically for same-tab updates
+      const interval = setInterval(loadWalletStatus, 1000);
+  
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        clearInterval(interval);
+      };
+    }, []);
   
     // Optimized haptic feedback function with proper error handling
     const triggerHaptic = useCallback((type = 'light') => {
@@ -487,30 +529,29 @@ function TelegramMiniApp() {
       }
     }, [triggerHaptic]);
   
-    // Get user name with better fallback logic
-    const getUserName = useCallback(() => {
-      // Try multiple sources for user name
-      if (user?.first_name) return user.first_name;
-      if (user?.firstName) return user.firstName;
-      if (user?.username) return user.username;
-      if (user?.name) return user.name;
-      
-      // Try Telegram WebApp user data if available
-      try {
-        const telegram = window?.Telegram?.WebApp;
-        if (telegram?.initDataUnsafe?.user?.first_name) {
-          return telegram.initDataUnsafe.user.first_name;
-        }
-        if (telegram?.initDataUnsafe?.user?.username) {
-          return telegram.initDataUnsafe.user.username;
-        }
-      } catch (error) {
-        // Silently handle telegram access errors
+    // Format wallet address for display
+    const formatWalletAddress = useCallback((address) => {
+      if (!address) return null;
+      return `${address.slice(0, 6)}...${address.slice(-4)}`;
+    }, []);
+  
+    // Get wallet status display
+    const getWalletStatusDisplay = useCallback(() => {
+      if (walletStatus.isConnected && walletStatus.address) {
+        return {
+          text: formatWalletAddress(walletStatus.address),
+          color: 'text-green-400',
+          icon: '🟢'
+        };
       }
-      
-      // Final fallback
-      return 'User';
-    }, [user]);
+      return {
+        text: 'Wallet not connected',
+        color: 'text-gray-400',
+        icon: '⚪'
+      };
+    }, [walletStatus, formatWalletAddress]);
+  
+    const statusDisplay = getWalletStatusDisplay();
   
     return (
       <div className="relative">
@@ -525,17 +566,23 @@ function TelegramMiniApp() {
               className="rounded-lg"
             />
             <div className="text-left">
-              <p className="text-gray-300 text-sm">Welcome</p>
-              <p className="text-gray-200 text-lg -mt-1 font-semibold">
-                {getUserName()}
-              </p>
+              <p className="text-gray-400 text-xs font-medium">Wallet Status</p>
+              <div className="flex items-center gap-2 -mt-0.5">
+                <span className="text-xs">{statusDisplay.icon}</span>
+                <p className={`${statusDisplay.color} text-sm font-semibold`}>
+                  {statusDisplay.text}
+                </p>
+              </div>
             </div>
           </div>
           
           {/* Menu Button */}
           <div className="relative flex items-center gap-2">
-            <Link href='/?tab=task2' className='glass-light flex items-center gap-0.5 font-semibold text-sm text-[#FF7A1A] p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'>
-            <GoTasklist size={25}/> Tasks
+            <Link 
+              href='/?tab=task2' 
+              className='glass-light flex items-center gap-0.5 font-semibold text-sm text-[#FF7A1A] p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'
+            >
+              <GoTasklist size={25}/> Tasks
             </Link>
             <button
               ref={buttonRef}
@@ -566,7 +613,7 @@ function TelegramMiniApp() {
                 >
                   <div className="glass-blue backdrop-blur-sm rounded-2xl p-1 min-w-[160px] shadow-xl border border-white/10">
                     
-                    {/* Share Option  /?tab=invite*/}
+                    {/* Invite Friends Option */}
                     <Link
                       href="/?tab=invite"
                       className="w-full flex bg-green-500/10 items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
@@ -579,7 +626,8 @@ function TelegramMiniApp() {
                     
                     {/* Divider */}
                     <div className="h-px bg-white/5 mx-2 my-1"/>
-                    {/* Share Option  /?tab=invite*/}
+                    
+                    {/* Share Option */}
                     <button
                       onClick={handleShare}
                       className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
@@ -614,6 +662,7 @@ function TelegramMiniApp() {
       </div>
     );
   };
+  
   
   const renderHomeContent = () => (
     <div className="space-y-6">
