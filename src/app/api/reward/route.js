@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 
-// ✅ FIXED DIRECT TRANSACTION API
+// ✅ SOMNUS Token Transaction API
 const ADMIN_PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
 const TOKEN_CONTRACT_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS;
-const BSC_RPC_URL = 'https://bsc-rpc.publicnode.com';
+const BSC_RPC_URL = 'https://bsc-dataseed1.binance.org';
 
-console.log('🔧 Fixed Transaction API Configuration:');
+console.log('🔧 SOMNUS Transaction API Configuration:');
 console.log('- Admin Key:', ADMIN_PRIVATE_KEY ? '✅ Present' : '❌ Missing');
 console.log('- Token Address:', TOKEN_CONTRACT_ADDRESS ? '✅ Present' : '❌ Missing');
 
@@ -33,17 +33,12 @@ async function directRPCCall(method, params = []) {
   return data.result;
 }
 
-// ✅ FIXED: Proper hex encoding for ERC-20 transfer
-function createTransferData(recipientAddress, tokenAmount) {
-  // Dynamic import ethers for utilities
-  const { ethers } = require('ethers');
-  
-  // Remove 0x prefix from address and pad to 32 bytes
+// ✅ Create transfer data for ERC-20 (works with ethers v6)
+function createTransferData(recipientAddress, tokenAmountWei) {
   const cleanAddress = recipientAddress.replace('0x', '').toLowerCase();
   const paddedAddress = cleanAddress.padStart(64, '0');
   
-  // Convert BigNumber amount to hex and pad to 32 bytes
-  const amountHex = tokenAmount.toHexString().replace('0x', '');
+  const amountHex = BigInt(tokenAmountWei).toString(16);
   const paddedAmount = amountHex.padStart(64, '0');
   
   const data = TRANSFER_FUNCTION_SIGNATURE + paddedAddress + paddedAmount;
@@ -51,7 +46,7 @@ function createTransferData(recipientAddress, tokenAmount) {
   console.log('🔍 Transfer Data Construction:');
   console.log('- Function Sig:', TRANSFER_FUNCTION_SIGNATURE);
   console.log('- Address:', recipientAddress, '→', paddedAddress);
-  console.log('- Amount:', tokenAmount.toString(), '→', paddedAmount);
+  console.log('- Amount Wei:', tokenAmountWei, '→', paddedAmount);
   console.log('- Final Data:', data);
   
   return data;
@@ -59,72 +54,91 @@ function createTransferData(recipientAddress, tokenAmount) {
 
 export async function POST(request) {
   const startTime = Date.now();
-  console.log('\n🥷 FIXED FINJA Transaction API called at:', new Date().toISOString());
+  console.log('\n💤 SOMNUS Transaction API called at:', new Date().toISOString());
 
   try {
     // Environment validation
     if (!ADMIN_PRIVATE_KEY || !TOKEN_CONTRACT_ADDRESS) {
-      return NextResponse.json({ 
-        error: 'Missing environment variables' 
+      return NextResponse.json({
+        error: 'Missing environment variables'
       }, { status: 500 });
     }
 
     // Parse request
     const body = await request.json();
-    const { taskId, address, message, signature, nonce, expiry, reward } = body;
-
-    console.log('📦 Processing task:', taskId);
-    console.log('👤 From Admin:', process.env.ADMIN_ADDRESS || 'Not set');
-    console.log('👤 To User:', address);
-    console.log('💰 Amount:', reward, 'FINJ');
-
-    // ✅ Validate that recipient is NOT the same as admin (prevent self-transfer)
-    const { ethers } = await import('ethers');
-    const adminWallet = new ethers.Wallet(ADMIN_PRIVATE_KEY);
+    const { taskId, address, message, signature, nonce, expiry, reward, isWelcomeBonus } = body;
     
+    console.log('📦 Processing:', isWelcomeBonus ? 'Welcome Bonus' : `Task ${taskId}`);
+    console.log('👤 To User:', address);
+    console.log('💰 Amount:', reward, 'SOMNUS');
+
+    // Load ethers v6
+    const ethers = await import('ethers');
+    const ethersLib = ethers.default || ethers;
+
+    // Create wallet from private key
+    const adminWallet = new ethersLib.Wallet(ADMIN_PRIVATE_KEY);
+
+    // Validate recipient is not admin
     if (address.toLowerCase() === adminWallet.address.toLowerCase()) {
       console.error('❌ Self-transfer detected!');
-      return NextResponse.json({ 
-        error: 'Invalid recipient: cannot send to admin wallet' 
+      return NextResponse.json({
+        error: 'Invalid recipient: cannot send to admin wallet'
       }, { status: 400 });
     }
 
     // Basic validation
-    if (!taskId || !address || !message || !signature || !reward) {
-      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    if (!address || !message || !signature || !reward) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    if (!ethers.utils.isAddress(address)) {
-      return NextResponse.json({ error: 'Invalid address' }, { status: 400 });
+    // Validate address (ethers v6 syntax)
+    if (!ethersLib.isAddress(address)) {
+      return NextResponse.json({ error: 'Invalid address format' }, { status: 400 });
     }
 
-    // Verify signature
+    // Verify signature (ethers v6 syntax)
     try {
-      const recoveredAddress = ethers.utils.verifyMessage(message, signature);
+      const recoveredAddress = ethersLib.verifyMessage(message, signature);
       if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
       }
-      console.log('✅ Signature verified for different address than admin');
+      console.log('✅ Signature verified');
     } catch (sigError) {
+      console.error('Signature error:', sigError);
       return NextResponse.json({ error: 'Signature verification failed' }, { status: 401 });
     }
 
     // Expiry and nonce checks
     const now = Math.floor(Date.now() / 1000);
     if (now > parseInt(expiry)) {
-      return NextResponse.json({ error: 'Expired' }, { status: 400 });
+      return NextResponse.json({ error: 'Request expired' }, { status: 400 });
     }
 
     const nonceKey = `${address}_${nonce}`;
     if (processedNonces.has(nonceKey)) {
-      return NextResponse.json({ error: 'Already processed' }, { status: 409 });
+      return NextResponse.json({ error: 'Nonce already used' }, { status: 409 });
     }
+
     processedNonces.add(nonceKey);
 
     // Task validation
-    const validTasks = { followX: 100, commentX: 75, retweetX: 60, joinTelegram: 80 };
-    if (!validTasks[taskId] || reward !== validTasks[taskId]) {
-      return NextResponse.json({ error: 'Invalid task' }, { status: 400 });
+    const validTasks = { 
+      followX: 100, 
+      commentX: 75, 
+      retweetX: 60, 
+      joinTelegram: 80,
+      likeX: 50,
+      shareX: 90,
+      joinCommunity: 70,
+      openMiniApp: 80,
+      welcomeBonus: 10
+    };
+
+    if (!isWelcomeBonus) {
+      if (!validTasks[taskId] || reward !== validTasks[taskId]) {
+        return NextResponse.json({ error: 'Invalid task reward' }, { status: 400 });
+      }
     }
 
     console.log('✅ All validations passed');
@@ -140,14 +154,14 @@ export async function POST(request) {
     ]);
 
     const bufferedGasPrice = Math.floor(parseInt(gasPrice, 16) * 1.2);
-    
-    // ✅ FIXED: Proper token amount calculation
-    const decimals = 18; // FINJ token decimals
-    const tokenAmount = ethers.utils.parseUnits(reward.toString(), decimals);
-    console.log('💰 Exact token amount:', tokenAmount.toString());
 
-    // ✅ FIXED: Proper transaction data encoding
-    const transactionData = createTransferData(address, tokenAmount);
+    // Token amount calculation (ethers v6 syntax)
+    const decimals = 18;
+    const tokenAmountWei = ethersLib.parseUnits(reward.toString(), decimals);
+    console.log('💰 Token amount (wei):', tokenAmountWei.toString());
+
+    // Transaction data encoding
+    const transactionData = createTransferData(address, tokenAmountWei.toString());
 
     // Build transaction
     const rawTransaction = {
@@ -160,18 +174,17 @@ export async function POST(request) {
       chainId: 56
     };
 
-    console.log('🔨 Transaction built for different recipient');
+    console.log('🔨 Transaction built');
 
     // Sign and broadcast
     const signedTx = await adminWallet.signTransaction(rawTransaction);
     const txHash = await directRPCCall('eth_sendRawTransaction', [signedTx]);
-    
     console.log('📤 Transaction sent:', txHash);
 
-    // Wait for confirmation
+    // Wait for confirmation (up to 30 seconds)
     let receipt = null;
     let attempts = 0;
-    
+
     while (!receipt && attempts < 30) {
       try {
         receipt = await directRPCCall('eth_getTransactionReceipt', [txHash]);
@@ -197,18 +210,18 @@ export async function POST(request) {
 
     const status = parseInt(receipt.status, 16);
     if (status !== 1) {
-      return NextResponse.json({ 
-        error: 'Transaction failed',
+      return NextResponse.json({
+        error: 'Transaction failed on chain',
         txHash,
         explorer: `https://bscscan.com/tx/${txHash}`
       }, { status: 500 });
     }
 
     const processingTime = Date.now() - startTime;
-
-    console.log('🎉 FIXED TRANSACTION SUCCESSFUL!');
-    console.log('✅ Sent', reward, 'FINJ from', adminWallet.address, 'to', address);
+    console.log('🎉 SOMNUS TRANSACTION SUCCESSFUL!');
+    console.log('✅ Sent', reward, 'SOMNUS from', adminWallet.address, 'to', address);
     console.log('✅ TX Hash:', txHash);
+    console.log('⏱️ Processing time:', processingTime, 'ms');
 
     return NextResponse.json({
       success: true,
@@ -216,35 +229,40 @@ export async function POST(request) {
       blockNumber: parseInt(receipt.blockNumber, 16),
       gasUsed: parseInt(receipt.gasUsed, 16),
       amount: reward,
-      symbol: 'FINJ',
+      symbol: 'SOMNUS',
       recipient: address,
       sender: adminWallet.address,
       processingTime,
       explorer: `https://bscscan.com/tx/${txHash}`,
       timestamp: new Date().toISOString(),
-      mode: 'REAL_FIXED_TRANSACTION'
+      mode: 'REAL_TRANSACTION_BSC'
     });
 
   } catch (error) {
-    console.error('❌ Error:', error);
-    return NextResponse.json({ 
-      error: 'Transaction failed: ' + error.message 
+    console.error('❌ Transaction Error:', error);
+    return NextResponse.json({
+      error: 'Transaction failed: ' + error.message,
+      details: error.toString()
     }, { status: 500 });
   }
 }
 
 export async function GET() {
   try {
-    const { ethers } = await import('ethers');
-    const adminWallet = new ethers.Wallet(ADMIN_PRIVATE_KEY);
+    const ethers = await import('ethers');
+    const ethersLib = ethers.default || ethers;
+    const adminWallet = new ethersLib.Wallet(ADMIN_PRIVATE_KEY);
     const blockNumber = await directRPCCall('eth_blockNumber');
 
     return NextResponse.json({
       status: 'healthy',
-      mode: 'FIXED_REAL_TRANSACTIONS',
+      mode: 'REAL_TRANSACTIONS_BSC',
       blockNumber: parseInt(blockNumber, 16),
       adminWallet: adminWallet.address,
       tokenContract: TOKEN_CONTRACT_ADDRESS,
+      tokenSymbol: 'SOMNUS',
+      network: 'Binance Smart Chain',
+      chainId: 56,
       rpcUrl: BSC_RPC_URL,
       timestamp: new Date().toISOString()
     });
