@@ -648,7 +648,7 @@ export default function LabelXTaskCenter() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white">
       {/* Notification */}
       <AnimatePresence>
         {notification && (
@@ -744,11 +744,10 @@ export default function LabelXTaskCenter() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-4xl mx-auto p-4 space-y-6">
+      <div className="max-w-4xl mx-auto pb-16 space-y-6">
         {/* Header */}
         <motion.div {...fadeIn} className="text-center mb-8 pt-6">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <TbBrain className="text-orange-400" size={40} />
             <h1 className="text-4xl font-bold text-white">LabelX Tasks</h1>
           </div>
           <p className="text-gray-400 text-lg">
