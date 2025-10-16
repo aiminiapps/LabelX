@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoHome, IoWallet, IoPerson, IoCheckmarkCircle, IoCloseCircle, IoFlag, IoPlay, IoGift, IoArrowBack, IoRefresh, IoSend, IoTime, IoFlash, IoStar, IoSparkles } from 'react-icons/io5';
+import { IoHome, IoPerson, IoCheckmarkCircle, IoFlag, IoGift, IoArrowBack, IoRefresh, IoSend, IoTime, IoFlash, IoSparkles } from 'react-icons/io5';
 import { TbBrain } from 'react-icons/tb';
 import { LuBrainCircuit } from "react-icons/lu";
 
