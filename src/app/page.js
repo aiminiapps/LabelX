@@ -683,14 +683,12 @@ function TelegramMiniApp() {
       case 'home':
         return renderHomeContent();
       case 'dataCenter':
-        // return <CoinAgent />;
         return <PremiumLeaderboard/>;
       case 'agents':
         return <Agent />;
       case 'task':
         return <MultiAgentChatHub/>;
       case 'task2':
-        // return <TaskCenter user={user} />;
         return <NewTaskCenter/>
       case 'invite':
         return <InviteCenter user={user} />;
