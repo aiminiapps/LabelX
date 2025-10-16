@@ -757,15 +757,13 @@ function TelegramMiniApp() {
               imageRendering: 'pixelated',
             }}
           />
-</div>
+        </div>
           </div>
           
           <div className="w-full">
             <TopNav />
             <SearchParamsWrapper setActiveTab={setActiveTab} renderContent={renderContent} />
           </div>
-          
-          {/* Bottom Navigation */}
         <div className="fixed bottom-0 left-0 right-0 flex justify-center z-50">
           <BottomNav
             activeTab={activeTab}
