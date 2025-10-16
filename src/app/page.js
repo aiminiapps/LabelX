@@ -22,7 +22,6 @@ import Link from 'next/link';
 import { LiaUserFriendsSolid } from "react-icons/lia";
 import MultiAgentChatHub from '@/components/MultiAgentChatHub';
 import { GoTasklist } from "react-icons/go";
-import TaskCenter from '@/components/TaskCenter';
 import NewTaskCenter from '@/components/NewTaskCenter';
 import { TbWallet, TbWalletOff } from "react-icons/tb";
 import EarnRewardsBanner from '@/components/EarnRewardsBanner';

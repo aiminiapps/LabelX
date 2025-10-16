@@ -6,8 +6,6 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { FiHome } from "react-icons/fi";
-import { CiWallet } from "react-icons/ci";
-import { GoTasklist } from "react-icons/go";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { LiaLayerGroupSolid } from "react-icons/lia";
