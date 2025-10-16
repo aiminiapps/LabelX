@@ -42,7 +42,6 @@ const OptimizedLabelXApp = () => {
   const [reviewQueue, setReviewQueue] = useState([]);
   const [currentReview, setCurrentReview] = useState(null);
 
-  // Theme
   const theme = {
     primary: '#FF7A1A',
     secondary: '#FDD536',
@@ -52,7 +51,6 @@ const OptimizedLabelXApp = () => {
     text: '#F5F5F5'
   };
 
-  // Enhanced Mission Data
   const sampleMissions = [
     {
       id: 1,
