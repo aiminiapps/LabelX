@@ -10,7 +10,6 @@ import {
 } from 'react-icons/fa';
 import {  TbTarget } from 'react-icons/tb';
 import { BiCoin, BiData, BiShield } from 'react-icons/bi';
-import Link from 'next/link';
 
 // Storage Configuration - Updated for LabelX
 const STORAGE_KEY = 'labelx-task-center';
