@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Trophy, TrendingUp, ChevronUp, ChevronDown, Shield, Star, Crown, Medal, Flame, Users, Zap, Target, Award } from 'lucide-react';
+import { Trophy, ChevronUp, ChevronDown, Star, Crown, Medal, Flame, Users, Zap, Target, Award } from 'lucide-react';
 
 const PremiumLeaderboard = () => {
   // Component state
