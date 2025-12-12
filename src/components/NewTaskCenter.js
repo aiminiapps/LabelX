@@ -394,7 +394,7 @@ export default function LabelXTaskCenter() {
       description: 'Follow @LabelX_AI on X (Twitter) for AI training updates',
       reward: 100,
       icon: FaTwitter,
-      action: 'https://twitter.com/intent/follow?screen_name=LabelX_AI',
+      action: 'https://twitter.com/intent/follow?screen_name=labelxofficial',
       type: 'social',
       difficulty: 'easy'
     },
@@ -404,7 +404,7 @@ export default function LabelXTaskCenter() {
       description: 'Like our latest post about AI data labeling',
       reward: 50,
       icon: FaThumbsUp,
-      action: 'https://x.com/LabelX_AI',
+      action: 'https://x.com/labelxofficial',
       type: 'social',
       difficulty: 'easy'
     },
@@ -414,7 +414,7 @@ export default function LabelXTaskCenter() {
       description: 'Share your thoughts on AI training and data labeling',
       reward: 75,
       icon: FaComment,
-      action: 'https://x.com/LabelX_AI',
+      action: 'https://x.com/labelxofficial',
       type: 'social',
       difficulty: 'medium'
     },
@@ -424,7 +424,7 @@ export default function LabelXTaskCenter() {
       description: 'Help us spread the word about decentralized AI training',
       reward: 60,
       icon: FaRetweet,
-      action: 'https://x.com/LabelX_AI',
+      action: 'https://x.com/labelxofficial',
       type: 'social',
       difficulty: 'easy'
     },
