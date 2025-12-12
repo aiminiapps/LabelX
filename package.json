@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/third-parties": "^16.0.8",
     "clsx": "^2.1.1",
     "cobe": "^0.6.5",
     "crypto": "^1.0.1",
@@ -16,7 +17,7 @@
     "framer-motion": "^12.15.0",
     "lucide-react": "^0.511.0",
     "motion": "^12.23.15",
-    "next": "15.3.6",
+    "next": "^16.0.8",
     "openai": "^5.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

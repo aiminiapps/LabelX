@@ -737,7 +737,7 @@ function TelegramMiniApp() {
 
   return (
     <Suspense fallback={<CustomLoader />}>
-      <div className="min-h-screen max-w-md w-full tektur mx-auto  text-white flex flex-col items-center p-4 relative overflow-hidden">
+      <div className="min-h-screen max-w-7xl w-full tektur mx-auto  text-white flex flex-col items-center p-4 relative overflow-hidden">
           <DebugPanel user={user} error={telegramError} webApp={webApp} />
           
           {/* Background decorations */}
