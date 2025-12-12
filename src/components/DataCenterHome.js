@@ -410,7 +410,7 @@ const SmartDataPresentation = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md mx-auto space-y-6"
+        className="w-full max-w-7xl mx-auto space-y-6"
       >
         {/* Results Header */}
         <div className="glass rounded-3xl p-6 text-center relative overflow-hidden">
@@ -522,7 +522,7 @@ const SmartDataPresentation = () => {
   if (!currentItem) return null;
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6">
+    <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Session Progress Header */}
       <div className="glass rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">

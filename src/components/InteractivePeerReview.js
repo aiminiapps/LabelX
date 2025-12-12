@@ -213,7 +213,7 @@ const InteractivePeerReview = () => {
   const weightIndicator = getWeightIndicator(reviewerStats.weight);
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6">
+    <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Reviewer Status Header with Dynamic Animations */}
       <motion.div 
         className="glass-light rounded-2xl p-4 relative overflow-hidden"
