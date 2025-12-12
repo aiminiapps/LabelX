@@ -842,8 +842,7 @@ export default function LabelXTaskCenter() {
                 <p className="text-gray-400 text-sm">LBLX Earned</p>
               </div>
 
-              <div className="glass rounded-2xl p-6 text-center"
-              style={{marginTop:'-25px'}}>
+              <div className="glass rounded-2xl p-6 text-center sm:mt-0 -mt-6">
                 <FaChartLine className="text-blue-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
                   {Math.round(stats.progress)}%
@@ -851,8 +850,7 @@ export default function LabelXTaskCenter() {
                 <p className="text-gray-400 text-sm">Complete</p>
               </div>
 
-              <div className="glass rounded-2xl p-6 text-center"
-              style={{marginTop:'-25px'}}>
+              <div className="glass rounded-2xl p-6 text-center sm:mt-0 -mt-6">
                 <FaFire className="text-red-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
                   {getStorage()?.stats?.currentStreak || 0}
