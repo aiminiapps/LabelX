@@ -434,7 +434,7 @@ export default function LabelXTaskCenter() {
       description: 'Join our AI training community on Telegram',
       reward: 80,
       icon: FaTelegram,
-      action: 'https://t.me/labelx_community',
+      action: 'https://t.me/LabelXAI_Bot',
       type: 'social',
       difficulty: 'easy'
     },
@@ -444,7 +444,7 @@ export default function LabelXTaskCenter() {
       description: 'Explore our Telegram labeling mini app',
       reward: 80,
       icon: FaMobileAlt,
-      action: 'https://t.me/labelxbot',
+      action: 'https://t.me/LabelXAI_Bot',
       type: 'app',
       difficulty: 'easy'
     },
@@ -457,16 +457,6 @@ export default function LabelXTaskCenter() {
       action: 'https://twitter.com/intent/tweet?text=Join%20me%20on%20LabelX%20-%20Train%20AI%20and%20earn%20LBLX%20tokens!',
       type: 'social',
       difficulty: 'medium'
-    },
-    joinCommunity: {
-      id: 'joinCommunity',
-      title: 'Join Discord',
-      description: 'Connect with AI trainers and data labelers',
-      reward: 70,
-      icon: FaUsers,
-      action: 'https://discord.gg/labelx',
-      type: 'social',
-      difficulty: 'easy'
     }
   }), []);
 
