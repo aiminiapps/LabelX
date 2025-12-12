@@ -166,7 +166,7 @@ const SocialTask = () => {
       addSpaiPoints(1000);
       setTwitterFollowCompleted(true);
       hapticFeedback('success');
-      window.open('https://x.com/AIDatanaut', '_blank');
+      window.open('https://x.com/labelxofficial', '_blank');
     }
   };
 

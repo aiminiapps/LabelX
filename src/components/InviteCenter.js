@@ -181,7 +181,7 @@ Use my invite link and we both get bonus tokens! 🎁`;
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 50 }}
         transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
-        className="glass rounded-3xl w-full max-w-md relative overflow-hidden"
+        className="glass rounded-3xl w-full max-w-7xl relative overflow-hidden"
       >
 
         <div className="relative z-10">
