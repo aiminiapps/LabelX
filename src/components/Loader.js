@@ -1,66 +1,97 @@
-import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import TrueFocus from './ui/TrueFocus';
+import { HiSparkles } from 'react-icons/hi2';
 
 const LabelXLoader = () => {
-  const imageRef = useRef(null);
+  const [progress, setProgress] = useState(0);
+
+  // Simulate loading progress
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        // Random increment for realistic feel
+        const increment = Math.floor(Math.random() * 5) + 2; 
+        return Math.min(prev + increment, 100);
+      });
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className='min-h-screen max-w-md w-full relative flex items-center justify-center mx-auto overflow-hidden'>
-      {/* Background decorations - Updated for LabelX orange theme */}
-      <div className="fixed top-0 inset-0 -z-10">
-        <div className="min-h-screen w-full relative bg-black">
-          {/* LabelX Orange Glow Background */}
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 122, 26, 0.25), transparent 70%), #000000",
-            }}
-          />
-        </div>
+    <div className='fixed inset-0 w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden z-[9999]'>
+      
+      {/* Background Ambience */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+         {/* Noise Texture */}
+         <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+         
+         {/* Central Glow */}
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-[#FBBF24]/10 blur-[120px] rounded-full opacity-40" />
       </div>
 
-      {/* Logo with advanced canvas shine effect */}
-      <div className="relative">
+      {/* Main Content */}
+      <div className="relative z-10 flex flex-col items-center gap-8">
+        
+        {/* Animated Brand Name */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative"
         >
-          {/* Hidden image for canvas reference - Updated for LabelX */}
-          {/* <Image 
-            src='/labelx-logo.png' 
-            alt='LabelX Logo' 
-            width={270} 
-            height={80}
-            quality={100}
-            className="opacity-0 absolute"
-            crossOrigin="anonymous"
-          /> */}
           <TrueFocus 
-            sentence="LabelX"
+            sentence="Label X"
             manualMode={false}
-            blurAmount={7}
-            borderColor="#FF7A1A"
-            animationDuration={1}
-            pauseBetweenAnimations={0}
+            blurAmount={8}
+            borderColor="#FBBF24" // LabelX Yellow
+            animationDuration={0.8}
+            pauseBetweenAnimations={0.2}
           />
         </motion.div>
         
-        {/* LabelX tagline */}
+        {/* Tagline */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-6"
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm"
         >
-          <p className="text-gray-400 text-sm font-medium">
-            Train AI • Earn Tokens
+          <HiSparkles className="text-[#FBBF24] w-3 h-3" />
+          <p className="text-neutral-400 text-xs font-mono tracking-[0.2em] uppercase">
+            Train AI • Earn Crypto
           </p>
         </motion.div>
+
       </div>
+
+      {/* Bottom Loading Bar (System Boot Style) */}
+      <div className="absolute bottom-12 w-full max-w-sm px-6">
+        <div className="flex justify-between items-end mb-2">
+           <span className="text-[10px] text-neutral-500 font-mono uppercase">Initializing Protocol...</span>
+           <span className="text-xs font-bold text-[#FBBF24] font-mono">{progress}%</span>
+        </div>
+        
+        {/* Progress Bar Container */}
+        <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+           <motion.div 
+             className="h-full bg-[#FBBF24]"
+             initial={{ width: 0 }}
+             animate={{ width: `${progress}%` }}
+             transition={{ duration: 0.1 }}
+           />
+        </div>
+        
+        <div className="mt-2 text-[10px] text-neutral-700 text-center font-mono">
+            SECURE CONNECTION ESTABLISHED
+        </div>
+      </div>
+
     </div>
   );
 };

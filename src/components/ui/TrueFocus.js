@@ -5,10 +5,10 @@ const TrueFocus = ({
   sentence = 'True Focus',
   manualMode = false,
   blurAmount = 5,
-  borderColor = 'green',
-  glowColor = 'rgba(0, 255, 0, 0.6)',
+  borderColor = '#FBBF24', // LabelX Yellow
+  glowColor = 'rgba(251, 191, 36, 0.5)',
   animationDuration = 0.5,
-  pauseBetweenAnimations = 1
+  pauseBetweenAnimations = 0.5
 }) => {
   const words = sentence.split(' ');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,25 +59,18 @@ const TrueFocus = ({
   };
 
   return (
-    <div className="relative flex gap-4 justify-center items-center flex-wrap" ref={containerRef}>
+    <div className="relative flex gap-2 justify-center items-center flex-wrap" ref={containerRef}>
       {words.map((word, index) => {
         const isActive = index === currentIndex;
         return (
           <span
             key={index}
             ref={el => (wordRefs.current[index] = el)}
-            className="relative text-[3rem] font-black cursor-pointer"
+            className="relative text-[3.5rem] md:text-[5rem] font-black cursor-default tracking-tighter leading-none transition-all duration-500"
             style={{
-              filter: manualMode
-                ? isActive
-                  ? `blur(0px)`
-                  : `blur(${blurAmount}px)`
-                : isActive
-                  ? `blur(0px)`
-                  : `blur(${blurAmount}px)`,
-              '--border-color': borderColor,
-              '--glow-color': glowColor,
-              transition: `filter ${animationDuration}s ease`
+              filter: isActive ? `blur(0px)` : `blur(${blurAmount}px)`,
+              opacity: isActive ? 1 : 0.3,
+              color: isActive ? '#FFFFFF' : '#666666', // Dim inactive words
             }}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
@@ -88,7 +81,7 @@ const TrueFocus = ({
       })}
 
       <motion.div
-        className="absolute top-2.5 left-1 pointer-events-none box-border border-0"
+        className="absolute top-0 left-0 pointer-events-none box-border z-10"
         animate={{
           x: focusRect.x,
           y: focusRect.y,
@@ -97,39 +90,43 @@ const TrueFocus = ({
           opacity: currentIndex >= 0 ? 1 : 0
         }}
         transition={{
-          duration: animationDuration
-        }}
-        style={{
-          '--border-color': borderColor,
-          '--glow-color': glowColor
+          duration: animationDuration,
+          ease: "circOut"
         }}
       >
+        {/* Top Left Corner */}
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] left-[-10px] border-r-0 border-b-0"
+          className="absolute w-6 h-6 border-[3px] rounded-tl-lg top-[-12px] left-[-12px] border-r-0 border-b-0"
           style={{
-            borderColor: 'var(--border-color)',
-            filter: 'drop-shadow(0 0 4px var(--border-color))'
+            borderColor: borderColor,
+            filter: `drop-shadow(0 0 8px ${borderColor})`
           }}
         ></span>
+        
+        {/* Top Right Corner */}
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] right-[-38px] border-l-0 border-b-0"
+          className="absolute w-6 h-6 border-[3px] rounded-tr-lg top-[-12px] right-[-12px] border-l-0 border-b-0"
           style={{
-            borderColor: 'var(--border-color)',
-            filter: 'drop-shadow(0 0 4px var(--border-color))'
+            borderColor: borderColor,
+            filter: `drop-shadow(0 0 8px ${borderColor})`
           }}
         ></span>
+
+        {/* Bottom Left Corner */}
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] left-[-10px] border-r-0 border-t-0"
+          className="absolute w-6 h-6 border-[3px] rounded-bl-lg bottom-[-12px] left-[-12px] border-r-0 border-t-0"
           style={{
-            borderColor: 'var(--border-color)',
-            filter: 'drop-shadow(0 0 4px var(--border-color))'
+            borderColor: borderColor,
+            filter: `drop-shadow(0 0 8px ${borderColor})`
           }}
         ></span>
+
+        {/* Bottom Right Corner */}
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] right-[-38px] border-l-0 border-t-0"
+          className="absolute w-6 h-6 border-[3px] rounded-br-lg bottom-[-12px] right-[-12px] border-l-0 border-t-0"
           style={{
-            borderColor: 'var(--border-color)',
-            filter: 'drop-shadow(0 0 4px var(--border-color))'
+            borderColor: borderColor,
+            filter: `drop-shadow(0 0 8px ${borderColor})`
           }}
         ></span>
       </motion.div>
