@@ -556,7 +556,7 @@ function TelegramMiniApp() {
     const statusDisplay = getWalletStatusDisplay();
   
     return (
-      <div className="relative mt-7">
+      <div className="relative">
         <div className="w-full flex justify-between items-center pb-3 px-1">
           <div className='flex items-center gap-3'>
             <Image 
