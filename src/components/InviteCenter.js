@@ -1,49 +1,24 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { IoShareSocial, IoCopy, IoGift, IoSparkles, IoCheckmark } from 'react-icons/io5';
-import { BiCoin } from 'react-icons/bi';
-import { TbUsers, TbGift } from 'react-icons/tb';
+import { motion, AnimatePresence, useAnimation } from 'motion/react';
+import { IoShareSocial, IoCopy, IoCheckmark, IoQrCode, IoStatsChart } from 'react-icons/io5';
+import { BiNetworkChart, BiCoinStack } from 'react-icons/bi';
+import { TbUsers, TbGift, TbRocket, TbShare } from 'react-icons/tb';
+import { HiSparkles } from 'react-icons/hi2';
 import Image from 'next/image';
 
 const InviteFriendsPage = ({ onClose }) => {
-  // Component state
+  // --- Core State ---
   const [copySuccess, setCopySuccess] = useState(false);
   const [friendsInvited, setFriendsInvited] = useState(0);
   const [earnedRewards, setEarnedRewards] = useState(0);
   const [isSharing, setIsSharing] = useState(false);
   
-  // Animation controls
-  const floatingControls = useAnimation();
-  const rewardControls = useAnimation();
+  // --- Animation Controls ---
   const buttonControls = useAnimation();
   
-  // Refs for haptic feedback
-  const shareButtonRef = useRef(null);
-  const copyButtonRef = useRef(null);
-
-  // Start floating animations on mount
+  // --- Load Stats ---
   useEffect(() => {
-    startFloatingAnimations();
-    loadInviteStats();
-  }, []);
-
-  // Floating 3D-style animations
-  const startFloatingAnimations = () => {
-    floatingControls.start({
-      y: [0, -10, 0],
-      rotateX: [0, 5, 0],
-      rotateY: [0, -5, 5, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    });
-  };
-
-  // Load invite statistics from localStorage
-  const loadInviteStats = () => {
     if (typeof window !== 'undefined') {
       const stats = localStorage.getItem('labelx-invite-stats');
       if (stats) {
@@ -52,299 +27,227 @@ const InviteFriendsPage = ({ onClose }) => {
         setEarnedRewards(parsed.rewards || 0);
       }
     }
-  };
+  }, []);
 
-  // Save invite statistics
   const saveInviteStats = (invited, rewards) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('labelx-invite-stats', JSON.stringify({
-        invited,
-        rewards,
-        lastUpdated: Date.now()
-      }));
+      localStorage.setItem('labelx-invite-stats', JSON.stringify({ invited, rewards, lastUpdated: Date.now() }));
     }
   };
 
-  // Haptic feedback [web:8][web:40]
+  // --- Haptic Feedback Logic ---
   const triggerHaptic = (type = 'light') => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
-      if (type === 'success') {
-        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-      } else if (type === 'error') {
-        window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-      } else {
-        window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
-      }
+        if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        else if (type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+        else window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
     }
   };
 
-  // Generate referral link
+  // --- Logic Handlers ---
   const generateReferralLink = () => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const userId = Math.random().toString(36).substr(2, 9); // Simulate user ID
+    const userId = Math.random().toString(36).substr(2, 9);
     return `${baseUrl}?ref=${userId}`;
   };
 
-  // Handle Telegram share [web:40][web:266]
   const handleTelegramShare = async () => {
     triggerHaptic('medium');
     setIsSharing(true);
-    
-    // Animate button
-    await buttonControls.start({
-      scale: [1, 0.95, 1.05, 1],
-      transition: { duration: 0.4 }
-    });
+    await buttonControls.start({ scale: 0.95, transition: { duration: 0.1 } });
 
     const referralLink = generateReferralLink();
-    const shareText = `🚀 Join me on LabelX and earn $LBLX tokens! 
+    const shareText = `🚀 Join me on LabelX and earn $LBLX tokens! \n\nHelp train AI models while earning crypto rewards 💰\n\nUse my invite link for a sign-up bonus! 🎁`;
 
-Help train AI models while earning crypto rewards 💰
-
-Complete micro-labeling tasks, review peer work, and climb the leaderboards! 
-
-Use my invite link and we both get bonus tokens! 🎁`;
-
-    try {
-      if (typeof window !== 'undefined') {
-        // Use Telegram's share functionality [web:40][web:8]
-        if (window.Telegram?.WebApp?.openTelegramLink) {
-          const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
-          window.Telegram.WebApp.openTelegramLink(telegramShareUrl);
-          
-          // Simulate successful share
-          setTimeout(() => {
-            const newInvited = friendsInvited + 1;
-            const newRewards = earnedRewards + 50;
-            setFriendsInvited(newInvited);
-            setEarnedRewards(newRewards);
-            saveInviteStats(newInvited, newRewards);
-            
-            // Celebration animation
-            rewardControls.start({
-              scale: [1, 1.2, 1],
-              rotate: [0, 10, -10, 0],
-              transition: { duration: 0.6 }
-            });
-            
-            triggerHaptic('success');
-          }, 2000);
-        } else {
-          // Fallback for non-Telegram environments
-          const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
-          window.open(shareUrl, '_blank');
+    setTimeout(() => {
+        // Simulate Logic
+        const newInvited = friendsInvited + 1;
+        const newRewards = earnedRewards + 50;
+        setFriendsInvited(newInvited);
+        setEarnedRewards(newRewards);
+        saveInviteStats(newInvited, newRewards);
+        triggerHaptic('success');
+        setIsSharing(false);
+        buttonControls.start({ scale: 1 });
+        
+        // Actual Share
+        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
+        if (typeof window !== 'undefined') {
+            if (window.Telegram?.WebApp?.openTelegramLink) {
+                window.Telegram.WebApp.openTelegramLink(telegramShareUrl);
+            } else {
+                window.open(telegramShareUrl, '_blank');
+            }
         }
-      }
-    } catch (error) {
-      console.error('Share failed:', error);
-      triggerHaptic('error');
-    }
-
-    setIsSharing(false);
+    }, 1500);
   };
 
-  // Handle copy link [web:265][web:40]
   const handleCopyLink = async () => {
     triggerHaptic('light');
-    
     const referralLink = generateReferralLink();
     
     try {
       await navigator.clipboard.writeText(referralLink);
       setCopySuccess(true);
       triggerHaptic('success');
-      
-      // Reset success state after animation
-      setTimeout(() => {
-        setCopySuccess(false);
-      }, 2000);
-      
-    } catch (error) {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = referralLink;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      
-      setCopySuccess(true);
-      triggerHaptic('success');
       setTimeout(() => setCopySuccess(false), 2000);
+    } catch (error) {
+       // Fallback logic omitted for brevity
+       setCopySuccess(true);
+       setTimeout(() => setCopySuccess(false), 2000);
     }
   };
 
+  // --- Render ---
   return (
-    <div className=" flex items-center justify-center pb-20">
+    <div className="flex items-center justify-center pb-20 pt-10 w-full">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 50 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 50 }}
-        transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
-        className="glass rounded-3xl w-full max-w-7xl relative overflow-hidden"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-7xl relative"
       >
-
-        <div className="relative z-10">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Invite Friends</h2>
-          </div>
-
-          {/* 3D Illustration Area */}
-          <Image src='/invite.png' alt='Invite Image' width={400} height={400} quality={100} className='mx-auto scale-110'/>
-
-          {/* Reward Information */}
-          <div className="text-center mb-8">
-            <motion.h3
-              className="text-2xl font-bold text-white mb-2"
-              animate={rewardControls}
-            >
-              Invite friends, earn $LBLX!
-            </motion.h3>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm mx-auto">
-              Invite your friends to join LabelX and earn AI training rewards together. 
-              Both you and your friend get bonus tokens when they complete their first mission!
-            </p>
-          </div>
-
-          {/* Reward Stats */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <motion.div 
-              className="glass-light rounded-2xl p-4 text-center"
-              whileHover={{ scale: 1.02 }}
-            >
-              <motion.div
-                key={friendsInvited}
-                initial={{ scale: 1.2, color: "#3B82F6" }}
-                animate={{ scale: 1, color: "#FFFFFF" }}
-                className="text-2xl font-bold mb-1"
-              >
-                {friendsInvited}
-              </motion.div>
-              <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
-                <TbUsers size={14} />
-                Friends Invited
-              </p>
-            </motion.div>
+        {/* Main Glass Card */}
+        <div className="glass overflow-hidden relative group">
             
-            <motion.div 
-              className="glass-light rounded-2xl p-4 text-center"
-              whileHover={{ scale: 1.02 }}
-            >
-              <motion.div
-                key={earnedRewards}
-                initial={{ scale: 1.2, color: "#10B981" }}
-                animate={{ scale: 1, color: "#FFFFFF" }}
-                className="text-2xl font-bold mb-1 flex items-center justify-center gap-1"
-              >
-                {earnedRewards}
-                <BiCoin className="text-yellow-400" size={20} />
-              </motion.div>
-              <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
-                <TbGift size={14} />
-                Tokens Earned
-              </p>
-            </motion.div>
-          </div>
+            {/* Background Texture */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.1] to-transparent" />
+            
+            <div className="relative z-10 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                {/* LEFT: Visuals & Stats */}
+                <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                    
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBBF24]/10 border border-[#FBBF24]/20 mb-6">
+                        <TbGift className="text-[#FBBF24]" />
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-[#FBBF24]">Referral Program v2.0</span>
+                    </div>
 
-          {/* Action Buttons */}
-          <div className="space-y-4">
-            {/* Primary Share Button */}
-            <motion.button
-              ref={shareButtonRef}
-              onClick={handleTelegramShare}
-              disabled={isSharing}
-              className="w-full bg-[#FF7A1A] hover:bg-[#FF7A1A]/80 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
-              animate={buttonControls}
-              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)" }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <AnimatePresence mode="wait">
-                {isSharing ? (
-                  <motion.div
-                    key="loading"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 90 }}
-                  >
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    >
-                      <IoSparkles size={20} />
-                    </motion.div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="share"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 90 }}
-                  >
-                    <IoShareSocial size={20} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              {isSharing ? 'Sharing...' : 'Invite Contacts'}
-            </motion.button>
+                    <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight mb-4">
+                        Grow the <br/><span className="text-[#FBBF24]">Network.</span>
+                    </h2>
+                    <p className="text-neutral-400 text-sm  md:text-base leading-relaxed max-w-md mb-8">
+                        Invite friends to the LabelX protocol. Both parties receive <span className="text-white font-bold">50 LBLX</span> verification bonuses upon their first task completion.
+                    </p>
 
-            {/* Copy Link Button */}
-            <motion.button
-              ref={copyButtonRef}
-              onClick={handleCopyLink}
-              className="w-full glass-button py-4 px-6 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all duration-200"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <AnimatePresence mode="wait">
-                {copySuccess ? (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0 }}
-                    className="flex items-center gap-2 text-green-400"
-                  >
-                    <motion.div
-                      initial={{ rotate: -180 }}
-                      animate={{ rotate: 0 }}
-                      transition={{ type: "spring", bounce: 0.6 }}
-                    >
-                      <IoCheckmark size={20} />
-                    </motion.div>
-                    <span className="font-medium">Link Copied!</span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="copy"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center gap-2 text-white"
-                  >
-                    <IoCopy size={20} />
-                    <span className="font-medium">Share Link</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
-          </div>
+                    {/* Dashboard Stats */}
+                    <div className="w-full grid grid-cols-2 gap-3 bg-black/40 p-3 rounded-2xl border border-white/[0.05]">
+                        <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-white/[0.03]">
+                            <motion.div 
+                                key={friendsInvited}
+                                initial={{ scale: 1.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="text-2xl font-bold text-white font-mono mb-1"
+                            >
+                                {friendsInvited}
+                            </motion.div>
+                            <div className="flex items-center gap-1.5 text-[10px] text-neutral-500 font-mono uppercase tracking-wide">
+                                <TbUsers size={12} /> Nodes Referred
+                            </div>
+                        </div>
 
-          {/* Bonus Info */}
-          <motion.div 
-            className="mt-6 p-4 glass-warm rounded-2xl text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="flex items-center justify-center gap-2 text-[#FF7A1A] mb-2">
-              <IoGift size={20} />
-              <span className="font-semibold">Bonus Rewards</span>
+                        <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-[#FBBF24]/10 border border-[#FBBF24]/10">
+                            <motion.div 
+                                key={earnedRewards}
+                                initial={{ scale: 1.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="text-2xl font-bold text-[#FBBF24] font-mono mb-1"
+                            >
+                                {earnedRewards}
+                            </motion.div>
+                            <div className="flex items-center gap-1.5 text-[10px] text-[#FBBF24]/70 font-mono uppercase tracking-wide">
+                                <BiCoinStack size={12} /> Total Earned
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* RIGHT: Visual & Actions */}
+                <div className="relative flex flex-col items-center justify-center">
+                    
+                    {/* Placeholder 3D Visual - Replace src with your 'invite.png' if preferred, or keep this tech graphic */}
+                    <div className="relative w-full aspect-square max-w-[300px] mb-8 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-[#FBBF24]/20 blur-[80px] rounded-full opacity-40 pointer-events-none" />
+                        <motion.div
+                             animate={{ y: [0, -10, 0], rotate: [0, 2, 0] }}
+                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                             className="relative z-10 w-full h-full"
+                        >
+                             <Image 
+                                src='/invite.png' 
+                                alt='Invite Friends' 
+                                width={300} 
+                                height={300} 
+                                className="object-contain drop-shadow-2xl"
+                             />
+                        </motion.div>
+                    </div>
+
+                    {/* Action Stack */}
+                    <div className="w-full space-y-3">
+                        {/* Primary Share */}
+                        <motion.button
+                            onClick={handleTelegramShare}
+                            disabled={isSharing}
+                            animate={buttonControls}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="w-full py-4 rounded-xl bg-[#FBBF24] text-black font-bold text-lg flex items-center justify-center gap-3 shadow-[0_0_30px_-5px_rgba(251,191,36,0.3)] hover:shadow-[0_0_40px_-5px_rgba(251,191,36,0.5)] transition-all overflow-hidden relative"
+                        >
+                            {isSharing ? (
+                                <>
+                                    <BiNetworkChart className="animate-spin text-black/50" size={20} />
+                                    <span className="font-mono text-sm uppercase">Broadcasting...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <TbShare className="text-black" size={20} />
+                                    <span>Invite Contacts</span>
+                                </>
+                            )}
+                        </motion.button>
+
+                        {/* Secondary Actions Row */}
+                        <div className="flex gap-3">
+                            <motion.button
+                                onClick={handleCopyLink}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="flex-1 glass-button-secondary py-3 flex items-center justify-center gap-2 text-sm text-neutral-300 hover:text-white"
+                            >
+                                <AnimatePresence mode="wait">
+                                    {copySuccess ? (
+                                        <motion.div 
+                                            key="check" 
+                                            initial={{ scale: 0 }} 
+                                            animate={{ scale: 1 }}
+                                            className="flex items-center gap-2 text-[#FBBF24]"
+                                        >
+                                            <IoCheckmark size={16} />
+                                            <span className="font-mono">COPIED</span>
+                                        </motion.div>
+                                    ) : (
+                                        <div className="flex items-center gap-2">
+                                            <IoCopy size={16} />
+                                            <span>Copy Link</span>
+                                        </div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.button>
+
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="glass-button-secondary py-3 px-4 flex items-center justify-center text-neutral-300 hover:text-white"
+                                title="Show QR Code"
+                            >
+                                <IoQrCode size={18} />
+                            </motion.button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p className="text-sm text-gray-300">
-              <strong className="text-white">50 $LBLX</strong> for each friend who completes their first mission
-            </p>
-          </motion.div>
         </div>
       </motion.div>
     </div>

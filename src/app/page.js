@@ -671,8 +671,8 @@ function TelegramMiniApp() {
       <EarnRewardsBanner/>
       <DataCenterHome />
       <LabelXNetworkGlobe/>
-      <SocialTask />
-      <InteractivePeerReview/>
+      {/* <SocialTask /> */}
+      {/* <InteractivePeerReview/> */}
       <div className="h-20" />
     </div>
   );
