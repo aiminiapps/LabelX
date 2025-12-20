@@ -669,8 +669,8 @@ function TelegramMiniApp() {
   const renderHomeContent = () => (
     <div className="">
       <EarnRewardsBanner/>
-      <LabelXNetworkGlobe/>
       <DataCenterHome />
+      <LabelXNetworkGlobe/>
       <SocialTask />
       <InteractivePeerReview/>
       <div className="h-20" />

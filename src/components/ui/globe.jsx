@@ -103,7 +103,7 @@ export function UltraLabelXGlobe({ className }) {
   }, [rs]);
 
   return (
-    <div className="glass rounded-[32px] mb-6 relative overflow-hidden flex flex-col items-center border border-white/[0.08] bg-[#0A0A0A]">
+    <div className="glass rounded-[32px] my-6 relative overflow-hidden flex flex-col items-center border border-white/[0.08] bg-[#0A0A0A]">
       
       {/* --- Header Stats --- */}
       <div className="w-full relative z-10 ">
