@@ -106,7 +106,7 @@ const PremiumLeaderboard = () => {
   // --- Render: Loading Skeleton ---
   if (animationStage === 'loading') {
     return (
-      <div className="w-full mx-auto space-y-6 min-h-screen p-4">
+      <div className="w-full mx-auto space-y-6 min-h-screen">
         {/* Loading Header */}
         <div className="glass rounded-[32px] p-8 animate-pulse">
             <div className="h-8 w-48 bg-white/5 rounded-lg mb-4" />
