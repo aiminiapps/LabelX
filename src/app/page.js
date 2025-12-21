@@ -319,8 +319,8 @@ function TelegramMiniApp() {
       }
       return {
         text: 'Not connected',
-        color: 'text-gray-400',
-        icon: <TbWalletOff className='size-4 text-red-400'/>
+        color: 'text-neutral-500', // Updated to neutral for cleaner look
+        icon: <TbWalletOff className='size-4 text-neutral-600'/>
       };
     }, [walletStatus, formatWalletAddress]);
   
@@ -336,13 +336,13 @@ function TelegramMiniApp() {
               width={40} 
               height={40} 
               priority
-              className="rounded-lg"
+              className="rounded-lg border border-white/10"
             />
             <div className="text-left">
-              <p className="text-gray-400 text-xs font-medium">Wallet Status</p>
-              <div className="flex items-center gap-2 -mt-0.5">
+              <p className="text-[#FBBF24] text-[10px] font-mono uppercase tracking-wider">System Status</p>
+              <div className="flex items-center gap-2">
                 {statusDisplay.icon}
-                <p className={`${statusDisplay.color} text-sm font-semibold`}>
+                <p className={`${statusDisplay.color} text-xs font-mono`}>
                   {statusDisplay.text}
                 </p>
               </div>
@@ -350,17 +350,20 @@ function TelegramMiniApp() {
           </div>
           
           {/* Menu Button */}
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex items-center gap-3">
+            {/* Updated Tasks Button Style */}
             <Link 
               href='/?tab=tasks' 
-              className='glass-light flex items-center gap-0.5 font-semibold text-sm text-[#FF7A1A] p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'
+              className='flex items-center gap-2 bg-[#FBBF24]/10 border border-[#FBBF24]/20 text-[#FBBF24] px-4 py-2 rounded-xl backdrop-blur-md transition-all duration-200 active:scale-95 hover:bg-[#FBBF24]/20'
             >
-              <GoTasklist size={25}/> Tasks
+              <GoTasklist size={18}/> 
+              <span className="text-xs font-bold font-mono uppercase tracking-wide">Tasks</span>
             </Link>
+
             <button
               ref={buttonRef}
               onClick={toggleMenu}
-              className='glass-light p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'
+              className='p-2 rounded-xl bg-white/5 border border-white/10 text-white backdrop-blur-md transition-all duration-200 active:scale-95 hover:bg-white/10'
               type="button"
               aria-label="Menu"
               aria-expanded={isMenuOpen}
@@ -369,7 +372,7 @@ function TelegramMiniApp() {
                 animate={{ rotate: isMenuOpen ? 90 : 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
-                <CiMenuKebab size={25} />
+                <CiMenuKebab size={20} />
               </motion.div>
             </button>
             
@@ -378,51 +381,49 @@ function TelegramMiniApp() {
               {isMenuOpen && (
                 <motion.div
                   ref={menuRef}
-                  initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
                   transition={{ duration: 0.15, ease: "easeOut" }}
-                  className="absolute right-0 top-full mt-2 z-50"
+                  className="absolute right-0 top-full mt-3 z-50 min-w-[180px]"
                 >
-                  <div className="glass-blue backdrop-blur-sm rounded-2xl p-1 min-w-[160px] shadow-xl border border-white/10">
+                  <div className="bg-[#0A0A0A]/95 backdrop-blur-xl rounded-2xl p-2 shadow-2xl border border-white/10">
                     
                     {/* Invite Friends Option */}
                     <Link
                       href="/?tab=invite"
-                      className="w-full flex bg-green-500/10 items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 group"
                     >
-                      <div className="p-1.5 rounded-lg glass-dark transition-all duration-200">
-                        <LiaUserFriendsSolid size={16} className="text-red-400" />
+                      <div className="p-2 rounded-lg bg-[#FBBF24]/10 text-[#FBBF24]">
+                        <LiaUserFriendsSolid size={18} />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Invite Friends</span>
                     </Link>
                     
-                    {/* Divider */}
                     <div className="h-px bg-white/5 mx-2 my-1"/>
                     
                     {/* Share Option */}
                     <button
                       onClick={handleShare}
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 group"
                       type="button"
                     >
-                      <div className="p-1.5 rounded-lg glass-dark transition-all duration-200">
-                        <IoShareSocial size={16} className="text-blue-400" />
+                      <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                        <IoShareSocial size={18} />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Share App</span>
                     </button>
                     
-                    {/* Divider */}
                     <div className="h-px bg-white/5 mx-2 my-1"/>
                     
                     {/* Copy Link Option */}
                     <button
                       onClick={handleCopyLink}
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 active:bg-white/10 transition-all duration-200 text-left group"
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-200 group"
                       type="button"
                     >
-                      <div className="p-1.5 rounded-lg glass-light transition-all duration-200">
-                        <IoLink size={16} className="text-green-400" />
+                      <div className="p-2 rounded-lg bg-green-500/10 text-green-400">
+                        <IoLink size={18} />
                       </div>
                       <span className="text-gray-200 text-sm font-medium">Copy Link</span>
                     </button>
@@ -442,8 +443,6 @@ function TelegramMiniApp() {
       <EarnRewardsBanner/>
       <DataCenterHome />
       <LabelXNetworkGlobe/>
-      {/* <SocialTask /> */}
-      {/* <InteractivePeerReview/> */}
       <div className="h-20" />
     </div>
   );
@@ -475,7 +474,7 @@ function TelegramMiniApp() {
   // Show error state with retry options
   if (telegramError && !user) {
     return (
-      <div className="min-h-screen bg-[#021941] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#000000] flex items-center justify-center p-4">
         <div className="text-center space-y-4 max-w-sm">
           <div className="text-red-400 mb-4">
             <h2 className="text-xl font-bold mb-2">Connection Issue</h2>
@@ -484,19 +483,19 @@ function TelegramMiniApp() {
           <div className="space-y-3">
             <button
               onClick={retryTelegram}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg block w-full transition-colors"
+              className="bg-[#FBBF24] hover:bg-[#FCD34D] text-black font-bold px-6 py-3 rounded-xl block w-full transition-colors"
             >
               🔄 Retry Connection
             </button>
             <button
               onClick={loadFallbackUser}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg block w-full transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl block w-full transition-colors"
             >
               🧪 Continue with Test User
             </button>
             <button
               onClick={() => window.location.reload()}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg block w-full transition-colors"
+              className="bg-white/5 hover:bg-white/10 text-gray-400 px-6 py-3 rounded-xl block w-full transition-colors"
             >
               🔃 Reload Page
             </button>
@@ -508,24 +507,25 @@ function TelegramMiniApp() {
 
   return (
     <Suspense fallback={<CustomLoader />}>
-      <div className="min-h-screen max-w-7xl w-full tektur mx-auto  text-white flex flex-col items-center p-4 relative overflow-hidden">
+      <div className="min-h-screen max-w-7xl w-full tektur mx-auto text-white flex flex-col items-center p-4 relative overflow-hidden">
           <DebugPanel user={user} error={telegramError} webApp={webApp} />
           
-          {/* Background decorations */}
-          <div className="fixed top-0 inset-0 -z-10">
-          <div className="min-h-screen w-full relative"> <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundColor: '#0a0a0a',
-              backgroundImage: `
-                radial-gradient(circle at 25% 25%, #222222 0.5px, transparent 1px),
-                radial-gradient(circle at 75% 75%, #111111 0.5px, transparent 1px)
-              `,
-              backgroundSize: '10px 10px',
-              imageRendering: 'pixelated',
-            }}
-          />
-        </div>
+          {/* Enhanced Background with Yellow Dots */}
+          <div className="fixed top-0 inset-0 -z-10 bg-black">
+            <div
+                className="absolute inset-0 z-0"
+                style={{
+                backgroundColor: '#000000',
+                backgroundImage: `
+                    radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.15) 1px, transparent 1px),
+                    radial-gradient(circle at 50% 50%, #151515 1px, transparent 1px)
+                `,
+                backgroundSize: '40px 40px, 12px 12px',
+                backgroundPosition: '0 0, 0 0'
+                }}
+            />
+            {/* Central Glow for depth */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[60vh] bg-[#FBBF24]/5 blur-[120px] rounded-full pointer-events-none" />
           </div>
           
           <div className="w-full">
