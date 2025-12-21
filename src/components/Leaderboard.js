@@ -294,8 +294,8 @@ const PremiumLeaderboard = () => {
       </div>
 
       {/* --- 4. User Rank Floating Bar --- */}
-      <div className="sticky bottom-6 z-20">
-        <div className="glass-brand bg-[#FBBF24] text-black rounded-2xl p-4 flex items-center justify-between shadow-[0_10px_40px_-10px_rgba(251,191,36,0.5)]">
+      <div className="sticky bottom-6 z-20 mb-10">
+        <div className="glass-brand bg-[#FBBF24] text-white rounded-2xl p-4 flex items-center justify-between shadow-[0_10px_40px_-10px_rgba(251,191,36,0.5)]">
             <div className="flex items-center gap-4">
                 <div className="flex flex-col items-center px-4 border-r border-black/10">
                     <span className="text-[10px] font-mono font-bold uppercase opacity-60">Your Rank</span>
