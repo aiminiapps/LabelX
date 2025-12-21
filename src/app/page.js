@@ -336,7 +336,7 @@ function TelegramMiniApp() {
               width={40} 
               height={40} 
               priority
-              className="rounded-lg border border-white/10"
+              className="rounded-full border border-white/10"
             />
             <div className="text-left">
               <p className="text-[#FBBF24] text-[10px] font-mono uppercase tracking-wider">System Status</p>
