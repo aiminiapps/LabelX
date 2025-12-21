@@ -577,7 +577,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       </div>
 
       {/* Input Area */}
-      <div className="flex-none p-4 md:p-6 bg-[#000000] border-t border-white/[0.08] z-20">
+      <div className="flex-none p-4 md:p-6 border-t border-white/[0.08] z-20">
          <div className="max-w-4xl mx-auto relative flex items-center gap-3">
             <input
                 ref={inputRef}
