@@ -628,7 +628,7 @@ export default function LabelXTaskCenter() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <FaSpinner className="animate-spin text-orange-400 mx-auto mb-4" size={48} />
+          <FaSpinner className="animate-spin text-yellow-400 mx-auto mb-4" size={48} />
           <p className="text-white text-lg font-medium">Loading Task Center...</p>
           <p className="text-gray-400 text-sm mt-2">Initializing your AI training dashboard</p>
         </motion.div>
@@ -667,7 +667,7 @@ export default function LabelXTaskCenter() {
                       href={`https://bscscan.com/tx/${notification.txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-orange-400 text-xs hover:underline flex items-center gap-1 mt-1"
+                      className="text-yellow-400 text-xs hover:underline flex items-center gap-1 mt-1"
                     >
                       View on BscScan <FaExternalLinkAlt size={10} />
                     </a>
@@ -689,7 +689,7 @@ export default function LabelXTaskCenter() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
           >
             <div className="glass rounded-3xl p-8 max-w-sm w-full text-center">
-              <FaSpinner className="animate-spin text-orange-400 mx-auto mb-4" size={48} />
+              <FaSpinner className="animate-spin text-yellow-400 mx-auto mb-4" size={48} />
               <h3 className="text-xl font-bold text-white mb-2">Welcome Bonus Processing</h3>
               <p className="text-gray-400 text-sm">
                 Sending 10 LBLX tokens to your wallet...
@@ -706,7 +706,7 @@ export default function LabelXTaskCenter() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
           >
             <div className="glass rounded-3xl p-8 max-w-sm w-full text-center">
-              <FaGift className="text-orange-400 mx-auto mb-4" size={48} />
+              <FaGift className="text-yellow-400 mx-auto mb-4" size={48} />
               <h3 className="text-xl font-bold text-white mb-2">🎉 Welcome to LabelX!</h3>
               <p className="text-green-400 font-medium mb-4">
                 +10 LBLX tokens added to your wallet!
@@ -716,7 +716,7 @@ export default function LabelXTaskCenter() {
                   href={`https://bscscan.com/tx/${wallet.welcomeBonusStatus.txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-orange-400 text-sm hover:underline flex items-center justify-center gap-2 mb-4"
+                  className="text-yellow-400 text-sm hover:underline flex items-center justify-center gap-2 mb-4"
                 >
                   View Transaction <FaExternalLinkAlt size={12} />
                 </a>
@@ -747,7 +747,7 @@ export default function LabelXTaskCenter() {
         {/* Wallet Connection */}
         {!wallet.isConnected ? (
           <motion.div {...fadeIn} className="glass rounded-3xl p-8 text-center">
-            <FaWallet className="text-orange-400 mx-auto mb-4" size={48} />
+            <FaWallet className="text-yellow-400 mx-auto mb-4" size={48} />
             <h2 className="text-2xl font-bold text-white mb-3">Connect Your Wallet</h2>
             <p className="text-gray-400 mb-6">
               Connect MetaMask to start earning LBLX tokens. New users receive 10 tokens instantly!
@@ -783,7 +783,7 @@ export default function LabelXTaskCenter() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="glass-light rounded-2xl p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <FaWallet className="text-orange-400" />
+                    <FaWallet className="text-yellow-400" />
                     <span className="text-gray-400 text-sm">Connected Wallet</span>
                   </div>
                   <p className="text-white font-medium text-sm">
@@ -791,7 +791,7 @@ export default function LabelXTaskCenter() {
                   </p>
                   <button
                     onClick={() => copyToClipboard(wallet.address)}
-                    className="text-orange-400 text-xs mt-1 hover:underline flex items-center gap-1"
+                    className="text-yellow-400 text-xs mt-1 hover:underline flex items-center gap-1"
                   >
                     <FaCopy size={10} /> Copy
                   </button>
@@ -837,7 +837,7 @@ export default function LabelXTaskCenter() {
               </div>
 
               <div className="glass rounded-2xl p-6 text-center">
-                <FaCoins className="text-orange-400 mx-auto mb-3" size={32} />
+                <FaCoins className="text-yellow-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">{stats.earned}</p>
                 <p className="text-gray-400 text-sm">LBLX Earned</p>
               </div>
@@ -862,7 +862,7 @@ export default function LabelXTaskCenter() {
             {/* Tasks Grid */}
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                {/* <TbTarget className="text-orange-400" /> */}
+                {/* <TbTarget className="text-yellow-400" /> */}
                 Available Tasks
               </h2>
 
@@ -886,7 +886,7 @@ export default function LabelXTaskCenter() {
                           className="p-3 rounded-2xl flex-shrink-0"
                           style={{ backgroundColor: theme.surface }}
                         >
-                          <task.icon className="text-orange-400" size={24} />
+                          <task.icon className="text-yellow-400" size={24} />
                         </div> */}
 
                         <div className="flex-1">
@@ -946,7 +946,7 @@ export default function LabelXTaskCenter() {
                           href={`https://bscscan.com/tx/${tasks[task.id].txHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-orange-400 text-xs hover:underline flex items-center gap-2"
+                          className="text-yellow-400 text-xs hover:underline flex items-center gap-2"
                         >
                           <FaEye size={12} />
                           View Transaction
@@ -966,7 +966,7 @@ export default function LabelXTaskCenter() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass rounded-3xl p-8 text-center"
               >
-                <FaTrophy className="text-orange-400 mx-auto mb-4" size={64} />
+                <FaTrophy className="text-yellow-400 mx-auto mb-4" size={64} />
                 <h2 className="text-2xl font-bold text-white mb-3">
                   🎉 All Tasks Completed!
                 </h2>
@@ -975,7 +975,7 @@ export default function LabelXTaskCenter() {
                 </p>
                 <div className="glass-light rounded-2xl p-6 inline-block">
                   <p className="text-gray-400 text-sm mb-1">Total Earned</p>
-                  <p className="text-4xl font-bold text-orange-400">{stats.earned} LBLX</p>
+                  <p className="text-4xl font-bold text-yellow-400">{stats.earned} LBLX</p>
                 </div>
               </motion.div>
             )}
@@ -985,7 +985,7 @@ export default function LabelXTaskCenter() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <BiCoin className="text-orange-400" />
+                    <BiCoin className="text-yellow-400" />
                     Add LBLX to MetaMask
                   </h3>
                   <p className="text-gray-400 text-sm mb-4">
@@ -1001,7 +1001,7 @@ export default function LabelXTaskCenter() {
                       </p>
                       <button
                         onClick={() => copyToClipboard(TOKEN_CONTRACT)}
-                        className="text-orange-400 hover:text-orange-300 flex-shrink-0"
+                        className="text-yellow-400 hover:text-orange-300 flex-shrink-0"
                       >
                         <FaCopy />
                       </button>
