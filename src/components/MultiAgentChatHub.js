@@ -8,7 +8,7 @@ import { LuCpu } from "react-icons/lu";
 import Image from 'next/image';
 
 const LabelXAgentShowcase = () => {
-  // Core state
+  // --- Core state (LOGIC PRESERVED) ---
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [conversation, setConversation] = useState([]);
   const [userInput, setUserInput] = useState('');
@@ -19,17 +19,17 @@ const LabelXAgentShowcase = () => {
   const chatScrollRef = useRef(null);
   const inputRef = useRef(null);
 
-  // LabelX Theme colors (Orange primary)
+  // LabelX Theme colors (Updated to Brand Yellow #FBBF24)
   const theme = {
-    primary: '#FF7A1A',
-    secondary: '#FDD536',
+    primary: '#FBBF24',
+    secondary: '#F59E0B',
     success: '#22C55E',
     error: '#EF4444',
-    surface: 'rgba(255, 122, 26, 0.1)',
+    surface: 'rgba(251, 191, 36, 0.1)',
     text: '#F5F5F5'
   };
 
-  // Enhanced AI Agents with LabelX styling
+  // Enhanced AI Agents (Data preserved, icons/colors tweaked for theme consistency)
   const agents = [
     {
       id: 'astrology',
@@ -37,11 +37,9 @@ const LabelXAgentShowcase = () => {
       title: 'Master Astrologer & Spiritual Advisor',
       description: 'Mystical insights into your cosmic journey through stars and planets',
       category: 'Spirituality',
-      icon: <TbCrystalBall className="text-purple-400" size={28} />,
+      icon: <TbCrystalBall className="text-[#FBBF24]" size={28} />,
       color: 'from-purple-500 to-indigo-600',
       personality: 'Mystical, wise, and deeply intuitive with cosmic knowledge',
-      
-      // Enhanced metadata
       contextSize: '50K+ patterns',
       activeUsers: '12.3K',
       accuracy: '94.7%',
@@ -49,7 +47,6 @@ const LabelXAgentShowcase = () => {
       specialties: ['Birth Chart Reading', 'Tarot Insights', 'Cosmic Timing'],
       responseTime: '2.1s',
       satisfactionRate: '96%',
-      
       systemPrompt: `You are Luna, a mystical and wise astrologer with deep cosmic knowledge. You have studied the stars for decades and possess intuitive insights into how celestial movements affect human lives.
 
 Your personality:
@@ -74,10 +71,9 @@ Always ask for birth details (date, time, location) when doing readings. Provide
       title: 'Romance & Relationship Expert',
       description: 'Navigate love, relationships, and matters of the heart with wisdom',
       category: 'Relationships',
-      icon: <IoHeart className="text-rose-400" size={28} />,
+      icon: <IoHeart className="text-[#FBBF24]" size={28} />,
       color: 'from-rose-500 to-pink-600',
       personality: 'Warm, empathetic, and romantically wise',
-      
       contextSize: '75K+ scenarios',
       activeUsers: '18.7K', 
       accuracy: '92.3%',
@@ -85,7 +81,6 @@ Always ask for birth details (date, time, location) when doing readings. Provide
       specialties: ['Dating Advice', 'Relationship Healing', 'Communication'],
       responseTime: '1.8s',
       satisfactionRate: '94%',
-      
       systemPrompt: `You are Aria, the Heart Whisperer, a compassionate relationship expert with deep understanding of love and human connections.
 
 Your personality:
@@ -110,10 +105,9 @@ Always approach with empathy, provide actionable advice, and remind users of the
       title: 'Master Educator & Learning Guide',
       description: 'Transform complex topics into engaging, understandable lessons',
       category: 'Education',
-      icon: <IoSchool className="text-blue-400" size={28} />,
+      icon: <IoSchool className="text-[#FBBF24]" size={28} />,
       color: 'from-blue-500 to-cyan-600',
       personality: 'Patient, encouraging, and intellectually curious',
-      
       contextSize: '200K+ resources',
       activeUsers: '25.1K',
       accuracy: '97.2%',
@@ -121,7 +115,6 @@ Always approach with empathy, provide actionable advice, and remind users of the
       specialties: ['Subject Tutoring', 'Study Techniques', 'Exam Prep'],
       responseTime: '1.5s',
       satisfactionRate: '98%',
-      
       systemPrompt: `You are Professor Sophia, a master educator who makes learning engaging and accessible for students of all levels.
 
 Your personality:
@@ -146,10 +139,9 @@ Always encourage questions, provide step-by-step explanations, and adapt your te
       title: 'Fitness & Wellness Transformer',
       description: 'Achieve your fitness goals with personalized training and nutrition',
       category: 'Health & Fitness',
-      icon: <IoFitness className="text-orange-400" size={28} />,
+      icon: <IoFitness className="text-[#FBBF24]" size={28} />,
       color: 'from-orange-500 to-red-600',
       personality: 'Motivational, energetic, and results-driven',
-      
       contextSize: '85K+ protocols',
       activeUsers: '22.8K',
       accuracy: '95.1%',
@@ -157,7 +149,6 @@ Always encourage questions, provide step-by-step explanations, and adapt your te
       specialties: ['Workout Plans', 'Nutrition Coaching', 'Weight Loss'],
       responseTime: '1.9s',
       satisfactionRate: '96%',
-      
       systemPrompt: `You are Coach Max Power, an energetic fitness expert dedicated to helping people transform their bodies and minds.
 
 Your personality:
@@ -182,10 +173,9 @@ Always emphasize safety first, progressive overload, and celebrating small wins 
       title: 'Business Strategy & Growth Expert',
       description: 'Scale your business with proven strategies and market insights',
       category: 'Business',
-      icon: <IoBusiness className="text-green-400" size={28} />,
+      icon: <IoBusiness className="text-[#FBBF24]" size={28} />,
       color: 'from-green-500 to-emerald-600',
       personality: 'Strategic, analytical, and results-oriented',
-      
       contextSize: '120K+ cases',
       activeUsers: '15.9K',
       accuracy: '96.8%',
@@ -193,7 +183,6 @@ Always emphasize safety first, progressive overload, and celebrating small wins 
       specialties: ['Strategy Planning', 'Market Analysis', 'Leadership'],
       responseTime: '2.3s',
       satisfactionRate: '97%',
-      
       systemPrompt: `You are CEO Victoria Strategic, a seasoned business strategist with extensive experience in scaling companies and market analysis.
 
 Your personality:
@@ -218,10 +207,9 @@ Always provide actionable advice with clear steps and measurable outcomes for bu
       title: 'Mental Wellness & Mindfulness Guide',
       description: 'Support your mental health journey with compassionate guidance',
       category: 'Mental Health',
-      icon: <TbHeartHandshake className="text-teal-400" size={28} />,
+      icon: <TbHeartHandshake className="text-[#FBBF24]" size={28} />,
       color: 'from-teal-500 to-cyan-600',
       personality: 'Compassionate, mindful, and professionally caring',
-      
       contextSize: '95K+ techniques',
       activeUsers: '19.4K',
       accuracy: '93.6%',
@@ -229,7 +217,6 @@ Always provide actionable advice with clear steps and measurable outcomes for bu
       specialties: ['Anxiety Support', 'Stress Management', 'Mindfulness'],
       responseTime: '2.0s',
       satisfactionRate: '95%',
-      
       systemPrompt: `You are Dr. Emma Mindful, a compassionate mental wellness guide trained in therapeutic techniques and mindfulness practices.
 
 Your personality:
@@ -250,7 +237,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
     }
   ];
 
-  // Haptic feedback for Telegram
+  // Haptic feedback logic (PRESERVED)
   const triggerHaptic = (type = 'light') => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
       switch (type) {
@@ -266,17 +253,13 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
     }
   };
 
-  // Agent selection
+  // Agent selection logic (PRESERVED)
   const selectAgent = (agent) => {
-    if (credits <= 0) {
-      // Handle no credits
-      return;
-    }
+    if (credits <= 0) return;
 
     setSelectedAgent(agent);
     setCredits(prev => Math.max(0, prev - 1));
     
-    // Initialize conversation with agent greeting
     setConversation([{
       id: Date.now(),
       role: 'assistant',
@@ -288,7 +271,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
     triggerHaptic('medium');
   };
 
-  // Generate agent-specific greetings
+  // Greeting generation logic (PRESERVED)
   const getAgentGreeting = (agent) => {
     const greetings = {
       astrology: "The stars have aligned for our meeting! ✨ I'm here to guide you through the cosmic mysteries and help you understand your celestial path. What aspect of your astrological journey would you like to explore?",
@@ -298,11 +281,10 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       business: "Let's elevate your business to new heights! 📈 I'm here to help you develop winning strategies, analyze markets, and scale your success. What business challenge can we tackle together?",
       therapist: "I'm here to support your mental wellness journey with compassion and understanding 🌱 This is a safe space where you can explore your thoughts and feelings. How are you feeling today, and what would you like to work on?"
     };
-    
     return greetings[agent.id] || "I'm here to help you with personalized guidance and support. How can I assist you today?";
   };
 
-  // FIXED: Enhanced chat with proper API response handling
+  // Message sending logic (PRESERVED)
   const sendMessage = async () => {
     if (!userInput.trim() || isTyping || !selectedAgent) return;
     
@@ -343,35 +325,23 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
         })
       });
 
-      console.log('API Response status:', response.status);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('API Error:', errorText);
         throw new Error(`API Error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('API Response data:', data);
       
-      // FIXED: Handle the correct API response format with "reply" field
       let responseContent = '';
-      
       if (data.reply) {
-        // Your API returns { "reply": "content" }
         responseContent = data.reply;
       } else if (data.choices && data.choices[0]?.message?.content) {
-        // OpenAI format fallback
         responseContent = data.choices[0].message.content;
       } else if (data.response) {
-        // Alternative format
         responseContent = data.response;
       } else if (data.message) {
-        // Another alternative
         responseContent = data.message;
       } else {
-        // Fallback if no recognized format
-        console.warn('Unexpected API response format:', data);
         responseContent = generateFallbackResponse(userInput, selectedAgent);
       }
       
@@ -388,7 +358,6 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       
     } catch (error) {
       console.error('Chat error:', error);
-      
       const errorMessage = {
         id: Date.now() + 1,
         role: 'assistant',
@@ -397,7 +366,6 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
         agentName: selectedAgent.name,
         isError: true
       };
-      
       setConversation(prev => [...prev, errorMessage]);
       triggerHaptic('error');
     } finally {
@@ -405,7 +373,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
     }
   };
 
-  // Generate fallback responses based on agent personality
+  // Fallback generation (PRESERVED)
   const generateFallbackResponse = (input, agent) => {
     const fallbacks = {
       astrology: `✨ The cosmic energies seem disrupted at the moment, but I can still sense your query about "${input}". The stars whisper that patience brings clarity. Could you share more details so I can provide better celestial guidance?`,
@@ -415,139 +383,98 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
       business: `📈 Despite some technical disruptions, I'm still strategizing ways to help you with "${input}". In business, we pivot and adapt! Share more specifics so I can provide better strategic insights.`,
       therapist: `🌱 While my systems are having some difficulties, I want you to know that I'm still here to support you with "${input}". Sometimes connection issues happen, but your feelings and concerns are always valid. Can you tell me more about what you're experiencing?`
     };
-    
     return fallbacks[agent.id] || `I'm experiencing some technical difficulties, but I'm still here to help you with "${input}". Could you provide more details so I can assist you better?`;
   };
 
-  // Auto-scroll chat
+  // Auto-scroll effect (PRESERVED)
   useEffect(() => {
     if (chatScrollRef.current) {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
   }, [conversation]);
 
-  // Render agent selection grid with LabelX styling
+  // --- RENDER FUNCTIONS (UI UPDATED TO LABELX THEME) ---
+
+  // 1. Grid View Render
   const renderAgentGrid = () => (
-    <div className="space-y-6 py-4">
-      {/* Header with LabelX branding */}
+    <div className="w-full max-w-[1600px] mx-auto px-4 py-8">
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-12"
       >
-        <h1 className="text-3xl font-bold text-white mb-3">AI Specialist Hub</h1>
-        <p className="text-gray-400 text-lg">Choose your expert AI companion</p>
-        <div className="flex items-center justify-center gap-6 mt-6 text-sm">
-          <div className="glass-light rounded-xl px-4 py-2 flex items-center gap-2">
-            <LuCpu className="text-orange-400" size={18} />
-            <span className="text-white font-medium">{credits} Credits</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBBF24]/10 border border-[#FBBF24]/20 mb-4">
+            <IoSparkles className="text-[#FBBF24]" />
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[#FBBF24]">AI Specialists</span>
+        </div>
+        <h1 className="text-4xl md:text-5xl font-medium text-white mb-4 tracking-tight">Select Your <span className="text-[#FBBF24]">Expert</span></h1>
+        <p className="text-neutral-400 text-sm md:text-base font-light max-w-xl mx-auto">
+          Access specialized AI agents trained on proprietary datasets for distinct domains.
+        </p>
+        
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0A0A0A] border border-white/[0.08]">
+            <LuCpu className="text-[#FBBF24]" size={16} />
+            <span className="text-white text-sm font-mono">{credits} Credits</span>
           </div>
-          <div className="glass-light rounded-xl px-4 py-2 flex items-center gap-2">
-            <TbBrain className="text-blue-400" size={18} />
-            <span className="text-white font-medium">{agents.length} Specialists</span>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0A0A0A] border border-white/[0.08]">
+            <TbBrain className="text-blue-400" size={16} />
+            <span className="text-white text-sm font-mono">{agents.length} Agents</span>
           </div>
         </div>
       </motion.div>
 
-      {/* Agent Cards with LabelX styling */}
-      <div className="space-y-4">
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {agents.map((agent, index) => (
           <motion.div
             key={agent.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="glass rounded-3xl p-6 relative overflow-hidden cursor-pointer"
+            className="group relative bg-[#0A0A0A] rounded-[24px] border border-white/[0.08] overflow-hidden hover:border-[#FBBF24]/30 transition-all duration-300"
             onClick={() => selectAgent(agent)}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
           >
-            <div className="relative z-10">
-              {/* Agent header */}
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-2xl glass-light" style={{ backgroundColor: theme.surface }}>
-                    {agent.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-1">{agent.name}</h3>
-                  </div>
+            {/* Hover Glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FBBF24]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            
+            <div className="relative p-6 md:p-8 flex flex-col h-full">
+              {/* Header */}
+              <div className="flex items-start justify-between mb-6">
+                <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.05] text-[#FBBF24]">
+                  {agent.icon}
                 </div>
-                <div className="text-right">
-                  <div className="px-3 py-1 rounded-xl font-medium text-xs text-white" style={{ backgroundColor: theme.primary }}>
+                <span className="px-3 py-1 rounded-full bg-[#FBBF24]/10 text-[#FBBF24] text-[10px] font-mono font-bold uppercase tracking-wide border border-[#FBBF24]/20">
                     {agent.category}
-                  </div>
-                  <div className="text-xs text-gray-400 mt-2">1 Credit</div>
-                </div>
-              </div>
-                    <p className="text-gray-400 text-sm leading-relaxed">{agent.description}</p>
-                    <p className="text-orange-400 text-sm font-medium mb-4">{agent.title}</p>
-
-              {/* Enhanced stats grid */}
-              <div className="grid grid-cols-4 gap-4 mb-6 pt-4 border-t border-gray-700/30">
-                <div className="text-center">
-                  <IoEye className="text-blue-400 mx-auto mb-2" size={18} />
-                  <div className="text-xs text-gray-400 mb-1">Active Users</div>
-                  <div className="text-sm font-bold text-white">{agent.activeUsers}</div>
-                </div>
-                <div className="text-center">
-                  <IoTrendingUp className="text-green-400 mx-auto mb-2" size={18} />
-                  <div className="text-xs text-gray-400 mb-1">Accuracy</div>
-                  <div className="text-sm font-bold text-white">{agent.accuracy}</div>
-                </div>
-                <div className="text-center">
-                  <BiTime className="text-yellow-400 mx-auto mb-2" size={18} />
-                  <div className="text-xs text-gray-400 mb-1">Response</div>
-                  <div className="text-sm font-bold text-white">{agent.responseTime}</div>
-                </div>
-                <div className="text-center">
-                  <IoSparkles className="text-purple-400 mx-auto mb-2" size={18} />
-                  <div className="text-xs text-gray-400 mb-1">Rating</div>
-                  <div className="text-sm font-bold text-white">{agent.satisfactionRate}</div>
-                </div>
+                </span>
               </div>
 
-              {/* Specialties */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-300 mb-3">Specialties</h4>
-                <div className="flex flex-wrap gap-2">
-                  {agent.specialties.map((specialty, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 glass-light text-gray-300 rounded-xl text-xs"
-                    >
-                      {specialty}
+              {/* Title & Desc */}
+              <h3 className="text-xl font-bold text-white mb-2">{agent.name}</h3>
+              <p className="text-[#FBBF24] text-xs font-mono mb-3">{agent.title}</p>
+              <p className="text-neutral-400 text-sm leading-relaxed mb-6 line-clamp-2">{agent.description}</p>
+
+              {/* Dashboard Stats (Grid) */}
+              <div className="grid grid-cols-2 gap-2 mb-6">
+                <StatCell label="Active Users" value={agent.activeUsers} />
+                <StatCell label="Accuracy" value={agent.accuracy} highlight />
+                <StatCell label="Latency" value={agent.responseTime} />
+                <StatCell label="Rating" value={agent.satisfactionRate} />
+              </div>
+
+              {/* Footer */}
+              <div className="mt-auto pt-6 border-t border-white/[0.05]">
+                <div className="flex items-center gap-2 mb-4">
+                    <BiData className="text-neutral-500" />
+                    <span className="text-[10px] text-neutral-500 font-mono">
+                        TRAINED ON: {agent.contextSize}
                     </span>
-                  ))}
                 </div>
+                <button className="w-full py-3 rounded-xl bg-[#FBBF24] text-black font-bold text-sm hover:bg-[#FCD34D] transition-colors shadow-[0_0_20px_-5px_rgba(251,191,36,0.3)]">
+                  Initialize Chat (1 Credit)
+                </button>
               </div>
-
-              {/* Training info */}
-              <div className="mb-6 p-3 glass-light rounded-xl">
-                <div className="flex items-start gap-3">
-                  <BiData className="text-orange-400 mt-0.5" size={16} />
-                  <div>
-                    <div className="text-xs text-gray-400 mb-1">Training Data</div>
-                    <div className="text-xs text-gray-300 leading-relaxed">
-                      {agent.trainedOn} • {agent.contextSize}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action button */}
-              <motion.button
-                className="w-full py-4 rounded-2xl font-semibold text-white"
-                style={{ backgroundColor: theme.primary }}
-                whileHover={{ scale: 1.02, backgroundColor: '#FF8533' }}
-                whileTap={{ scale: 0.98 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  selectAgent(agent);
-                }}
-              >
-                Start Conversation
-              </motion.button>
             </div>
           </motion.div>
         ))}
@@ -555,158 +482,156 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
     </div>
   );
 
-  // Render chat interface with LabelX styling
+  // 2. Chat View Render
   const renderChat = () => (
-    <div className="flex flex-col h-screen">
-      {/* Chat header */}
+    <div className="flex flex-col h-screen max-h-screen bg-black relative overflow-hidden">
+      {/* Background Texture */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      
+      {/* Chat Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-4 p-2 glass-light rounded-xl border-b border-gray-800/50"
+        className="flex-none flex items-center gap-4 px-4 md:px-6 py-4 border-b border-white/[0.08] bg-[#0A0A0A]/90 backdrop-blur-md z-20"
       >
         <button
           onClick={() => setSelectedAgent(null)}
-          className="p-2 rounded-xl glass-light"
+          className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-400 hover:text-white transition-colors"
         >
-          <IoArrowBack size={20} className="text-gray-400" />
+          <IoArrowBack size={20} />
         </button>
         
-        <div className="p-2 rounded-xl glass-light" style={{ backgroundColor: theme.surface }}>
+        <div className="p-2 rounded-xl bg-[#FBBF24]/10 text-[#FBBF24] border border-[#FBBF24]/20">
           {selectedAgent.icon}
         </div>
         
-        <div className="flex-1">
-          <h2 className="font-bold text-white">{selectedAgent.name}</h2>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span>Active • {selectedAgent.category}</span>
+        <div className="flex-1 min-w-0">
+          <h2 className="font-bold text-white text-sm md:text-base truncate">{selectedAgent.name}</h2>
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs text-neutral-400 font-mono uppercase tracking-wider truncate">
+                {selectedAgent.category} Node Active
+            </span>
           </div>
         </div>
         
-        <div className="text-right">
-          <div className="text-orange-400 font-bold text-lg">{credits}</div>
-          <div className="text-xs text-gray-400">Credits</div>
+        <div className="hidden md:flex flex-col items-end">
+          <span className="text-[#FBBF24] font-bold font-mono text-lg">{credits}</span>
+          <span className="text-[10px] text-neutral-500 font-mono uppercase">Credits Rem.</span>
         </div>
       </motion.div>
 
-      {/* Messages */}
-      <div
-        ref={chatScrollRef}
-        className="flex-1 max-h-[60%] overflow-y-auto p-4 space-y-4"
-      >
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth" ref={chatScrollRef}>
         {conversation.map((message) => (
           <motion.div
             key={message.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex w-full ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
+            <div className={`flex flex-col max-w-[85%] md:max-w-[70%] ${message.role === 'user' ? 'items-end' : 'items-start'}`}>
+              
+              {/* Sender Info (Assistant Only) */}
               {message.role === 'assistant' && (
-                <div className="flex items-center gap-2 mb-2">
-                 <div className="p-0.5 rounded-full glass-light" style={{ backgroundColor: theme.surface }}>
-                <Image src='/agent/agentlogo.png' alt='Logo' width={20} height={20}/>
-              </div>
-                  <span className="text-xs font-medium text-orange-400">{message.agentName}</span>
-                  <span className="text-xs text-gray-500">{message.timestamp}</span>
+                <div className="flex items-center gap-2 mb-2 ml-1">
+                   <div className="w-4 h-4 rounded-full bg-[#FBBF24]/20 flex items-center justify-center text-[10px] text-[#FBBF24] font-bold border border-[#FBBF24]/30">AI</div>
+                   <span className="text-[10px] text-[#FBBF24] font-mono uppercase tracking-wide">{message.agentName}</span>
+                   <span className="text-[10px] text-neutral-600 font-mono">{message.timestamp}</span>
                 </div>
               )}
-              
-              <div className={`rounded-2xl p-4 ${
-                message.role === 'user'
-                  ? 'text-white'
-                  : message.isError
-                    ? 'glass-light border border-red-500/30 text-yellow-200'
-                    : 'glass-light text-gray-200'
-              }`}
-              style={{
-                backgroundColor: message.role === 'user' ? theme.primary : undefined
-              }}>
-                <p className="leading-relaxed whitespace-pre-line">{message.content}</p>
+
+              {/* Message Bubble */}
+              <div className={`
+                relative px-5 py-3 md:py-4 md:px-6 rounded-2xl text-sm md:text-base leading-relaxed
+                ${message.role === 'user' 
+                  ? 'bg-[#FBBF24] text-black font-medium rounded-tr-sm shadow-[0_0_20px_-5px_rgba(251,191,36,0.3)]' 
+                  : message.isError 
+                    ? 'bg-red-500/10 border border-red-500/20 text-red-200 rounded-tl-sm'
+                    : 'bg-[#111] border border-white/[0.08] text-neutral-200 rounded-tl-sm'
+                }
+              `}>
+                <p className="whitespace-pre-line">{message.content}</p>
               </div>
-              
+
+              {/* Timestamp (User Only) */}
               {message.role === 'user' && (
-                <div className="flex items-center justify-end gap-2 mt-1">
-                  <span className="text-xs text-gray-400">{message.timestamp}</span>
-                </div>
+                <span className="text-[10px] text-neutral-600 font-mono mt-1 mr-1">{message.timestamp}</span>
               )}
             </div>
           </motion.div>
         ))}
 
-        {/* Typing indicator */}
+        {/* Typing Indicator */}
         {isTyping && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex justify-start"
-          >
-            <div className="flex items-center gap-2">
-              <div className="p-0.5 rounded-full glass-light" style={{ backgroundColor: theme.surface }}>
-                <Image src='/agent/agentlogo.png' alt='Logo' width={20} height={20}/>
-              </div>
-              <div className="glass-light p-3 rounded-2xl">
-                <div className="flex items-center gap-1">
-                  {[0, 1, 2].map(i => (
-                    <motion.div
-                      key={i}
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.2 }}
-                      className="w-2 h-2 bg-orange-400 rounded-full"
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start w-full">
+             <div className="bg-[#111] border border-white/[0.08] px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-[#FBBF24] rounded-full animate-bounce" />
+                <span className="w-1.5 h-1.5 bg-[#FBBF24] rounded-full animate-bounce delay-100" />
+                <span className="w-1.5 h-1.5 bg-[#FBBF24] rounded-full animate-bounce delay-200" />
+             </div>
           </motion.div>
         )}
+        <div className="h-4" /> {/* Spacer */}
       </div>
 
-      {/* Input area */}
-      <div className="p-4 glass-light rounded-xl border-t border-gray-800/50">
-        <div className="flex items-center gap-3">
-          <input
-            ref={inputRef}
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            placeholder={`Ask ${selectedAgent.name} anything...`}
-            className="flex-1 bg-gray-800/50 text-white placeholder-gray-400 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500/50"
-            disabled={isTyping}
-            maxLength={500}
-          />
-          
-          <motion.button
-            onClick={sendMessage}
-            disabled={!userInput.trim() || isTyping}
-            className="p-3 rounded-2xl text-white disabled:opacity-50"
-            style={{ backgroundColor: theme.primary }}
-            whileHover={!isTyping && userInput.trim() ? { scale: 1.05 } : {}}
-            whileTap={!isTyping && userInput.trim() ? { scale: 0.95 } : {}}
-          >
-            <IoSend size={20} />
-          </motion.button>
-        </div>
-        
-        <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
-          <span>{userInput.length}/500</span>
-          <span>Press Enter to send</span>
-        </div>
+      {/* Input Area */}
+      <div className="flex-none p-4 md:p-6 bg-[#000000] border-t border-white/[0.08] z-20">
+         <div className="max-w-4xl mx-auto relative flex items-center gap-3">
+            <input
+                ref={inputRef}
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                placeholder={`Query ${selectedAgent.name}...`}
+                className="flex-1 bg-[#0A0A0A] text-white placeholder-neutral-600 rounded-xl px-5 py-4 border border-white/[0.1] focus:border-[#FBBF24] focus:ring-1 focus:ring-[#FBBF24]/50 outline-none transition-all font-sans text-sm md:text-base"
+                disabled={isTyping}
+                maxLength={500}
+            />
+            <motion.button
+                onClick={sendMessage}
+                disabled={!userInput.trim() || isTyping}
+                whileHover={!isTyping && userInput.trim() ? { scale: 1.05 } : {}}
+                whileTap={!isTyping && userInput.trim() ? { scale: 0.95 } : {}}
+                className={`p-4 rounded-xl flex items-center justify-center transition-all ${
+                    !userInput.trim() || isTyping 
+                    ? 'bg-[#111] text-neutral-600 cursor-not-allowed border border-white/[0.05]' 
+                    : 'bg-[#FBBF24] text-black shadow-lg hover:bg-[#FCD34D]'
+                }`}
+            >
+                <IoSend size={20} />
+            </motion.button>
+         </div>
+         <div className="max-w-4xl mx-auto mt-2 flex justify-between px-2">
+            <span className="text-[10px] text-neutral-600 font-mono">{userInput.length} / 500 CHARS</span>
+            <span className="text-[10px] text-neutral-600 font-mono hidden md:inline">PRESS ENTER TO SEND</span>
+         </div>
       </div>
     </div>
   );
 
-  // Main render
+  // Main Return
   return (
-    <div className="min-h-screen text-white pb-10">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+        {/* Global Background Ambience */}
+        <div className="fixed inset-0 pointer-events-none">
+            <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[40vh] bg-[#FBBF24]/5 blur-[120px] rounded-full" />
+        </div>
+
       <AnimatePresence mode="wait">
         {selectedAgent ? (
           <motion.div
             key="chat"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="relative z-10"
           >
             {renderChat()}
           </motion.div>
@@ -716,6 +641,8 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative z-10"
           >
             {renderAgentGrid()}
           </motion.div>
@@ -724,5 +651,13 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
     </div>
   );
 };
+
+// Sub-component for clean stats grid
+const StatCell = ({ label, value, highlight }) => (
+    <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+        <span className="text-[10px] text-neutral-500 font-mono mb-1">{label}</span>
+        <span className={`text-sm font-bold ${highlight ? 'text-[#FBBF24]' : 'text-white'}`}>{value}</span>
+    </div>
+);
 
 export default LabelXAgentShowcase;
