@@ -511,22 +511,43 @@ function TelegramMiniApp() {
           <DebugPanel user={user} error={telegramError} webApp={webApp} />
           
           {/* Enhanced Background with Yellow Dots */}
-          <div className="fixed top-0 inset-0 -z-10 bg-black">
-            <div
-                className="absolute inset-0 z-0"
-                style={{
-                backgroundColor: '#000000',
-                backgroundImage: `
-                    radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.15) 1px, transparent 1px),
-                    radial-gradient(circle at 50% 50%, #151515 1px, transparent 1px)
-                `,
-                backgroundSize: '40px 40px, 12px 12px',
-                backgroundPosition: '0 0, 0 0'
-                }}
-            />
-            {/* Central Glow for depth */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[60vh] bg-[#FBBF24]/5 blur-[120px] rounded-full pointer-events-none" />
-          </div>
+          {/* Enhanced Industrial Background */}
+<div className="fixed top-0 inset-0 -z-10 bg-black overflow-hidden">
+  
+  {/* 1. Noise Grain Overlay (The "Premium" Texture) */}
+  <div 
+    className="absolute inset-0 z-20 opacity-[0.04] pointer-events-none mix-blend-overlay"
+    style={{
+      backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+    }}
+  />
+
+  {/* 2. Technical Grid (Sparse Yellow + Dense Grey) */}
+  <div
+      className="absolute inset-0 z-10"
+      style={{
+        backgroundImage: `
+            /* Layer 1: Sparse Yellow "Active" Dots (High Priority) */
+            radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.2) 1.5px, transparent 1.5px),
+            /* Layer 2: Dense Grey "Structural" Grid (Low Priority) */
+            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+        `,
+        /* Yellow dots repeat every 100px, Grey dots every 24px */
+        backgroundSize: '100px 100px, 24px 24px', 
+        backgroundPosition: '0 0, 0 0',
+        /* Vignette: Fade out edges to black */
+        maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)' 
+      }}
+  />
+
+  {/* 3. Deep Atmospheric Glow (Breathing Animation) */}
+  <motion.div 
+    initial={{ opacity: 0.3, scale: 1 }}
+    animate={{ opacity: [0.3, 0.4, 0.3], scale: [1, 1.05, 1] }}
+    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] h-[60vh] bg-[#FBBF24]/10 blur-[120px] rounded-full pointer-events-none z-0" 
+  />
+</div>
           
           <div className="w-full">
             <TopNav />
