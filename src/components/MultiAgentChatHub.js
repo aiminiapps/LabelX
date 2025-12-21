@@ -433,13 +433,13 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="group relative bg-[#0A0A0A] rounded-[24px] border border-white/[0.08] overflow-hidden hover:border-[#FBBF24]/30 transition-all duration-300"
+            className="group glass relative bg-[#0A0A0A] border border-white/[0.08] overflow-hidden hover:border-[#FBBF24]/30 transition-all duration-300"
             onClick={() => selectAgent(agent)}
           >
             {/* Hover Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#FBBF24]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             
-            <div className="relative p-6 md:p-8 flex flex-col h-full">
+            <div className="relative flex flex-col h-full">
               {/* Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.05] text-[#FBBF24]">
@@ -616,7 +616,7 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
 
   // Main Return
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen pb-14 text-white overflow-x-hidden">
         {/* Global Background Ambience */}
         <div className="fixed inset-0 pointer-events-none">
             <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
