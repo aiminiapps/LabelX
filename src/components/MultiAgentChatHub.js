@@ -484,15 +484,13 @@ IMPORTANT: Always remind users that you're not a replacement for professional th
 
   // 2. Chat View Render
   const renderChat = () => (
-    <div className="flex flex-col h-screen max-h-screen bg-black relative overflow-hidden">
-      {/* Background Texture */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+    <div className="flex flex-col h-[80vh] max-h-screen  relative overflow-hidden">
       
       {/* Chat Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex-none flex items-center gap-4 px-4 md:px-6 py-4 border-b border-white/[0.08] bg-[#0A0A0A]/90 backdrop-blur-md z-20"
+        className="flex-none flex items-center gap-4 px-4 md:px-6 py-4 border-b border-white/[0.08] z-20"
       >
         <button
           onClick={() => setSelectedAgent(null)}
