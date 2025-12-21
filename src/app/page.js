@@ -581,7 +581,7 @@ function TelegramMiniApp() {
           {/* Menu Button */}
           <div className="relative flex items-center gap-2">
             <Link 
-              href='/?tab=task2' 
+              href='/?tab=tasks' 
               className='glass-light flex items-center gap-0.5 font-semibold text-sm text-[#FF7A1A] p-2 rounded-full backdrop-blur-xs transition-all duration-200 active:scale-95 hover:bg-white/5'
             >
               <GoTasklist size={25}/> Tasks
@@ -687,7 +687,7 @@ function TelegramMiniApp() {
         return <Agent />;
       case 'task':
         return <MultiAgentChatHub/>;
-      case 'task2':
+      case 'tasks':
         return <NewTaskCenter/>
       case 'invite':
         return <InviteCenter user={user} />;

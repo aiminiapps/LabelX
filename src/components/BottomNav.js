@@ -29,7 +29,7 @@ export default function PortiqBottomNav({ activeTab, setActiveTab }) {
             bgColor: 'rgba(255, 184, 42, 0.1)'
         },
         { 
-            id: 'SPAI', 
+            id: 'tasks', 
             icon: <Image src="/agent/agentlogo.png" alt="AI Agent" width={28} height={28} className='scale-150'/>, 
             label: 'AI Agent',
             isSpecial: true,
