@@ -17,11 +17,11 @@ const TOKEN_CONTRACT = process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS || '0x...'
 
 // LabelX Theme Colors
 const theme = {
-  primary: '#FF7A1A',
-  secondary: '#FDD536',
-  success: '#22C55E',
-  error: '#EF4444',
-  surface: 'rgba(255, 122, 26, 0.1)',
+  primary: '#FBBF24', 
+  secondary: '#F59E0B', 
+  success: '#22C55E',  
+  error: '#EF4444',  
+  surface: 'rgba(251, 191, 36, 0.1)',
   text: '#F5F5F5'
 };
 
@@ -842,7 +842,7 @@ export default function LabelXTaskCenter() {
                 <p className="text-gray-400 text-sm">LBLX Earned</p>
               </div>
 
-              <div className="glass rounded-2xl p-6 text-center sm:mt-0 -mt-6">
+              <div className="glass rounded-2xl p-6 text-center sm:mt-0 mt-1">
                 <FaChartLine className="text-blue-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
                   {Math.round(stats.progress)}%
@@ -850,7 +850,7 @@ export default function LabelXTaskCenter() {
                 <p className="text-gray-400 text-sm">Complete</p>
               </div>
 
-              <div className="glass rounded-2xl p-6 text-center sm:mt-0 -mt-6">
+              <div className="glass rounded-2xl p-6 text-center sm:mt-0 mt-1">
                 <FaFire className="text-red-400 mx-auto mb-3" size={32} />
                 <p className="text-2xl font-bold text-white mb-1">
                   {getStorage()?.stats?.currentStreak || 0}
