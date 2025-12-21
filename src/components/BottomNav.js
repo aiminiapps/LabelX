@@ -54,7 +54,7 @@ export default function PortiqBottomNav({ activeTab, setActiveTab }) {
 
     return (
         <motion.div 
-            className="glass-dark w-full max-w-md mx-3 bottomnav backdrop-blur-xl rounded-t-3xl py-2 shadow-2xl border-t border-[#FF007F]/20"
+            className="glass-dark w-full max-w-md mx-3 bottomnav backdrop-blur-xl rounded-t-3xl py-2 shadow-2xl border-t border-yellow-400/40"
             style={{
                 background: `linear-gradient(135deg, 
                     rgba(11, 12, 16, 0.95) 0%, 
