@@ -54,19 +54,6 @@ const LabelXLoader = () => {
             pauseBetweenAnimations={0.2}
           />
         </motion.div>
-        
-        {/* Tagline */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm"
-        >
-          <HiSparkles className="text-[#FBBF24] w-3 h-3" />
-          <p className="text-neutral-400 text-xs font-mono tracking-[0.2em] uppercase">
-            Train AI • Earn Crypto
-          </p>
-        </motion.div>
 
       </div>
 
